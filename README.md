@@ -1,6 +1,6 @@
 # Dotfiles
 
-![Preview]()
+![Preview](preview.png)
 
 WM: spectrwm
 Editor: nvim
