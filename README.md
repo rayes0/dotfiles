@@ -1,5 +1,7 @@
 # Dotfiles
 
+## Preview
+
 ![Preview](preview.png)
 
 ## Programs
