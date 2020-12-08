@@ -1,0 +1,3 @@
+file="$(fzf --reverse && [ -f "$file" ])"
+
+open "$file"

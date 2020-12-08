@@ -1,0 +1,49 @@
+#!/bin/sh
+
+i=1
+file=/tmp/expose-desktop
+current_workspace="$(xdotool get_desktop)"
+
+if [ -f "$file" ]; then
+#	if [ "$(wmctrl -l | cut -c 22-)" != "$(cat /tmp/expose-desktop)" ]; then
+#		rm -r /tmp/expose-desktop
+#		rm -r /tmp/hidden-windows
+#		exec expose-desktop
+#	fi
+	while : 
+	do
+	        window="$(sed -n "$i"p $file)"
+        	if [ -z "$window" ]; then
+			rm -r /tmp/expose-desktop
+			rm -r /tmp/hidden-windows
+			xdotool set_desktop $current_workspace
+	                exit
+	        else
+			if ! grep -q "$window" /tmp/hidden-windows; then
+        	        	wmctrl -r "$window" -b remove,hidden
+	               		i="$((i+1))"
+			else
+				i="$((i+1))"
+			fi
+		fi
+	done
+else
+	wmctrl -l | cut -c 22- > $file
+
+	while :
+	do
+		window="$(sed -n "$i"p $file)"
+		if [ -z "$window" ]; then
+			xdotool set_desktop $current_workspace
+			exit
+		else
+			if xwininfo -name "$window" | grep 'IsUnMapped'; then
+				echo $window >> /tmp/hidden-windows
+				i="$((i+1))"
+			else
+				wmctrl -r "$window" -b add,hidden
+				i="$((i+1))"
+			fi
+		fi
+	done
+fi

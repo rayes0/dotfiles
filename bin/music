@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+status="$(cmus-remote -Q)"
+
+menu_command="dmenu -l 6 -sb #826456 -bw 2 -w 68 -y 444 -h 16 -p ♪ -fn Iosevka:size=16 -n 1"
+
+if [ -z $(pgrep cmus) ]; then
+	urxvt -e cmus &
+fi
+
+#if [ -z $(pgrep glava) ]; then
+#	glava-dual &
+#fi
+
+# Icons (Change to match your font)"
+tog_repeat="凌"
+tog_shuffle=""
+stop=""
+next=""
+previous=""
+if [[ $status == *"status playing"* ]]; then
+    play_pause=""
+    play_stat="Paused"
+else
+    play_pause=""
+    play_stat="Playing"
+fi
+
+# Check repeat status
+if [[ $status == *"set repeat_current true"* ]]; then
+    repeat="off"
+elif [[ $status == *"set repeat_current false"* ]]; then
+    repeat="on"
+else
+    repeat="error"
+fi
+
+# Check shuffle status
+if [[ $status == *"set shuffle true"* ]]; then
+    shuffle="off"
+elif [[ $status == *"set shuffle false"* ]]; then
+    shuffle="on"
+else
+    shuffle="error"
+fi
+
+# Variable passed to menu
+options="$previous\n$play_pause\n$stop\n$next\n$tog_repeat\n$tog_shuffle"
+
+# Spawn the menu with the "Play / Pause" entry selected by default
+chosen="$(echo -e "$options" | $menu_command)"
+case $chosen in
+    $previous)
+        cmus-remote --prev && . ~/.config/cmus/scripts/cmus-notification.sh
+
+        ;;
+    $play_pause)
+        cmus-remote --pause  && notify-send -i ~/.icons/Papirus-Dark-Custom/24x24/apps/rhythmbox.svg -u low -t 1080 "Cmus" "$play_stat"
+#	if [ $play_stat == "Paused" ]; then
+#		glava_pid=$(ps aux | grep glava | grep -v grep | awk '{print $2}')
+#		sleep 120 && kill -STOP $glava_pid
+#	fi
+#	if [ $play_stat == "Playing" ]; then
+#		glava_pid=$(ps aux | grep glava | grep -v grep | awk '{print $2}')
+#		kill -CONT $glava_pid
+#	fi
+        ;;
+    $stop)
+        cmus-remote --stop
+	notify-send "TURN OFF NC"
+	killall cmus
+	killall glava
+        ;;
+    $next)
+        cmus-remote --next && . ~/.config/cmus/scripts/cmus-notification.sh
+        ;;
+    $tog_repeat)
+        cmus-remote --raw "toggle repeat_current" && notify-send -i ~/.icons/Papirus-Dark-Custom/24x24/apps/rhythmbox.svg -u low -t 1800 "Cmus" "Repeat $repeat"
+        ;;
+    $tog_shuffle)
+        cmus-remote --shuffle && notify-send -u low -t 1800 "Cmus" "Shuffle $shuffle"
+        ;;
+esac
