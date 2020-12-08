@@ -1,0 +1,88 @@
+!! Colorscheme
+
+! special
+*.foreground: #bdbdbd
+*.background: #2a2a2a
+!*.cursorColor: #bdbdbd
+
+! black
+*.color0: #2a2a2a
+*.color8: #2a2a2a
+
+! red
+*.color1: #907466
+*.color9: #826456
+
+! green
+*.color2: #4d5a4d
+*.color10: #404b40
+
+! yellow
+*.color3: #a28977
+*.color11: #947b6b
+
+! blue
+*.color4: #698590
+*.color12: #5e7983
+
+! magenta
+*.color5: #79706f
+*.color13: #686261
+
+! cyan
+*.color6: #8b796f
+*.color14: #7b6d63
+
+! white
+*.color7: #bdbdbd
+*.color15: #bdbdbd
+
+!! Fonts
+Xft.autohint: 0
+Xft.lcdfilter: lcddefault
+Xft.hintstyle: hintslight
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.rgba: rgb
+Xft.dpi: 96
+
+!! Xterm
+XTerm.vt100.scrollBar: false
+
+!! URxvt Appearance
+*.font: xft:Sarasa Term J:style=Regular:size=11.5
+*.boldFont: xft:Sarasa Term J:style=Bold:size=11.5
+*.italicFont: xft:Sarasa Term J:style=Italic:size=11.5
+*.boldItalicFont: xft:Sarasa Term J:style=Bold Italic:size=11.5
+!URxvt.letterSpace: 0
+!URxvt.lineSpace: 0
+URxvt.geometry: 92x24
+URxvt.internalBorder: 24
+URxvt.cursorBlink: true
+!URxvt.cursorColor: #79706f
+URxvt.cursorUnderline: false
+URxvt.saveline: 2048
+URxvt.scrollBar: false
+URxvt.scrollBar_right: false
+URxvt.urgentOnBell: true
+!URxvt.depth: 32
+URxvt.background: #2a2a2a
+URxvt.iso14755: false
+URxvt.iconFile: /home/rayes/.icons/Papirus-Dark-Custom/22x22/apps/utilities-terminal.svg
+
+!! Common Keybinds for Navigations
+URxvt.keysym.Shift-Up: command:\033]720;1\007
+URxvt.keysym.Shift-Down: command:\033]721;1\007
+URxvt.keysym.Control-Up: \033[1;5A
+URxvt.keysym.Control-Down: \033[1;5B
+URxvt.keysym.Control-Right: \033[1;5C
+URxvt.keysym.Control-Left: \033[1;5D
+
+!! Perls
+URxvt.perl-ext-common : default,keyboard-select,resize-font
+URxvt.keysym.A-Escape: perl:keyboard-select:activate
+URxvt.keyboard-select.clipboard: true
+Urxvt.resize-font.step: 0.5
+
+!! Rofi
+rofi.font: Noto Sans 11
