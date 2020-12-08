@@ -2,7 +2,8 @@
 
 ![Preview](preview.png)
 
-WM: spectrwm
-Editor: nvim
-Terminal: urxvt
-Distro: Fedora 33
+## Programs
+- WM: spectrwm
+- Editor: nvim
+- Terminal: urxvt
+- Distro: Fedora 33
