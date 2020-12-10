@@ -1,4 +1,4 @@
-<h1 align="center">Dotfiles</h1>
+<h1 align="center">~ Dotfiles ~</h1>
 
 ![Preview](preview.png)
 
