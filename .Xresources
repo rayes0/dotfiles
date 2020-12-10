@@ -1,9 +1,9 @@
 !! Colorscheme
 
 ! special
-*.foreground: #bdbdbd
+*.foreground: #bebebe
 *.background: #2a2a2a
-!*.cursorColor: #bdbdbd
+!*.cursorColor: #bebebe
 
 ! black
 *.color0: #2a2a2a
@@ -14,16 +14,16 @@
 *.color9: #826456
 
 ! green
-*.color2: #4d5a4d
-*.color10: #424d42
+*.color2: #5d6f56
+*.color10: #546550
 
 ! yellow
 *.color3: #a28977
 *.color11: #947b6b
 
 ! blue
-*.color4: #698590
-*.color12: #5e7983
+*.color4: #647e8d
+*.color12: #5b717e
 
 ! magenta
 *.color5: #79706f
@@ -34,8 +34,8 @@
 *.color14: #7b6d63
 
 ! white
-*.color7: #bdbdbd
-*.color15: #bdbdbd
+*.color7: #bebebe
+*.color15: #bebebe
 
 !! Fonts
 Xft.autohint: 0

@@ -10,7 +10,7 @@ inoremap \ \<C-N>
 " PLUGINS
 
 " Plugins will be downloaded under the specified directory.
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.nvim/plugged')
 
 " Declare the list of plugins.
 Plug 'junegunn/goyo.vim'
@@ -35,7 +35,8 @@ nnoremap <F4> :NERDTreeToggle<CR>
 set completeopt=menuone,noinsert
 
 " Pandoc-markdown
-let g:pandoc#module#disabled = ["folding"]
+let g:pandoc#filetypes#pandoc_markdown = 0
+let g:pandoc#folding#fold_yaml = 1
 augroup pandocnotes
 	autocmd BufNewFile,BufRead *.mdown set filetype=markdown.pandoc
 	autocmd BufNewFile *.mdown r ~/.config/nvim/templates/template.mdown
