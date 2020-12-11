@@ -1,0 +1,3 @@
+# Script to see a preview of certain files in the terminal.
+
+pandoc "$1" | w3m -T text/html
