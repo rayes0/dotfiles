@@ -39,7 +39,7 @@ let g:pandoc#filetypes#pandoc_markdown = 0
 let g:pandoc#folding#fold_yaml = 1
 augroup pandocnotes
 	autocmd BufNewFile,BufRead *.mdown set filetype=markdown.pandoc
-	autocmd BufNewFile *.mdown r ~/.config/nvim/templates/template.mdown
+	autocmd BufNewFile *.mdown r ~/.config/nvim/templates/template.mdown | set expandtab
 	autocmd FileType markdown.pandoc call Pandoc_mdown()
 	function Pandoc_mdown()
 		setlocal spell spelllang=en_ca
@@ -49,7 +49,6 @@ augroup pandocnotes
 		
 		let g:file = expand('%:p')
 		let g:pdf = "/tmp/" . expand('%:t:r') . ".pdf"
-		let g:out = expand('%:p:r')
 		
 		function NotesPreview()
 		    " compile the pdf from this file, then start the pdf viewer "
