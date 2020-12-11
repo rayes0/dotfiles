@@ -15,7 +15,7 @@ case $(file --mime-type "$@" -bL) in
         	devour zathura "$@" >/dev/null 2>&1
         ;;
         text/*)
-		devour urxvt -e nvim "$@" >/dev/null 2>&1
+		devour urxvtc -e nvim "$@" >/dev/null 2>&1
 	;;
         application/com.github.phase1geo.minder)
 		devour com.github.phase1geo.minder "$@" >/dev/null 2>&1

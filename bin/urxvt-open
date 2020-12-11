@@ -1,1 +1,1 @@
-xdotool search --onlyvisible --classname URxvtFuzzy windowunmap   ||  urxvt -name URxvtFuzzy -geometry 60x20 -e sh -c launch
+xdotool search --onlyvisible --classname URxvtFuzzy windowunmap   ||  urxvtc -name URxvtFuzzy -geometry 60x20 -e sh -c launch

@@ -11,31 +11,31 @@
 
 ! red
 *.color1: #907466
-*.color9: #826456
+*.color9: #907466
 
 ! green
-*.color2: #5d6f56
-*.color10: #546550
+*.color2: #627554
+*.color10: #627554
 
 ! yellow
 *.color3: #a28977
-*.color11: #947b6b
+*.color11: #a08771
 
 ! blue
-*.color4: #647e8d
-*.color12: #5b717e
+*.color4: #637a89
+*.color12: #637a89
 
 ! magenta
 *.color5: #79706f
-*.color13: #686261
+*.color13: #79706f
 
 ! cyan
 *.color6: #8b796f
-*.color14: #7b6d63
+*.color14: #8b796f
 
 ! white
-*.color7: #bebebe
 *.color15: #bebebe
+*.color7: #bebebe
 
 !! Fonts
 Xft.autohint: 0
@@ -57,13 +57,13 @@ XTerm.vt100.scrollBar: false
 !URxvt.letterSpace: 0
 !URxvt.lineSpace: 0
 URxvt.geometry: 92x24
-URxvt.internalBorder: 24
+URxvt.internalBorder: 30
 URxvt.cursorBlink: true
-!URxvt.cursorColor: #79706f
 URxvt.cursorUnderline: false
 URxvt.saveline: 2048
 URxvt.scrollBar: false
 URxvt.scrollBar_right: false
+URxvt.scrollTtyOutput:  false
 URxvt.urgentOnBell: true
 !URxvt.depth: 32
 URxvt.background: #2a2a2a

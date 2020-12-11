@@ -5,12 +5,14 @@ filetype plugin on
 filetype plugin indent on
 syntax on
 
+colorscheme disco
+
 inoremap \ \<C-N>
 
 " PLUGINS
 
 " Plugins will be downloaded under the specified directory.
-call plug#begin('~/.nvim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 " Declare the list of plugins.
 Plug 'junegunn/goyo.vim'
