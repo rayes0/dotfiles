@@ -6,6 +6,7 @@ filetype plugin indent on
 syntax on
 
 colorscheme disco
+set laststatus=1
 
 inoremap \ \<C-N>
 
