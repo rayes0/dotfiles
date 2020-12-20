@@ -20,7 +20,7 @@ case $(file --mime-type "$@" -bL) in
         application/com.github.phase1geo.minder)
 		devour com.github.phase1geo.minder "$@" >/dev/null 2>&1
 	;;
-	application/vnd.openxmlformats-officedocument*)
+	application/vnd.openxmlformats-officedocument* | application/vnd.oasis*)
 		devour libreoffice "$@" >/dev/null 2>&1
 	;;
 	image/*)

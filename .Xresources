@@ -11,7 +11,7 @@
 
 ! red
 *.color1: #627a8a
-*.color9: #637a8a
+*.color9: #627a8a
 
 ! green
 *.color2: #aa8f7c
@@ -34,8 +34,8 @@
 *.color14: #937f74
 
 ! white
-*.color15: #bebebe
 *.color7: #bebebe
+*.color15: #bebebe
 
 !! Fonts
 Xft.autohint: 0

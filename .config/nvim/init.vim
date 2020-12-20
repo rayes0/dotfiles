@@ -5,10 +5,14 @@ filetype plugin on
 filetype plugin indent on
 syntax on
 
-colorscheme disco
+colorscheme sayo
 set laststatus=1
 
 inoremap \ \<C-N>
+
+map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 " PLUGINS
 
