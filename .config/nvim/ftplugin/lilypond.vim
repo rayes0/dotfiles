@@ -23,6 +23,6 @@ call LilypondPreview()
 autocmd VimLeave *.ly execute '!rm' g:pdf
 
 " when saving, also recompile the pdf (this should update the viewer automatically) "
-autocmd BufWrite *.ly execute '!lilypond' '-o' g:out g:file
+autocmd BufWritePost *.ly execute '!lilypond' '-o' g:out g:file
 
 nmap <C-p> :call LilypondPreview()<CR>
