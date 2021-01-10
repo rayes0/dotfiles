@@ -1,4 +1,5 @@
 # /bin/bash
+
 VALUE=$(cat /tmp/hide-cursor)
 
 if pgrep -f xbanish >/dev/null 2>&1 && [[ $VALUE -eq 0 ]]; then

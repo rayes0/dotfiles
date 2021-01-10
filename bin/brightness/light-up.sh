@@ -1,3 +1,4 @@
+#!/bin/bash
 current=`light`%
 
 light -A 5

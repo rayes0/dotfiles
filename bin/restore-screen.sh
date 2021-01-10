@@ -1,3 +1,5 @@
+#!/bin/bash
+
 autorandr --change
 wmctrl -s 0
 wmctrl -s 1
