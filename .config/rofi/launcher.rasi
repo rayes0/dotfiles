@@ -21,7 +21,7 @@ configuration {
 @import "colors.rasi"
 
 * {
-  text-font:                            "Sarasa Fixed J 12";
+  text-font:                            "SF Mono 11";
 
   inputbar-margin:                      3px 3px;
   prompt-padding:                       10px 10px;

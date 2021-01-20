@@ -41,7 +41,7 @@ set render-loading              true
 # verbose
 # verbose
 set recolor-lightcolor          "#fdfbe3" # base3
-set recolor-darkcolor           "#839496" # base00
+set recolor-darkcolor           "#657b83" # base00
 set recolor                     "true"
 # set recolor-keephue             true      # keep original color
 

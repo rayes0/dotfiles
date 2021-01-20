@@ -45,7 +45,7 @@
 #request setshaderversion 330
 
 /* Window title */
-#request settitle "GLava"
+#request settitle "GLavaUp"
 
 /* Window geometry (x, y, width, height) */
 #request setgeometry 0 0 1920 1080

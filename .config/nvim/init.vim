@@ -30,6 +30,7 @@ Plug 'vim-latex/vim-latex'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'ferrine/md-img-paste.vim'
+Plug 'jakykong/vim-zim'
 
 call plug#end()
 

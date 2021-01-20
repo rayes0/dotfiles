@@ -21,7 +21,7 @@ configuration {
 
 * {
   background-color: @background-light;
-  font: "Sarasa Fixed J 12";
+  font: "SF Mono 11";
   text-color: @foreground;
 }
 

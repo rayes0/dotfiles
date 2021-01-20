@@ -1,0 +1,9 @@
+#!/bin/bash
+# This script checks and opens urls with specific programs depending on the type of url
+
+if [[ $1 =~ ^.*\.png$ || $1 =~ ^.*\.jpg$ ]];then
+	feh $1
+else
+	echo $1 | xclip -selection clipboard
+	notify-send "Copied to clipboard!"
+fi
