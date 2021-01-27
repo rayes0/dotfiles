@@ -7,12 +7,12 @@ autorandr -c
 setup="$(autorandr | grep '(current)' | cut -d' ' -f1)"
 case $setup in
 	mobile)
-		bspc monitor eDP-1 -d 1 2 3 4 5 ;;
+		bspc monitor eDP-1 -d いち に さん よん ご ;;
 	docked)
-		bspc monitor DP-1-1 -d 1 2 3 4 5
-		bspc monitor DP-1-2 -d 6 7 8 9 ;;
+		bspc monitor DP-1-1 -d いち に さん よん ご
+		bspc monitor DP-1-2 -d ろく しち はち なな ;;
 	*)
-		bspc monitor -d 1 2 3 4 5 ;;
+		bspc monitor -d いち に さん よん ご ;;
 esac
 
 # Settings
@@ -35,13 +35,33 @@ bspc rule -a feh state=floating
 bspc rule -a GLava manage=off
 
 #~/.config/polybar/start.sh # start polybar
-orangebar | lemonbar -n bar -B \#c52a2a2a -F \#bebebe -f 'SF Mono:size=11' -g 1920x30+0+0 & # start lemonbar with script &
-disown
-orangebar | lemonbar -n bar -B \#c52a2a2a -F \#bebebe -f 'SF Mono:size=11' -g 1920x30+1920+0 &
-disown
-sh -c '~/.config/bspwm/borders.sh' & # double borders
 
-nitrogen --restore # set background
+# Start lemonbar
+if pgrep orangebar >/dev/null 2>&1 ; then
+	killall orangebar
+	killall lemonbar
+	orangebar | lemonbar -n bar -B \#c52a2a2a -F \#bebebe -f 'SF Mono:size=11' -f 'Noto Serif CJK JP:style=SemiBold:size=11' -g 1920x30+0+0 & # start lemonbar with script &
+	disown
+	orangebar | lemonbar -n bar -B \#c52a2a2a -F \#bebebe -f 'SF Mono:size=11' -f 'Noto Serif CJK JP:style=SemiBold:size=11' -g 1920x30+1920+0 &
+	disown
+else
+	orangebar | lemonbar -n bar -B \#c52a2a2a -F \#bebebe -f 'SF Mono:size=11' -f 'Noto Serif CJK JP:style=SemiBold:size=11' -g 1920x30+0+0 & # start lemonbar with script &
+	disown
+	orangebar | lemonbar -n bar -B \#c52a2a2a -F \#bebebe -f 'SF Mono:size=11' -f 'Noto Serif CJK JP:style=SemiBold:size=11' -g 1920x30+1920+0 &
+	disown
+fi
+
+# Double borders
+if pgrep borders.sh >/dev/null 2>&1 ; then
+	killall borders.sh
+	sh -c '~/.config/bspwm/borders.sh' &
+else
+	sh -c '~/.config/bspwm/borders.sh' &
+fi
+
+
+#nitrogen --restore # set background
+feh --bg-fill ~/Pictures/wallpapers/cofe/coffee.jpg
 numlockx on # set numlock on
 
 picom-ibhagwan --config ~/.config/picom-bsp.conf & # start picom

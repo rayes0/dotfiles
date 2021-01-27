@@ -20,25 +20,23 @@ clock() {
 net() {
         con_up="$(nmcli --terse --fields NAME,TYPE,DEVICE con show --active | grep -v 'virbr0')"
 
-        if [[ "$con_up" == *"ethernet"* ]]; then
-#                netp="$(echo "$con_up" | grep 'ethernet' | awk -F: '{print $3}' | cut -c1-3)"
+        if [[ "$con_up" =~ .*ethernet.* ]]; then
                 net="$(echo "$con_up" | grep 'ethernet' | awk -F: '{print $1}')"
         fi
         
-        if [[ "$con_up" == *"wireless"* ]]; then
- #               netp="$(echo "$con_up" | grep 'wireless' | awk -F: '{print $3}' | cut -c1-3)"
+        if [[ "$con_up" =~ .*wireless.* ]]; then
                 net="$(echo "$con_up" | grep 'wireless' | awk -F: '{print $1}')"
         fi
         
-        if [[ "$con_up" != *"ethernet"* && "$con_up" != *"wireless"* ]]; then
-  #              netp="Airplane mode"
+        if ![[ "$con_up" =~ .*ethernet.* && "$con_up" != .*wireless.* ]]; then
   		 net="Airplane mode"
         fi
         
-        if [[ "$con_up" == *"tun"* || "$con_up" == *"vpn"* ]];then
-                #vpn=""
-		vpn="${fga}(vpn)"
-        fi
+        if [[ "$con_up" =~ .*tun.* || "$con_up" =~ .*vpn.* ]];then
+		vpn="${fga} (vpn)  "
+	else
+		vpn="  "
+	fi
 }
 
 vol() {
@@ -65,15 +63,16 @@ cmus-info() {
 }
 
 update() {
-	echo "%{l}%{O5}${fgn} $(bspc query -D -d focused --names) %{O20}$(cmus-info) %{c}${fgn}$(clock) %{r}${fga2}vol ~ ${fgn}$(vol)% ${fga} \  ${fgb}net ~ ${fgn}$net ${vpn} ${fga} \  ${fgb}bat ~ ${fgn}$(bat)%{O10}"
+	net
+	echo "%{l}%{O5}${fgn} $(bspc query -D -d focused --names) %{O20}$(cmus-info) %{c}${fgn}$(clock) %{r}${fga2}vol ~ ${fgn}$(vol)% ${fga} \  ${fgb}net ~ ${fgn}$net${vpn}${fga}\  ${fgb}bat ~ ${fgn}$(bat)%{O10}"
 	while read -r line; do
-		echo "%{l}%{O5}${fgn} $(bspc query -D -d focused --names) %{O20}$(cmus-info) %{c}${fgn}$(clock) %{r}${fga2}vol ~ ${fgn}$(vol)% ${fga} \  ${fgb}net ~ ${fgn}$net ${vpn} ${fga} \  ${fgb}bat ~ ${fgn}$(bat)%{O10}"
+		net
+		echo "%{l}%{O5}${fgn} $(bspc query -D -d focused --names) %{O20}$(cmus-info) %{c}${fgn}$(clock) %{r}${fga2}vol ~ ${fgn}$(vol)% ${fga} \  ${fgb}net ~ ${fgn}$net${vpn}${fga}\  ${fgb}bat ~ ${fgn}$(bat)%{O10}"
 	done < <(bspc subscribe desktop) &
 }
 
 while :;
 do
-	net
 	update
 	sleep 60 &
 	wait
