@@ -3,7 +3,10 @@
 
 # Menus and Accessories
 super + Return
-	urxvt 
+	urxvt
+
+super + shift + Return
+	urxvt -name URxvtFloat
 
 super + d
 	dmenu_run -p menu -i -h 30 -fn 'SF Mono:size=11'
@@ -20,6 +23,19 @@ super + shift + q
 super + y
 	keepmenu
 
+super + s
+	pavucontrol -t 3
+
+super + o
+	urxvt-open
+
+super + z
+	zim-choose
+
+super + {Up,Down}
+	pactl set-sink-volume @DEFAULT_SINK@ {+2,-2}%; pkill -10 coffeebar
+
+# Applications
 super + shift + i
 	icecat --ProfileManager
 
@@ -31,8 +47,11 @@ super + shift +t
 #
 
 # quit/restart bspwm
-super + alt + {q,r}
-	bspc {quit,wm -r}
+super + alt + q
+	bspc quit
+
+super + q
+	bspc wm -r
 
 # close and kill
 super + x
@@ -61,26 +80,34 @@ super + {t,@space}
 super + e
 	bspc node -t fullscreen
 
-# set the node flags
-super + ctrl + {m,x,y,z}
-	bspc node -g {marked,locked,sticky,private}
+super + i
+	bspc node -g hidden
 
-# Switch desktops
+super + u
+	bspc node {,$(bspc query -N -n .hidden | tail -n1)} -g hidden=off
+
+# set the node flags
+#super + ctrl + {m,x,y,z}
+#	bspc node -g {marked,locked,sticky,private}
 
 #
 # focus/swap
 #
 
 # focus the node in the given direction
-super + {_,shift + }{h,j,k,l}
-	bspc node -{f,s} {west,south,north,east}
+#super + {_,shift + }{h,j,k,l}
+	#bspc node -{f,s} {west,south,north,east}
+
+# focus the monitor in the given direction
+super + {h,l}
+	bspc monitor -f {west,east}
 
 # focus the node for the given path jump
 super + {p,b,comma,period}
 	bspc node -f @{parent,brother,first,second}
 
 # focus the next/previous node in the current desktop
-super + {_,shift + }c
+super + {j,k}
 	bspc node -f {next,prev}.local
 
 # focus the next/previous desktop in the current monitor
@@ -88,8 +115,11 @@ super + {_,shift + }c
 #	bspc desktop -f {prev,next}.local
 
 # focus the last node/desktop
-super + {grave,Tab}
-	bspc {node,desktop} -f last
+super + grave
+	bspc node -f last
+
+super + a
+	bspc desktop -f last
 
 # focus the older or newer node in the focus history
 super + {o,i}
@@ -98,8 +128,8 @@ super + {o,i}
 	bspc wm -h on
 
 # focus or send to the given desktop
-super + {_,shift + }{1-9,0}
-	bspc {desktop -f,node -d} '^{1-9,10}'
+super + {_,shift + }{1,2,3,4,5,6,7,8,9,0,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12}
+	bspc {desktop -f,node -d} '^{2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23}'
 
 #
 # preselect

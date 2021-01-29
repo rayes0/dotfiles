@@ -1,0 +1,194 @@
+#!/bin/bash
+# Script for lemonbar on bspwm
+# In order to be less resource intensive, many things in the script updates at a very slow interval by default. You can manually refresh by sending signal 10 manually (pkill -10 orangebar), so you can have instant updates for things like changing the volume
+
+trap 'update' 10   # allows user to instantaneously update the bar
+
+# Check for an argument indicating dual monitors, this is to prevent multiple bars writing the same file
+if [ -z "$1" ]; then
+	fifo=${XDG_RUNTIME_DIR:-/tmp}/lemonbar.fifo
+	test -e "$fifo" && rm "$fifo"
+	mkfifo "$fifo"
+else
+	fifo=${XDG_RUNTIME_DIR:-/tmp}/lemonbar2.fifo
+	test -e "$fifo" && rm "$fifo"
+	mkfifo "$fifo"
+fi
+
+trap "pkill lemonbar; kill $(jobs -p); rm -r $fifo" EXIT # Cleanly exit
+
+fgb='%{F#937f74}'
+fgn='%{F#bebebe}'
+fga='%{F#8b8f7e}'
+fga2='%{F#987a6b}'
+
+# Date
+check_date() {
+	while :; do
+		echo "DAT$(date "+%a, %b %d  ${fgb}${fgn}  %I:%M %p")" > "$fifo"
+		sleep 30
+	done &
+}
+
+# Bspwm workspaces
+# Only shows focused and occupied workspaces
+get_desk() {
+	names=$(bspc query -D --names | grep -v "Desktop")
+	occupied=$(bspc query -D -d .occupied --names | grep -v "Desktop")
+	loc=$(bspc query -D -d .active.local --names | grep -v "Desktop")
+	str=""
+	for d in ${names[@]}; do
+		if [[ "$(bspc query -D -d focused --names)" == "${d}" || "$loc" == "${d}" ]]; then
+			str="${str}%{B#3a3a3a}%{U#bebebe}%{+u} ${d} %{-u}%{B-}"
+		elif [[ "${occupied[@]}" =~ "${d}" ]]; then
+			str="${str} ${d} "
+		fi
+	done
+	echo "$str"
+}
+check_workspc() {
+	while read -r line; do
+		echo "DES$(get_desk)" > "$fifo"
+	done < <(bspc subscribe desktop) &
+}
+
+# Network
+check_net() {
+	while :; do
+		con_up="$(nmcli --terse --fields NAME,TYPE,DEVICE con show --active | grep -v 'virbr0')"
+		
+		if [[ "$con_up" =~ .*ethernet.* ]]; then
+		        net="$(echo "$con_up" | grep 'ethernet' | awk -F: '{print $1}')"
+			netp=" Eth"
+		elif [[ "$con_up" =~ .*wireless.* ]]; then
+		        net="$(echo "$con_up" | grep 'wireless' | awk -F: '{print $1}')"
+			netp=" Wlp"
+		elif [[ ! "$con_up" =~ .*ethernet.* && ! "$con_up" != .*wireless.* ]]; then
+			net="Airplane mode" > "$fifo"
+		fi
+
+		if [[ "$con_up" =~ .*tun.* || "$con_up" =~ .*vpn.* ]]; then
+			echo "VPN${fga}(vpn)" > "$fifo"
+		else
+			echo "VPN  " > "$fifo"
+		fi
+
+		echo "NET${fgb}$netp ~ ${fgn}$net" > "$fifo"
+		sleep 60
+	done &
+}
+
+# Volume
+check_vol() {
+	while :; do
+		vol="$(pacmd list-sinks|grep -A 15 '* index'| awk '/volume: front/{ print $5 }' | sed 's/%//g')"
+		
+		if [ "$vol" -ge "0" ] && [ "$vol" -lt "30" ]; then
+			voli=""
+		elif [ "$vol" -ge "30" ] && [ "$vol" -lt "60" ]; then
+			voli="奔"
+		elif [ "$vol" -ge "60" ] && [ "$vol" -lt "90" ]; then
+			voli="墳"
+		elif [ "$vol" -eq "100" ]; then
+			voli="墳"
+		fi
+		echo "VOL${fgb}$voli ~ ${fgn}${vol}%" > "$fifo"
+		sleep 60
+	done &
+}
+
+# Battery
+check_bat() {
+	while :; do
+		bat="$(cat /sys/class/power_supply/BAT0/capacity)"
+		bat_state="$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep state | tr -d "[:space:]" | cut -c 7-)"
+		if [ "$bat" -lt 20 ]; then
+			bati=""
+		elif [ "$bat" -ge "20" ] && [ "$bat" -lt "30" ]; then
+			bati=""
+		elif [ "$bat" -ge "30" ] && [ "$bat" -lt "50" ]; then
+			bati=""
+		elif [ "$bat" -ge "50" ] && [ "$bat" -lt "90" ]; then
+			bati=""
+		elif [ "$bat" -eq "100" ]; then
+			bati=""
+		fi
+		case "$bat_state" in
+			charging)
+				bat="$bat% ${fga}(charging)${fgn}"
+				bati=""
+				;;
+			*)
+				bat="${bat}%"
+				;;
+		esac
+		echo "BAT${fgb}${bati} ~ ${fgn}$bat" > "$fifo"
+		sleep 120
+	done &
+}
+
+# Hidden window count
+check_hid() {
+	while read -r line; do
+		number="$(bspc query -N -n .hidden.window | wc -l)"
+		hid=""
+		if [ $number -gt 0 ]; then
+			hid="${fgb} min ~ ${fgn}$number"
+		fi
+		echo "HID$hid" > "$fifo"
+	done < <(bspc subscribe node_flag) &
+}
+
+# Cmus
+check_mus() {
+	# no while loop, refresh the bar with pkill whenever you launch cmus
+	if pgrep cmus >/dev/null 2>&1 ; then
+		title="$(cmus-remote -Q | grep "tag title " | sed "s/tag title //")"	
+		album="$(cmus-remote -Q | grep "tag album " | sed "s/tag album //")"
+		artist="$(cmus-remote -Q | grep "tag artist " | sed "s/tag artist //")"
+		echo "MUS${fgb} ~ ${fgn}$title ${fgb}by ${fgb}$artist" > $fifo
+#	else
+#		echo "MUS "
+	fi
+}
+
+
+update() {
+	check_date
+	check_workspc
+	check_net
+	check_vol
+	check_bat
+	check_hid
+	check_mus
+}
+
+output_fifo() {
+	while read -r line; do
+		case $line in
+			DAT*)
+				date="${line#???}" ;;
+			DES*)
+				desktop="${line#???}" ;;
+			NET*)
+				network="${line#???}" ;;
+			VPN*)
+				vpnname="${line#???}" ;;
+			VOL*)
+				volume="${line#???}" ;;
+			BAT*)
+				battery="${line#???}" ;;
+			HID*)
+				hidden="${line#???}" ;;
+			MUS*)
+				music="${line#???}" ;;
+			*) ;;
+		esac
+		echo "%{l}%{O1}${fgn}$desktop  $hidden %{B-}%{O20}${music} %{c}${fgn}${date} %{r}${volume}   ${network} ${vpnname}   ${battery} "
+	done < <(tail -f "$fifo")
+}
+
+# Run update and echo to stdout, ready to be piped to lemonbar
+update
+output_fifo
+
