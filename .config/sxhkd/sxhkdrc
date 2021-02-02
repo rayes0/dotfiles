@@ -20,6 +20,9 @@ super + w
 super + shift + q
 	powermenu.sh
 
+super + shift + m
+	music
+
 super + y
 	keepmenu
 
@@ -35,12 +38,24 @@ super + z
 super + {Up,Down}
 	pactl set-sink-volume @DEFAULT_SINK@ {+2,-2}%; pkill -10 coffeebar
 
+XF86MonBrightnessUp
+	~/bin/brightness/light-up.sh
+
+XF86MonBrightnessDown
+	~/bin/brightness/light-down.sh
+
 # Applications
 super + shift + i
 	icecat --ProfileManager
 
-super + shift +t
+super + shift + t
 	cd ~/.tor-browser && sh -c '~/.tor-browser/start-tor-browser.desktop'
+
+super + shift + p
+	icecat -P Professional
+
+super + f
+	urxvt -e ranger
 
 
 # bspwm hotkeys
@@ -128,8 +143,8 @@ super + {o,i}
 	bspc wm -h on
 
 # focus or send to the given desktop
-super + {_,shift + }{1,2,3,4,5,6,7,8,9,0,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12}
-	bspc {desktop -f,node -d} '^{2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23}'
+super + {_,shift + }{1-9,0}
+	bspc {desktop -f,node -d} '^{1-9,10}'
 
 #
 # preselect

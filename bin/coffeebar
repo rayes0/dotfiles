@@ -4,7 +4,7 @@
 
 trap 'update' 10   # allows user to instantaneously update the bar
 
-# Check for an argument indicating dual monitors, this is to prevent multiple bars writing the same file
+# Check for an argument indicating dual monitors, this is to prevent multiple bars writing to the same named pipe
 if [ -z "$1" ]; then
 	fifo=${XDG_RUNTIME_DIR:-/tmp}/lemonbar.fifo
 	test -e "$fifo" && rm "$fifo"
@@ -35,7 +35,6 @@ check_date() {
 get_desk() {
 	names=$(bspc query -D --names | grep -v "Desktop")
 	occupied=$(bspc query -D -d .occupied --names | grep -v "Desktop")
-	loc=$(bspc query -D -d .active.local --names | grep -v "Desktop")
 	str=""
 	for d in ${names[@]}; do
 		if [[ "$(bspc query -D -d focused --names)" == "${d}" || "$loc" == "${d}" ]]; then
@@ -63,8 +62,9 @@ check_net() {
 		elif [[ "$con_up" =~ .*wireless.* ]]; then
 		        net="$(echo "$con_up" | grep 'wireless' | awk -F: '{print $1}')"
 			netp=" Wlp"
-		elif [[ ! "$con_up" =~ .*ethernet.* && ! "$con_up" != .*wireless.* ]]; then
-			net="Airplane mode" > "$fifo"
+		elif [[ ! "$con_up" =~ .*ethernet.* && ! "$con_up" =~ .*wireless.* ]]; then
+			net="Airplane mode"
+			netp=""
 		fi
 
 		if [[ "$con_up" =~ .*tun.* || "$con_up" =~ .*vpn.* ]]; then
@@ -89,7 +89,9 @@ check_vol() {
 			voli="奔"
 		elif [ "$vol" -ge "60" ] && [ "$vol" -lt "90" ]; then
 			voli="墳"
-		elif [ "$vol" -eq "100" ]; then
+		elif [ "$vol" -ge "90" ] && [ "$vol" -le "100" ]; then
+			voli="墳"
+		else
 			voli="墳"
 		fi
 		echo "VOL${fgb}$voli ~ ${fgn}${vol}%" > "$fifo"
@@ -146,7 +148,7 @@ check_mus() {
 		title="$(cmus-remote -Q | grep "tag title " | sed "s/tag title //")"	
 		album="$(cmus-remote -Q | grep "tag album " | sed "s/tag album //")"
 		artist="$(cmus-remote -Q | grep "tag artist " | sed "s/tag artist //")"
-		echo "MUS${fgb} ~ ${fgn}$title ${fgb}by ${fgb}$artist" > $fifo
+		echo "MUS${fgb} ~ ${fgn}$title ${fgb}by ${fga}$artist" > $fifo
 #	else
 #		echo "MUS "
 	fi

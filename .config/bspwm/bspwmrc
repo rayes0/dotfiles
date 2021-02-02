@@ -7,16 +7,14 @@ autorandr -c
 setup="$(autorandr | grep '(current)' | cut -d' ' -f1)"
 case $setup in
 	mobile)
-		bspc monitor eDP-1 -d 一 二 三 四 五 ;;
+		bspc monitor eDP-1 -d 一 二 三 四 五 六 七 八 九 十 ;;
 	docked)
 		bspc monitor DP-1-1 -d 一 二 三 四 五
-		bspc monitor DP-1-2 -d 六 七 八 九 十 ;;
+		bspc monitor DP-1-2 -d 六 七 八 九 十
+		bspc monitor eDP-1 -r ;;
 	*)
-		bspc monitor -d 一 二 三 四 五 ;;
+		bspc monitor -d 一 二 三 四 五 六 七 八 九 十 ;;
 esac
-
-bspc monitor DP-1-1 -d 一 二 三 四 五
-bspc monitor DP-1-2 -d 六 七 八 九 十
 
 # Settings
 bspc config border_width         15
@@ -62,7 +60,7 @@ case $setup in
 		;;
 esac
 
-# Double borders
+ Double borders
 if pgrep borders.sh >/dev/null 2>&1 ; then
 	killall borders.sh
 	sh -c '~/.config/bspwm/borders.sh' &
