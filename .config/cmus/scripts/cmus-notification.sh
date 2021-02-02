@@ -24,9 +24,7 @@ FLIST=$( find "$FOLDER" -type f )
 
 if echo "$FLIST" | grep -i ".jpeg\|.png\|.jpg" &>/dev/null; then
         ART=$( echo "$FLIST" | grep -i "cover.jpg\|cover.png\|front.jpg\|front.png\|folder.jpg\|folder.png" | head -n1 )
-fi
-
-if [[ -z "$ART" ]]; then
+else
         ffmpeg -i "$FILE" "$FOLDER/cover.jpg"
         ART="$FOLDER/cover.jpg"
 fi

@@ -1,6 +1,8 @@
 <h1 align="center">~ Dotfiles ~</h1>
 
-This repo contains my personal dotfiles for my own backup purposes. A lot of the files here are specific to my system, and will likely not be compatible with yours right out of the box. I suggest looking at my ![colorscheme repo](https://github.com/rayes0/sayo/) for application themes that will be compatible across the majority of systems.
+A backup of my personal dotfiles. Take what you need and make sure to do a quick check through the files before you use it and replace my applications with the ones you use (some files are specific to my system).
+
+Also take a look at my ![colorscheme repo](https://github.com/rayes0/sayo/).
 
 ## Info
 - Distro: Fedora 33
@@ -14,6 +16,8 @@ This repo contains my personal dotfiles for my own backup purposes. A lot of the
 - Notifications: dunst
 
 ## spectrwm: Main Setup
+
+Distraction-free, focused on usability and productivity.
 
 ![Preview](img/spectr-preview.png)
 

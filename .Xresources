@@ -50,15 +50,14 @@ Xft.dpi: 96
 XTerm.vt100.scrollBar: false
 
 !! URxvt Appearance
-*.font: xft:SF Mono:style=Regular:size=11,xft:Noto Serif CJK JP:style=SemiBold:size=11,xft:symbola:size=12
+*.font: xft:SF Mono:style=Regular:size=11,xft:Noto Serif CJK JP:style=SemiBold:size=11,xft:symbola:size=12:minspace=False
 *.boldFont: xft:SF Mono:style=Bold:size=11,xft:Noto Serif CJK JP:style=Black:size=11
 *.italicFont: xft:SF Mono:style=Regular Italic:size=11,xft:Noto Serif CJK JP:style=Italic:size=11
 *.boldItalicFont: xft:SF Mono:style=Bold Italic:size=11,xft:Noto Serif CJK JP:style=Bold Italic:size=11
 URxvt.letterSpace: -1
 URxvt.lineSpace: 2
 URxvt.geometry: 92x26
-URxvt.internalBorder: 30
-!!URxvt.internalBorder: 50
+URxvt.internalBorder: 35
 URxvt.cursorBlink: true
 URxvt.cursorUnderline: false
 URxvt.saveline: 2048
