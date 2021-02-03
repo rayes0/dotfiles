@@ -10,11 +10,45 @@ let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 colorscheme sayo
 set laststatus=1
 
+set tabstop=4
+set shiftwidth=4
+
 inoremap \ \<C-N>
 
 map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+" STATUSLINE
+
+"set statusline=
+"set statusline+=%2*%{toupper(g:currentmode[mode()])}
+"set statusline+=%=
+"set statusline+=%5*\ %v:%l\/%L
+"set statusline+=%4*\ %Y%4*
+"
+"let g:currentmode = {
+"            \ 'n'  : 'normal',
+"            \ 'no' : 'n-op',
+"            \ 'v'  : 'visual',
+"            \ 'V'  : 'line',
+"            \ '' : 'block',
+"            \ 's'  : 'selection',
+"            \ 'S'  : 'line select',
+"            \ '' : 'block select',
+"            \ 'i'  : 'insert',
+"            \ 'R'  : 'replace',
+"            \ 'Rv' : 'visual replace',
+"            \ 'c'  : 'command',
+"            \ 'cv' : 'vim execute',
+"            \ 'ce' : 'execute',
+"            \ 'r'  : 'prompt',
+"            \ 'rm' : 'more',
+"            \ 'r?' : 'confirm',
+"            \ '!'  : 'shell',
+"            \ 't'  : 'terminal'
+"                   \}
+"
 
 " PLUGINS
 

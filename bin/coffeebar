@@ -1,6 +1,9 @@
 #!/bin/bash
 # Script for lemonbar on bspwm
-# In order to be less resource intensive, many things in the script updates at a very slow interval by default. You can manually refresh by sending signal 10 manually (pkill -10 orangebar), so you can have instant updates for things like changing the volume
+# In order to be less resource intensive, many things in the script updates at a very slow interval by default. You can manually refresh by sending signal 10 manually (pkill -10 coffeebar), so you can have instant updates for things like changing the volume
+#
+# Calling from bspwmrc: `coffeebar | lemonbar -n bar | sh &`
+# It should work as long as you have the `-n bar` option
 
 trap 'update' 10   # allows user to instantaneously update the bar
 
@@ -144,7 +147,7 @@ check_hid() {
 # Cmus
 check_mus() {
 	# no while loop, refresh the bar with pkill whenever you launch cmus
-	if pgrep cmus >/dev/null 2>&1 ; then
+	if pgrep -x cmus >/dev/null 2>&1 ; then
 		title="$(cmus-remote -Q | grep "tag title " | sed "s/tag title //")"	
 		album="$(cmus-remote -Q | grep "tag album " | sed "s/tag album //")"
 		artist="$(cmus-remote -Q | grep "tag artist " | sed "s/tag artist //")"
@@ -192,5 +195,6 @@ output_fifo() {
 
 # Run update and echo to stdout, ready to be piped to lemonbar
 update
+xdotool above -t "$(xdo id -N Bspwm -n root | sort | head -n 1)" "$(xdotool id -a "bar")"
 output_fifo
 

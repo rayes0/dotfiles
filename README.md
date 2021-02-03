@@ -8,6 +8,7 @@ Also take a look at my ![colorscheme repo](https://github.com/rayes0/sayo/).
 - Distro: Fedora 33
 - Main WM: spectrwm
 - Colorscheme: I mainly use ![sayo](https://github.com/rayes0/sayo/), a colorscheme I created
+- Bar: spectrwm built in bar, or lemonbar
 - Editor: nvim
 - Terminal: urxvt
 - Launcher: dmenu and rofi
@@ -24,3 +25,8 @@ Distraction-free, focused on usability and productivity.
 ## bspwm
 
 ![bspwm](img/bsp-preview.png)
+
+## herbstluftwm
+Light theme
+
+![hlwm](img/hlwm-preview.png)

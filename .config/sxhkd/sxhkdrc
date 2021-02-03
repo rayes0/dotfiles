@@ -110,12 +110,12 @@ super + u
 #
 
 # focus the node in the given direction
-#super + {_,shift + }{h,j,k,l}
-	#bspc node -{f,s} {west,south,north,east}
+super + {_,shift + }{h,j,k,l}
+	bspc node -{f,s} {west,south,north,east}
 
 # focus the monitor in the given direction
-super + {h,l}
-	bspc monitor -f {west,east}
+#super + {h,l}
+	#bspc monitor -f {west,east}
 
 # focus the node for the given path jump
 super + {p,b,comma,period}
