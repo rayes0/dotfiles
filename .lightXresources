@@ -1,0 +1,93 @@
+!! Colorscheme
+
+! special
+*.foreground: #60584f
+*.background: #f7f7f7
+!*.cursorColor: #937f74
+
+! black
+*.color0: #f7f7f7
+*.color8: #f7f7f7
+
+! red
+*.color1: #c49580
+*.color9: #c49580
+
+! green
+*.color2: #7c8e6d
+*.color10: #7c8e6d
+
+! yellow
+*.color3: #96947b
+*.color11: #96947b
+
+! blue
+!*.color4: #708088
+!*.color12: #708088
+*.color4: #887e70
+*.color12: #887e70
+
+! magenta
+*.color5: #937593
+*.color13: #937593
+
+! cyan
+*.color6: #6f9086
+*.color14: #6f9086
+
+! white
+*.color7: #585858
+*.color15: #585858
+
+!! Fonts
+Xft.autohint: true
+Xft.lcdfilter: lcddefault
+Xft.hintstyle: hintslight
+Xft.hinting: true
+Xft.antialias: true
+Xft.rgba: rgb
+Xft.dpi: 96
+
+!! Xterm
+XTerm.vt100.scrollBar: false
+
+!! URxvt Appearance
+*.font: xft:SF Mono:style=Regular:size=11,xft:Noto Serif CJK JP:style=SemiBold:size=11,xft:symbola:size=12:minspace=False
+*.boldFont: xft:SF Mono:style=Bold:size=11,xft:Noto Serif CJK JP:style=Black:size=11
+*.italicFont: xft:SF Mono:style=Regular Italic:size=11,xft:Noto Serif CJK JP:style=Italic:size=11
+*.boldItalicFont: xft:SF Mono:style=Bold Italic:size=11,xft:Noto Serif CJK JP:style=Bold Italic:size=11
+URxvt.letterSpace: -1
+URxvt.lineSpace: 2
+URxvt.geometry: 92x26
+URxvt.internalBorder: 35
+URxvt.cursorBlink: true
+URxvt.cursorUnderline: false
+URxvt.saveline: 2048
+URxvt.scrollBar: false
+URxvt.scrollBar_right: false
+URxvt.scrollTtyOutput:  false
+URxvt.urgentOnBell: true
+!URxvt.depth: 32
+URxvt.iso14755: false
+URxvt.iconFile: /home/rayes/.icons/Papirus-Dark-Custom/22x22/apps/utilities-terminal.svg
+
+!! Common Keybinds for Navigations
+URxvt.keysym.Shift-Up: command:\033]720;1\007
+URxvt.keysym.Shift-Down: command:\033]721;1\007
+URxvt.keysym.Control-Up: \033[1;5A
+URxvt.keysym.Control-Down: \033[1;5B
+URxvt.keysym.Control-Right: \033[1;5C
+URxvt.keysym.Control-Left: \033[1;5D
+
+!! Perls
+URxvt.perl-ext-common : default,keyboard-select,resize-font,url-select
+URxvt.keysym.A-Escape: perl:keyboard-select:activate
+URxvt.keyboard-select.clipboard: true
+
+URxvt.resize-font.step: 0.5
+
+URxvt.keysym.M-u: perl:url-select:select_next
+URxvt.url-select.launcher: urxvt-url
+
+!! Rofi
+rofi.font: Noto Sans 11
