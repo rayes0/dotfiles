@@ -11,6 +11,15 @@ geometry:
 - left=20mm
 - right=20mm
 - bottom=30mm
+header-includes: |
+  \usepackage{float}
+  \let\origfigure\figure
+  \let\endorigfigure\endfigure
+  \renewenvironment{figure}[1][2] {
+      \expandafter\origfigure\expandafter[H]
+  } {
+      \endorigfigure
+  }
 ---
 \maketitle
 \tableofcontents

@@ -1,0 +1,69 @@
+# .inputrc
+# GNU readline configuration
+
+# Global values should be located at /etc/inputrc
+$include /etc/inputrc
+
+set editing-mode emacs
+set show-mode-in-prompt on
+
+# Prevent pasted characters from being interpreted as commands
+set enable-bracketed-paste on
+
+# Toggle between emacs and vi mode with alt-e
+set keymap emacs
+"\ee": vi-editing-mode
+set keymap vi-insert
+"\ee": emacs-editing-mode
+set keymap vi-command
+"\ee": emacs-editing-mode
+
+# Switch between cursor types, note that the linux console uses different escape sequences
+$if term=linux
+	set vi-ins-mode-string "(ins) \1\e[?0c\2"
+	set vi-cmd-mode-string "(cmd) \1\e[?8c\2"
+	set emacs-mode-string "(@) \1\e[?8c\2"
+$else
+	set vi-ins-mode-string "(ins) \1\e[5 q\2"
+	set vi-cmd-mode-string "(cmd) \1\e[1 q\2"
+	set emacs-mode-string "(@) \1\e[1 q\2"
+	# enter command mode when enter is pressed
+	set keymap vi-insert
+	RETURN: "\e\n"
+$endif
+
+# Improve tab completion
+# prevents need for double tab
+set show-all-if-ambiguous on
+set show-all-if-unmodified on
+
+set completion-ignore-case on
+set skip-completed-text on
+set visible-stats on
+
+# Will expand tilde during completion
+#set expand-tilde on
+
+# colorize tab completion
+# Note that this may cause completion text blink in some terminals (e.g. xterm).
+set colored-stats On
+# Append char to indicate type
+set visible-stats On
+# Mark symlinked directories
+set mark-symlinked-directories On
+# Color the common prefix, taken from LS_COLORS
+set colored-completion-prefix On
+# Color the common prefix in menu-complete
+set menu-complete-display-prefix On
+
+# Set visual bell
+set bell-style visible
+
+# Optimize history
+# Preserve cursor point when flipping through history
+set history-preserve-point on
+
+# Will mark with an asterisk when history is changed
+set mark-modified-lines on
+
+

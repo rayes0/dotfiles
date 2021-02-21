@@ -1,13 +1,13 @@
 !! Colorscheme
 
 ! special
-*.foreground: #60584f
-*.background: #f7f7f7
+*.foreground: #6c605a
+*.background: #ede6e3
 !*.cursorColor: #937f74
 
 ! black
-*.color0: #f7f7f7
-*.color8: #f7f7f7
+*.color0: #ede6e3
+*.color8: #ede6e3
 
 ! red
 *.color1: #c49580
@@ -22,8 +22,6 @@
 *.color11: #96947b
 
 ! blue
-!*.color4: #708088
-!*.color12: #708088
 *.color4: #887e70
 *.color12: #887e70
 
@@ -36,8 +34,8 @@
 *.color14: #6f9086
 
 ! white
-*.color7: #585858
-*.color15: #585858
+*.color7: #6c605a
+*.color15: #6c605a
 
 !! Fonts
 Xft.autohint: true
@@ -59,7 +57,7 @@ XTerm.vt100.scrollBar: false
 URxvt.letterSpace: -1
 URxvt.lineSpace: 2
 URxvt.geometry: 92x26
-URxvt.internalBorder: 35
+URxvt.internalBorder: 30
 URxvt.cursorBlink: true
 URxvt.cursorUnderline: false
 URxvt.saveline: 2048

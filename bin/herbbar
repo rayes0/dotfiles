@@ -28,9 +28,9 @@ bgf='%{B#bebebe}'
 # Date
 check_date() {
 	while :; do
-                echo "DAT$(date "+%a, %b %d  ${fgb}${fgn}  %I:%M %p")" > "$fifo"
-                sleep 30
-        done &
+		echo "DAT$(date "+%a, %b %d  ${fgb}${fgn}  %I:%M %p")" > "$fifo"
+		sleep 30
+	done &
 }
 # Network
 check_net() {
