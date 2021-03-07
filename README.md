@@ -91,7 +91,7 @@ All credit for weather goes to wttr.in
 
 Calendar:
 
-<img src="img/calendar.png" height="400" />
+<img src="img/calendar.png" height="200" />
 
 Each widget also has a dark mode.
 
