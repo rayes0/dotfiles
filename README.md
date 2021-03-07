@@ -117,6 +117,7 @@ Each widget also has a dark mode.
 - `cmus` as a music player
   - Other music players will require quite a bit of work to adapt to this setup (look at the wrapper script and the sidebar config if you want to know why)
 - `todo.sh`, a script from the ![todo.txt cli](https://github.com/todotxt/todo.txt-cli). Used for managing the todo list (more info below)
+- `calcurse` as a calendar, for the appointment widget
 - GNU `date`, not other variants because the calendar widget selects dates using `date -d`.
 - `jq` to parse quotes from a json file. Note that I have not checked over all 8600 quotes from the provided quote file, and I make no guarantees towards the quality either. Check the Other Info section if you want to use a custom quote file.
 
