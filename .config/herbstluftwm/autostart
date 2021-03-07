@@ -40,7 +40,6 @@ hc keybind $mod-Shift-k     shift up
 hc keybind $mod-Shift-l     shift right
 
 # splitting frames
-# create an empty frame at the specified direction
 hc keybind $mod-u			split   auto
 hc keybind $mod-Shift-u		split   bottom  0.5
 hc keybind $mod-Control-u	split   right   0.5
@@ -70,6 +69,7 @@ for i in "${!tag_names[@]}" ; do
     if ! [ -z "$key" ] ; then
         hc keybind "$mod-$key" use_index "$i"
         hc keybind "$mod-Shift-$key" move_index "$i"
+		#hc keybind "$mod-Control-$key" `
     fi
 done
 
@@ -80,7 +80,8 @@ hc keybind $mod-period use_index +1 --skip-visible
 hc keybind $mod-comma  use_index -1 --skip-visible
 
 # layouting
-hc keybind $mod-space floating toggle
+#hc keybind $mod-space floating toggle
+hc keybind $mod-space attr clients.focus.floating toggle
 hc keybind $mod-t pseudotile toggle
 hc keybind $mod-e fullscreen toggle
 # The following cycles through the available layouts within a frame, but skips
@@ -107,13 +108,15 @@ hc keybind $mod-c cycle
 hc keybind $mod-Left  focus left
 hc keybind $mod-Right focus right
 
-hc keybind $mod-Up    spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +2%; pkill -10 herbbar'
-hc keybind $mod-Down  spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -2%; pkill -10 herbbar'
+hc keybind $mod-Up    spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar1.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)'
+hc keybind $mod-Down  spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar2.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)'
+#hc keybind $mod-Up    spawn sh -c 'amixer set Master 2%+; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar2.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)'
+#hc keybind $mod-Down  spawn sh -c 'amixer set Master 2%-; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar2.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)'
 
 # theme
 hc attr theme.tiling.reset 1
 hc attr theme.floating.reset 1
-hc set frame_border_active_color '#ede6e3'
+hc set frame_border_active_color '#fccec1'
 hc set frame_border_normal_color '#ede6e3'
 hc set frame_bg_normal_color '#ede6e3'
 hc set frame_bg_active_color '#ede6e3'
@@ -121,7 +124,7 @@ hc set frame_border_width 1
 hc set always_show_frame off
 hc set frame_bg_transparent on
 hc set frame_transparent_width 0
-hc set frame_gap 5
+hc set frame_gap 6
 
 hc attr theme.active.color '#ce9c85'
 hc attr theme.normal.color '#ede6e3'
@@ -146,27 +149,33 @@ hc set raise_on_focus 1
 
 ## menus
 hc keybind $mod-d spawn dmenu_run -i -h 30 -nf \#6c605a -nb \#ede6e3 -sf \#6c605a -sb \#c8c2bf -shb \#c8c2bf -nhb \#ede6e3 -shf \#9c7b9c
+hc keybind $mod-m spawn rofi -show drun -theme launcher_light.rasi
 hc keybind $mod-w spawn rofi -no-lazy-grab -show window -theme window_menu_light.rasi
 hc keybind $mod-p spawn rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' -config ~/.config/rofi/clipboard.rasi -m -4
-hc keybind $mod-Shift-w spawn sh -c 'xdotool search --onlyvisible --classname eww-side-light windowunmap || eww open side-light' &
+hc keybind $mod-Shift-w spawn sh -c 'eww close side-light || eww open side-light' &
+hc keybind $mod-Shift-r spawn sh -c 'eww close utilities-light || eww open utilities-light' &
+hc keybind $mod-Shift-e spawn sh -c 'eww close calendar-light || eww open calendar-light' &
 hc keybind $mod-y spawn keepmenu
 hc keybind $mod-o spawn urxvt-open
 hc keybind $mod-b spawn ~/bin/hlwm/hidebar.sh
 hc keybind $mod-z spawn zim-choose
 hc keybind $mod-Shift-m spawn music
 hc keybind $mod-n spawn ~/.config/cmus/scripts/cmus-notification-italic.sh
+hc keybind $mod-Shift-v spawn vim-anywhere
 
 # applications
 hc keybind $mod-Shift-t spawn ~/.tor-browser/Browser/start-tor-browser
+hc keybind $mod-Shift-f spawn firefox --ProfileManager
 hc keybind $mod-Shift-i spawn icecat --ProfileManager
 hc keybind $mod-Shift-p spawn icecat -P Professional
 hc keybind $mod-Shift-d spawn icecat -P Development
 
+hc keybind $mod-g spawn gimp
 hc keybind $mod-f spawn urxvtc -e ranger
 
 # Other keybinds
-hc keybind XF86MonBrightnessUp spawn ~/bin/brightness/light-up.sh 
-hc keybind XF86MonBrightnessDown spawn ~/bin/brightness/light-down.sh
+hc keybind XF86MonBrightnessUp spawn sh -c '~/bin/brightness/light-up.sh; pkill -SIGUSR1 start-eww'
+hc keybind XF86MonBrightnessDown spawn sh -c '~/bin/brightness/light-down.sh; pkill -SIGUSR1 start-eww'
 
 # rules
 rulespawn() {(
@@ -204,38 +213,43 @@ hc rule instance='urxvt' title='weechat' tag=12
 # unlock, just to be sure
 hc unlock
 
-# do multi monitor setup here, e.g.:
-# hc set_monitors 1280x1024+0+0 1280x1024+1280+0
-# or simply:
-hc detect_monitors
-
 # Panel
 if pgrep herbbar >/dev/null 2>&1 ; then
 	pkill herbbar
 	pkill lemonbar
 fi
 
-number=$(hc list_monitors | wc -l)
-case $number in
-	2)
-		~/bin/hlwm/herbbar | lemonbar -n bar -B \#ede6e3 -F \#6c605a -f 'SF Mono:size=11' -f 'Victor Mono:style=Italic:size=11' -f 'Victor Mono:style=SemiBold Italic:size=11' -f 'Noto Serif CJK JP:style=SemiBold:size=10' -f 'Noto Sans CJK JP:size=10' -g 1920x30+0+0 | sh &
-		~/bin/hlwm/herbbar 2 | lemonbar -n bar -B \#ede6e3 -F \#6c605a -f 'SF Mono:size=11' -f 'Victor Mono:style=Italic:size=11' -f 'Victor Mono:style=SemiBold Italic:size=11' -f 'Noto Serif CJK JP:style=SemiBold:size=10' -f 'Noto Sans CJK JP:size=10' -g 1920x30+1920+0 | sh & ;;
-	1|*)
-		~/bin/hlwm/herbbar | lemonbar -n bar -B \#ede6e3 -F \#6c605a -f 'SF Mono:size=11' -f 'Victor Mono:style=Italic:size=11' -f 'Victor Mono:style=SemiBold Italic:size=11' -f 'Noto Serif CJK JP:style=SemiBold:size=10' -f 'Noto Sans CJK JP:size=10' -g 1920x30+0+0 | sh & ;;
-esac
-
 # Only autostart on first run
 if hc silent new_attr bool my_not_first_autostart ; then
 	autorandr -c
 	feh --bg-fill ~/Pictures/wallpapers/neutral/foggy-mountain_trees.jpg	
 	urxvt -e weechat &
+	xbanish -d -s -t 1000 &
+    hc use_index "10"
+	hc split right 0.56
 	RULES=( tag=11 focus=off )
 	rulespawn urxvt -e calcurse
+	hc focus left
 	RULES=( tag=11 focus=ooff)
 	rulespawn urxvt -e nvim -o2 ~/.todo/todo.txt ~/.todo/Todo.txt
-	xbanish -d -s -t 1000
+	hc use_index "0"
+	start-eww &
 fi
 
-picom-ibhagwan --config ~/.config/picom-rounded.conf --shadow-opacity 0.25 &
+# do multi monitor setup here, e.g.:
+# hc set_monitors 1280x1024+0+0 1280x1024+1280+0
+# or simply:
+hc detect_monitors
+
+number=$(hc list_monitors | wc -l)
+case $number in
+	2)
+		~/bin/hlwm/herbbar | lemonbar -n bar -B \#ede6e3 -F \#6c605a -f 'SF Mono:size=10.8' -f 'Victor Mono:style=Italic:size=10.8' -f 'Victor Mono:style=SemiBold Italic:size=10.8' -f 'Noto Serif CJK JP:style=SemiBold:size=10.8' -f 'Noto Sans CJK JP:size=10.8' -g 1920x30+0+0 | sh &
+		~/bin/hlwm/herbbar 2 | lemonbar -n bar -B \#ede6e3 -F \#6c605a -f 'SF Mono:size=10.8' -f 'Victor Mono:style=Italic:size=10.8' -f 'Victor Mono:style=SemiBold Italic:size=10.8' -f 'Noto Serif CJK JP:style=SemiBold:size=10.8' -f 'Noto Sans CJK JP:size=10.8' -g 1920x30+1920+0 | sh & ;;
+	1|*)
+		~/bin/hlwm/herbbar | lemonbar -n bar -B \#ede6e3 -F \#6c605a -f 'SF Mono:size=10.8' -f 'Victor Mono:style=Italic:size=10.8' -f 'Victor Mono:style=SemiBold Italic:size=10.8' -f 'Noto Serif CJK JP:style=SemiBold:size=10.8' -f 'Noto Sans CJK JP:size=10.8' -g 1920x30+0+0 | sh & ;;
+esac
+
+picom --config ~/.config/picom-rounded.conf --shadow-opacity 0.25 &
 dunst -config ~/.config/dunst/dunstrc-light &
 

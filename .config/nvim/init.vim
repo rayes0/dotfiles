@@ -5,9 +5,27 @@ filetype plugin on
 filetype plugin indent on
 syntax on
 
-let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
-let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
-colorscheme sayo
+" PLUGINS
+
+" Plugins will be downloaded under the specified directory.
+call plug#begin('~/.config/nvim/plugged')
+
+" Declare the list of plugins.
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'reedes/vim-pencil'
+Plug 'preservim/nerdtree'
+Plug 'vim-latex/vim-latex'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'ferrine/md-img-paste.vim'
+Plug 'jakykong/vim-zim'
+"Plug 'rayes0/blossom.vim'
+Plug 'dbeniamine/todo.txt-vim'
+Plug 'vim-voom/VOoM'
+
+call plug#end()
+
 set laststatus=1
 
 set tabstop=4
@@ -18,6 +36,46 @@ inoremap \ \<C-N>
 map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+" TABLINE
+
+set tabline=%!MyTabLine()
+
+function MyTabLine()
+	let s = ''
+	for i in range(tabpagenr('$'))
+		" select the highlighting
+		if i + 1 == tabpagenr()
+			let s .= '%#TabLineSel#'
+		else
+			let s .= '%#TabLine#'
+    	endif
+
+    	" set the tab page number (for mouse clicks)
+    	let s .= '%' . (i + 1) . 'T' 
+
+    	" the label is made by MyTabLabel()
+    	let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
+  	endfor
+
+  	" after the last tab fill with TabLineFill and reset tab page nr
+  	let s .= '%#TabLineFill#%T'
+
+  	" right-align the label to close the current tab page
+  	if tabpagenr('$') > 1 
+    	let s .= '%=%#TabLine#%999XClose '
+  	endif
+
+  	return s
+endfunction
+
+function MyTabLabel(n)
+	let buflist = tabpagebuflist(a:n)
+	let winnr = tabpagewinnr(a:n)
+	let label =  bufname(buflist[winnr - 1]) 
+	return fnamemodify(label, ":t") 
+endfunction
+
 
 " STATUSLINE
 
@@ -50,24 +108,6 @@ map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans
 "                   \}
 "
 
-" PLUGINS
-
-" Plugins will be downloaded under the specified directory.
-call plug#begin('~/.config/nvim/plugged')
-
-" Declare the list of plugins.
-Plug 'junegunn/goyo.vim'
-Plug 'junegunn/limelight.vim'
-Plug 'reedes/vim-pencil'
-Plug 'preservim/nerdtree'
-Plug 'vim-latex/vim-latex'
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-syntax'
-Plug 'ferrine/md-img-paste.vim'
-Plug 'jakykong/vim-zim'
-
-call plug#end()
-
 " PLUGIN SETTINGS
 
 let g:limelight_conceal_ctermfg = '240'
@@ -78,12 +118,10 @@ nnoremap <F4> :NERDTreeToggle<CR>
 
 set completeopt=menuone,noinsert
 
-" Pandoc-markdown
-let g:pandoc#filetypes#pandoc_markdown = 0
-let g:pandoc#folding#fold_yaml = 1
 augroup pandocnotes
 	autocmd BufNewFile,BufRead *.mdown set filetype=markdown.pandoc
 	autocmd BufNewFile *.mdown r ~/.config/nvim/templates/template.mdown | set expandtab
+	"autocmd FileType pandoc set signcolumn=yes:2
 	autocmd FileType markdown.pandoc call Pandoc_mdown()
 	function Pandoc_mdown()
 		setlocal spell spelllang=en_ca
@@ -115,6 +153,21 @@ augroup pandocnotes
 	" let g:mdip_imgname = 'image'
 augroup END
 autocmd BufNewFile *.mkdwn r ~/.config/nvim/templates/template.mkdwn
+
+" TODO SETTINGS
+let g:TodoTxtForceDoneName='done.txt'
+
+" Use todo#Complete as the omni complete function for todo files
+au filetype todo setlocal omnifunc=todo#Complete
+
+" Auto complete projects
+au filetype todo imap <buffer> + +<C-X><C-O>
+
+" Auto complete contexts
+au filetype todo imap <buffer> @ @<C-X><C-O>
+
+" let g:Todo_fold_char='@'
+
 
 " FOLDING
 
@@ -154,3 +207,12 @@ au BufEnter Volume*.md setlocal foldmethod=expr
 set shellslash
 let g:tex_flavor='latex'
 
+" Pandoc-markdown
+let g:pandoc#filetypes#pandoc_markdown = 0
+let g:pandoc#folding#fold_yaml = 1
+let g:pandoc#syntax#conceal#blacklist = ["dashes", "atx"]
+
+" Set colorscheme at end to prevent pandoc from overriding
+set termguicolors
+colorscheme blossom
+" colorscheme sayo

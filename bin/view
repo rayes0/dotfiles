@@ -1,5 +1,9 @@
 #!/bin/bash
-
 # Script to see a preview of certain files in the terminal.
 
-pandoc "$1" | w3m -T text/html
+case "$1" in
+	*.md|*.mdown|*.markdown)
+		pandoc "$1" | w3m -T text/html ;;
+	*.html)
+		w3m -T text/html "$1" ;;
+esac

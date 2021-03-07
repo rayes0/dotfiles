@@ -1,0 +1,43 @@
+#!/bin/bash
+
+case $1 in
+	vol) # CHANGES vol
+		pactl set-sink-volume @DEFAULT_SINK@ ${2%%.*}%
+		kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock) &
+		kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock) &
+		kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar1.lock) &
+		;;
+	light) # CHANGES light
+		light -S $2
+		kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock) &
+		kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock) &
+		kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar1.lock) &
+		;;
+	up) # deals with uptime less than a minute, where the command `uptime` doesn't work
+		time="$(uptime -p )"
+		time="${time/up }"
+		time="${time/ days,/d}"
+		time="${time/ hours,/h}"
+		time="${time/ minutes/m}"
+		echo ${time:-'less than a minute'}
+		;;
+	cpuavg) # avg cpu load since the cpu started
+		grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage "%"}' ;;
+	disk) # disk space of the root partition
+		percent_used="$(df -h / | tail -n -1 | awk '{ print $4 "\t" }')"
+		df -h / | tail -n -1 | awk '{ print $4" / "$3 }'
+		;;
+	mem) # source: https://github.com/KittyKatt/screenFetch/issues/386#issuecomment-249312716
+		while IFS=":" read -r a b; do
+        	case $a in
+        		"MemTotal") ((mem_used+=${b/kB})); mem_total="${b/kB}" ;;
+        		"Shmem") ((mem_used+=${b/kB}))  ;;
+        		"MemFree" | "Buffers" | "Cached" | "SReclaimable")
+        		mem_used="$((mem_used-=${b/kB}))"
+    			;;
+        	esac
+		done < /proc/meminfo
+
+        echo "$((mem_used / 1024))kb / $((mem_total / 1024))kb"
+		;;
+esac

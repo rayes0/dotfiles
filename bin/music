@@ -55,7 +55,7 @@ case $chosen in
 
         ;;
     $play_pause)
-        cmus-remote --pause  && notify-send -i ~/.icons/Papirus-Dark-Custom/24x24/apps/rhythmbox.svg -u low -t 1080 "Cmus" "$play_stat"
+        cmus-remote --pause  && notify-send -i rhythmbox -u low -t 1080 "Cmus" "$play_stat"
 #	if [ $play_stat == "Paused" ]; then
 #		glava_pid=$(ps aux | grep glava | grep -v grep | awk '{print $2}')
 #		sleep 120 && kill -STOP $glava_pid
@@ -75,7 +75,7 @@ case $chosen in
         cmus-remote --next && . ~/.config/cmus/scripts/cmus-notification.sh
         ;;
     $tog_repeat)
-        cmus-remote --raw "toggle repeat_current" && notify-send -i ~/.icons/Papirus-Dark-Custom/24x24/apps/rhythmbox.svg -u low -t 1800 "Cmus" "Repeat $repeat"
+        cmus-remote --raw "toggle repeat_current" && notify-send -i rhythmbox -u low -t 1800 "Cmus" "Repeat $repeat"
         ;;
     $tog_shuffle)
         cmus-remote --shuffle && notify-send -u low -t 1800 "Cmus" "Shuffle $shuffle"

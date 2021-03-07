@@ -1,7 +1,8 @@
 #!/bin/bash
 # This script checks and opens urls with specific programs depending on the type of url
 
-if [[ $1 =~ ^.*\.png$ || $1 =~ ^.*\.jpg$ || $1 =~ ^.*\.jpeg$ ]];then
+
+if [[ $1 =~ ^.*\.png$ || $1 =~ ^.*\.jpg$ || $1 =~ ^.*\.jpeg$ || $1 =~ ^.*\.png.*$ || $1 =~ ^.*\.jpg?width.*$ || $1 =~ ^.*\.jpeg?width.*$ ]];then
 	feh --scale-down --geometry 1280x720 $1
 else
 	echo $1 | xclip -selection clipboard

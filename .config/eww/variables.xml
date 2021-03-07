@@ -1,0 +1,38 @@
+<!-- Only script-vars are included here, the majority of variables are created by the wrapper script -->
+<eww>
+<variables>
+	<!-- System -->
+	<script-var name="uptime" interval="60s">~/.config/eww/scripts/check-sys.sh up</script-var>
+	<script-var name="cpuavg" interval="60s">~/.config/eww/scripts/check-sys.sh cpuavg</script-var>
+	<script-var name="disk" interval="1h">~/.config/eww/scripts/check-sys.sh disk</script-var>
+	<script-var name="mem" interval="30s">~/.config/eww/scripts/check-sys.sh mem</script-var>
+
+	<!-- Date -->
+	<script-var name="day_num" interval="2h">date "+%d"</script-var>
+	<script-var name="month" interval="12h">date "+%b"</script-var>
+	<script-var name="weekday" interval="2h">date "+%a"</script-var>
+	<script-var name="min" interval="10s">date "+%M"</script-var>
+	<script-var name="hour" interval="25s">date "+%I"</script-var>
+	<script-var name="ampm" interval="1h">date "+%P"</script-var>
+
+	<!-- Calcurse -->
+	<script-var name="next_appointment" interval="1m">~/.config/eww/scripts/check-todo.sh appoint</script-var>
+	<script-var name="next_appointment_time" interval="1m">~/.config/eww/scripts/check-todo.sh appoint-time</script-var>
+
+	<!-- Cmus -->
+	<!-- Shell looping is too slow for this, so dedicate these to eww. This is not a big problem as it will only compute when cmus is playing -->
+	<script-var name="mus_position" interval="200ms">~/.config/eww/scripts/cmus-check.sh</script-var>
+
+	<!-- Todo -->
+	<script-var name="todo" interval="10s">~/.config/eww/scripts/check-todo.sh adaptive</script-var>
+	<script-var name="todo-num" interval="10s">~/.config/eww/scripts/check-todo.sh adaptivenum</script-var>
+	<script-var name="todo-total" interval="10s">~/.config/eww/scripts/check-todo.sh totnum</script-var>
+	<script-var name="todo-apri" interval="10s">~/.config/eww/scripts/check-todo.sh apri</script-var>
+	<script-var name="todo-apri-num" interval="10s">~/.config/eww/scripts/check-todo.sh aprinum</script-var>
+	<script-var name="otherpri" interval="10s">~/.config/eww/scripts/check-todo.sh otherpri</script-var>
+	<script-var name="otherprinum" interval="10s">~/.config/eww/scripts/check-todo.sh otherprinum</script-var>
+
+	<!-- Weather -->
+	<script-var name="update-weather" interval="20m">~/.config/eww/scripts/weather.sh</script-var>
+</variables>
+</eww>

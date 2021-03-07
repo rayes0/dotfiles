@@ -1,0 +1,537 @@
+* {
+	all: unset;
+}
+
+.main {
+	background-color: #2a2a2a;
+	font-family: Victor Mono, SFMono Nerd Font, Noto Serif CJK JP;
+	font-style: italic;
+	font-size: 15px;
+	color: #bebebe;
+}
+
+@keyframes fadeIn {
+	from {color:rgba(0, 0, 0, 0,);}
+}
+
+.side-close {
+	padding-top: 80px;
+}
+button:hover {
+	font-weight: bold;
+}
+button:disabled {
+	color: rgba(108, 96, 90, 0.3);
+}
+
+// Time
+.hour {
+	font-size: 85px;
+	font-weight: 600;
+	font-style: normal;
+	font-family: SFMono Nerd Font;
+}
+.semicolon {
+	font-size: 70px;
+	margin-left: 5px;
+	margin-right: 5px;
+	font-style: normal;
+	font-family: SFMono Nerd Font;
+}
+.min {
+	font-size: 85px;
+	font-weight: lighter;
+	font-style: normal;
+	font-family: SFMono Nerd Font;
+}
+.ampm {
+	font-size: 40px;
+	margin-top: 48px;
+	margin-left: 15px;
+	font-weight: 600;
+	font-style: italic;
+	font-family: Victor Mono;
+	animation-name: fadeIn;
+	animation-duration: 300ms;
+}
+.date {
+	font-size: 30px;
+	font-weight: 500;
+	margin-bottom: 20px;
+	animation-name: fadeIn;
+	animation-duration: 600ms;
+}
+
+calendar {
+	padding: 2px 4px 0px 4px;
+	font-size: 17px;
+	font-family: SFMono Nerd Font;
+	font-style: normal;
+}
+/*calendar:disabled {
+	color: rgba(190, 190, 190, 0.2);
+}*/
+calendar:selected {
+	border-radius: 3px;
+	color: #e6dad6;
+	background-color: #6c605a;
+}
+calendar.header {
+	color: #6c605a;
+	font-weight: bold;
+}
+calendar.button {
+	color: rgba(108, 96, 90, 0.7);
+}
+calendar.highlight {
+	color: rgba(108, 96, 90, 0.7);
+	font-weight: bold;
+}
+calendar:indeterminate {
+	color: rgba(108, 96, 90, 0.3);
+}
+.calendar {
+	background-color: #2a2a2a;
+	color: #bebebe;
+	padding: 17px;
+}
+.calendar-date {
+	margin-left: 6px;
+	font-size: 40px;
+	font-weight: 600;
+}
+.calendar-date-num {
+	font-family: SFMono Nerd Font;
+	margin-left: 6px;
+	font-size: 40px;
+	font-weight: 300;
+}
+.calendar-year {
+	margin-left: 6px;
+	font-family: SFMono Nerd Font;
+	font-size: 18px;
+	font-weight: 500;
+	color: rgba(108, 96, 90, 0.8)
+}
+.calendar-info {
+	margin-left: 40px;
+}
+.app-times {
+	font-size: 15px;
+	font-family: SFMono Nerd Font;
+	font-style: normal;
+	font-weight: normal;
+	color: rgba(108, 96, 90, 0.6);
+	margin-left: 15px;
+}
+.app-names {
+	font-size: 15px;
+	font-family: Victor Mono;
+	font-style: italic;
+	font-weight: normal;
+	margin-left: 40px;
+}
+.todo-names {
+	font-size: 15px;
+	font-family: Victor Mono;
+	font-style: italic;
+	font-weight: normal;
+	margin-left: 15px;
+}
+.next-app {
+	font-weight: 700;
+	font-size: 15px;
+	margin-bottom: 10px;
+}
+.next-app-text {
+	font-family: SFMono Nerd Font;
+	font-style: normal;
+	font-size: 15px;
+	margin-bottom: 10px;
+}
+.quote {
+	font-weight: 400;
+	font-size: 17px;
+	margin-bottom: 5px;
+}
+.quote-info {
+	font-weight: 300;
+	font-family: SFMono Nerd Font;
+	font-style: normal;
+	margin-left: 50px;
+}
+.quote-time {
+	font-size: 13.5px;
+	margin-right: 10px;
+	font-weight: 500;
+	color: rgba(108, 96, 90, 0.7);
+}
+.quote-number {
+	font-size: 13.5px;
+	margin-right: 10px;
+	font-family: SFMono Nerd Font;
+	font-style: normal;
+	color: rgba(108, 96, 90, 0.7);
+}
+.quotation-mark {
+	font-size: 25px;
+}
+.quote-title {
+	font-weight: 500;
+	font-family: Victor Mono;
+	font-style: italic;
+	color: rgba(108, 96, 90, 0.9);
+}
+.quote-container {
+	margin-bottom: 30px;
+}
+
+// Apparently when objects are rotated by 90deg, their x and y axis swaps
+expander {
+	all: unset;
+	// Make up for the translation
+	margin-left: 4px;
+}
+expander title {
+	font-weight: 600;
+}
+expander title:hover {
+	font-weight: bold;
+}
+expander arrow {
+	all: unset;
+	transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+	min-width: 16px;
+	min-height: 30px;
+	-gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+	-gtk-icon-transform: rotate(-90deg) translateY(-8px);
+	color: rgba(108, 96, 90, 0.5);
+}
+expander arrow:dir(rtl) {
+	-gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+}
+expander arrow:checked {
+	-gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+	// Since we rotated -90, we have to add this to rotate back
+	-gtk-icon-transform: rotate(0deg) translateX(-8px);
+}
+expander arrow:checked:hover {
+	-gtk-icon-transform: rotate(0deg) translateX(-4px);
+	color: rgba(108, 96, 90, 1);
+}
+expander arrow:hover, expander arrow:active {
+	-gtk-icon-transform: rotate(-90deg) translateY(-4px);
+	color: rgba(108, 96, 90, 1);
+}
+
+// Music
+.album-art {
+	margin: 30px 0 0 40px;
+	min-width: 200px;
+	min-height: 200px;
+	border-radius: 6px;
+	background-size: 200px;
+}
+.music-info {
+	min-height: 215px;
+}
+.music-text {
+	margin: 0px 20px 0 30px;
+	font-size: 16px;
+}
+.music-buttons {
+	font-family: SFMono Nerd Font;
+	font-size: 30px;
+	margin: 10px 20px 0 20px;
+}
+.music-buttons:hover {
+	color: #987a6b;
+}
+.music-norun {
+	font-size: 15px;
+}
+.music-song {
+	font-weight: bold;
+}
+.music-time {
+	font-family: SFMono Nerd Font;
+	font-style: italic;
+	font-weight: 300;
+	font-size: 14px;
+	margin-top: 20px;
+}
+.music-controls {
+	font-style: normal;
+	font-family: SFMono Nerd Font;
+}
+.weather-mus-status {
+	font-size: 14px;
+	margin-top: 10px;
+}
+
+// Weather
+.weather {
+	margin: 20px 0 0px 0;
+	//min-height: 210px;
+	min-height: 190px;
+	animation-name: fadeIn;
+	animation-duration: 900ms;
+}
+.weather-mus {
+	min-width: 420px;
+	font-size: 16px;
+	margin: 0 40px 0 40px;
+}
+.weather-mus-status {
+	margin: 0px;
+	font-size: 16px;
+	font-weight: 300;
+}
+.weather-mus-time {
+	margin: 0px;
+	font-family: SFMono Nerd Font;
+	font-style: normal;
+	font-weight: 100;
+}
+.weather-mus-song {
+	margin: 0px;
+	margin-left: 10px;
+}
+.weather-toggle {
+	font-size: 15px;
+	margin-top: 10px;
+}
+.weather-loc {
+	margin-bottom: 10px;
+}
+.weather-info {
+	margin-left: 35px;
+}
+.weather-icon {
+	font-family: SFMono Nerd Font;
+	font-size: 80px;
+}
+.weather-desc {
+	font-size: 18px;
+}
+.weather-temp {
+	font-style: normal;
+	font-family: SFMono Nerd Font;
+	font-size: 36px;
+}
+.weather-ftemp {
+	font-size: 17px;
+	font-weight: 500;
+}
+.weather-wind {
+	margin-top: 10px;
+}
+expander.weather-expander title {
+	font-weight: 300;
+	margin-top: 10px;
+}
+.weather-region {
+	color: rgba(108, 96, 90, 0.5);
+}
+
+// Sliders
+.slide-label {
+	color: #bebebe;
+	font-size: 15px;
+}
+scale.music-slide {
+	padding: 0px;
+	padding-top: 10px;
+	min-width: 420px;
+}
+.sliders {
+	font-family: SFMono Nerd Font;
+	font-size: 20px;
+	font-weight: 300;
+	margin: 20px 0 15px 0;
+}
+scale {
+	all: unset;
+	min-height: 30px;
+	min-width: 55px;               
+	padding: 16px;
+}
+scale slider {
+	all: unset;
+	min-height: 10px;
+	margin: -6px;
+	border-radius: 100%;
+	background-color: #6c605a;
+}
+scale trough {
+	all: unset;
+	background-color: rgba(155, 155, 155, 0.2);
+	min-width: 250px;
+	min-height: 7px;
+	border-radius: 10px;
+}
+scale highlight {
+	all: unset;
+	background-color: #a09c80;
+	color: black;
+	border-radius: 10px;
+}
+
+.powermenu {
+	margin-top: 20px;
+	font-family: SFMono Nerd Font;
+	font-size: 35;
+}
+.powerbuttons {
+	border-radius: 20px;
+	margin: 10px 40px 10px 40px;
+}
+.powerbuttons:hover {
+	color: #987a6b;
+}
+
+.userinfo {
+	margin-top: 20px;
+}
+.seperator {
+	font-family: SFMono Nerd Font;
+	margin: 10px 0 10px 0;
+}
+.face-img {
+	min-width: 100px;
+	min-height: 100px;
+	border-radius: 100%;
+	background-size: 100px;
+}
+.username {
+	font-size: 23px;
+	font-weight: bold;
+	margin-top: 10px;
+}
+.hostname {
+	font-size: 18px;
+	margin-top: 10px;
+	font-style: italic;
+}
+.sysinfo {
+	font-size: 16px;
+	margin-left: 45px;
+	margin-top: 8px;
+}
+.sysinfo-text {
+	font-family: SFMono Nerd Font;
+	font-style: normal;
+	font-weight: 300;
+}
+.syslabel {
+	font-weight: bold;
+}
+
+// Menus
+.todo {
+	font-size: 15px;
+	font-family: SFMono Nerd Font;
+	padding: 10px;
+	padding: 15px;
+}
+
+// Theme specific
+.main-light {
+	background-color: #ede6e3;
+	font-family: Victor Mono, SFMono Nerd Font, Noto Serif CJK JP;
+	font-style: italic;
+	color: #6c605a;
+}
+.calendar-light {
+	background-color: #e6dad6;
+	padding: 17px;
+}
+.calendar-container-light {
+	background-color: rgba(108, 96, 90, 0.04);
+	padding: 23px;
+	border-radius: 10px;
+}
+.calendar-year-dark {
+	margin-left: 6px;
+	font-family: SFMono Nerd Font;
+	font-size: 18px;
+	font-weight: 500;
+	color: rgba(190, 190, 190, 0.7);
+}
+.quote-time-dark {
+	font-size: 13.5px;
+	margin-right: 10px;
+	font-weight: 500;
+	//color: rgba(190, 190, 190, 0.6);
+	color: #8b8f7e;
+}
+.quote-number-dark {
+	font-size: 13.5px;
+	margin-right: 10px;
+	font-family: SFMono Nerd Font;
+	font-style: normal;
+	color: #8b8f7e;
+	//color: rgba(190, 190, 190, 0.6);
+}
+.quote-title-dark {
+	font-weight: 500;
+	font-family: Victor Mono;
+	font-style: italic;
+	color: #877979;
+}
+.quote-author-dark {
+	color: #937f74;
+}
+.calendar-dark {
+	padding: 17px;
+}
+.calendar-dark calendar:selected {
+	border-radius: 3px;
+	color: #e6dad6;
+	background-color: #6c605a;
+}
+.calendar-dark calendar.header {
+	color: #8b8f7e;
+	font-weight: bold;
+}
+.calendar-dark calendar.button {
+	color: #8b8f7e;
+}
+.calendar-dark calendar.highlight {
+	color: #877979;
+	font-weight: bold;
+}
+.calendar-dark calendar:indeterminate {
+	color: rgba(155, 155, 155, 0.4);
+}
+.calendar-dark expander arrow {
+	all: unset;
+	transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+	min-width: 16px;
+	min-height: 30px;
+	-gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+	-gtk-icon-transform: rotate(-90deg) translateY(-8px);
+	//color: rgba(108, 96, 90, 0.5);
+	color: rgba(190, 190, 190, 0.5);
+}
+.calendar-dark expander arrow:checked:hover {
+	-gtk-icon-transform: rotate(0deg) translateX(-4px);
+	//color: rgba(108, 96, 90, 1);
+	color: #987a6b;
+}
+.calendar-dark expander arrow:hover, expander arrow:active {
+	-gtk-icon-transform: rotate(-90deg) translateY(-4px);
+	//color: rgba(108, 96, 90, 1);
+	color: #987a6b;
+}
+.calendar-dark .app-times {
+	font-size: 15px;
+	font-family: SFMono Nerd Font;
+	font-style: normal;
+	font-weight: normal;
+	color: #877979;
+	margin-left: 15px;
+}
+.sidebar .weather-region {
+	color: rgba(190, 190, 190, 0.3);
+}

@@ -1,4 +1,4 @@
-set aaa_mode=artist
+set aaa_mode=all
 set altformat_current= %F 
 set altformat_playlist= %f%= %d 
 set altformat_title=%f
@@ -47,6 +47,7 @@ set color_win_title_bg=black
 set color_win_title_fg=blue
 set confirm_run=true
 set continue=true
+set continue_album=true
 set device=/dev/cdrom
 set display_artist_sort_name=false
 set dsp.alsa.device=default:CARD=Dock
@@ -106,14 +107,17 @@ set show_current_bitrate=false
 set show_hidden=false
 set show_playback_position=true
 set show_remaining_time=false
-set shuffle=false
+set shuffle=true
 set skip_track_info=false
 set smart_artist_sort=true
 set softvol=false
 set softvol_state=0 0
 set start_view=tree
-set status_display_program=
+set status_display_program=/home/rayes/.config/cmus/scripts/cmus-status.sh
+set stop_after_queue=false
 set time_show_leading_zero=true
+set tree_width_max=0
+set tree_width_percent=33
 set wrap_search=true
 bind browser backspace browser-up
 bind browser i toggle show_hidden

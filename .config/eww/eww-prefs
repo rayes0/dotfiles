@@ -1,0 +1,15 @@
+#!/bin/bash
+# Sourced by the start-eww wrapper script and a number of other scripts
+# Restart the eww wrapper completely after changing
+
+# Set this to the command you want to use to launch terminal programs
+term_command='urxvtc -e'
+
+# Location for weather (in a valid fromat for wttr.in)
+weather_location='Calgary'
+
+# Which unit to display weather in. Either 'C' or 'F'
+temp_units='C'
+
+# Which unit to display wind speed in. Either 'kmph' or 'miles'
+wind_units='kmph'

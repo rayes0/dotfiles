@@ -6,20 +6,26 @@ trap 'update' 10   # allows user to instantaneously update the bar
 
 # Check for an argument indicating dual monitors, this is to prevent multiple bars writing to the same named pipe
 if [ -z "$1" ]; then
+	lockf="${XDG_RUNTIME_DIR}/herbbar.lock"
 	fifo=${XDG_RUNTIME_DIR:-/tmp}/herb-bar.fifo
 	test -e "$fifo" && rm "$fifo"
 	mkfifo "$fifo"
 	monitor=0
 else
+	lockf="${XDG_RUNTIME_DIR}/herbbar1.lock"
 	fifo=${XDG_RUNTIME_DIR:-/tmp}/herb-bar2.fifo
 	test -e "$fifo" && rm "$fifo"
 	mkfifo "$fifo"
 	monitor=1
 fi
 
-trap "pkill lemonbar; kill $(jobs -p); rm -r $fifo" EXIT # Cleanly exit
+# pidfile
+set -C
+! echo "$$" > "$lockf" && exit 1
 
-fgb='%{F#8f8378}'
+trap "pkill lemonbar; kill $(jobs -p); rm -r $fifo; rm -r $lockf" EXIT # Cleanly exit
+
+fgb='%{F#8f8678}'
 fgn='%{F-}'
 fga='%{F#839773}'
 bgf='%{B#c8c2bf}'
@@ -34,25 +40,28 @@ check_date() {
 # Network
 check_net() {
 	while :; do
+		netp=""
     	con_up="$(nmcli --terse --fields NAME,TYPE,DEVICE con show --active | grep -v 'virbr0')"
             if [[ "$con_up" =~ .*ethernet.* ]]; then
                 net="$(echo "$con_up" | grep 'ethernet' | awk -F: '{print $1}')"
-                netp=" Eth"
-            elif [[ "$con_up" =~ .*wireless.* ]]; then
+                netp=""
+			fi
+            if [[ "$con_up" =~ .*wireless.* ]]; then
                 net="$(echo "$con_up" | grep 'wireless' | awk -F: '{print $1}')"
-                netp=" Wlp"
-            elif [[ ! "$con_up" =~ .*ethernet.* && ! "$con_up" =~ .*wireless.* ]]; then
+                netp="${netp} "
+			fi
+            if [[ ! "$con_up" =~ .*ethernet.* && ! "$con_up" =~ .*wireless.* ]]; then
                 net="Airplane mode"
                 netp=""
             fi
 
             if [[ "$con_up" =~ .*tun.* || "$con_up" =~ .*vpn.* ]]; then
-                echo "VPN${fga}(vpn)" > "$fifo"
+                echo "VPN${fga}" > "$fifo"
             else
                 echo "VPN  " > "$fifo"
             fi
 
-        	echo "NET${fgb}$netp ~ %{T3}${fgn}$net%{T2}" > "$fifo"
+        	echo "NET${fgb}$netp %{T3}${fgn}$net%{T2}" > "$fifo"
             sleep 60
     done &
 }
@@ -63,32 +72,32 @@ check_bat() {
         bat_state="$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep state | tr -d "[:space:]" | cut -c 7-)"
         if [ "$bat" -lt 20 ]; then
             bati=""
-        elif [ "$bat" -ge "20" ] && [ "$bat" -lt "30" ]; then
+        elif [ "$bat" -ge "20" ] && [ "$bat" -lt "40" ]; then
             bati=""
-        elif [ "$bat" -ge "30" ] && [ "$bat" -lt "50" ]; then
+        elif [ "$bat" -ge "40" ] && [ "$bat" -lt "60" ]; then
             bati=""
-        elif [ "$bat" -ge "50" ] && [ "$bat" -lt "90" ]; then
+        elif [ "$bat" -ge "60" ] && [ "$bat" -lt "90" ]; then
             bati=""
         elif [ "$bat" -eq "100" ]; then
             bati=""
         fi
         case "$bat_state" in
             charging)
-                bat="%{T3}$bat% %{T2}${fga}(charging)${fgn}"
+                bat="%{T3}$bat%+%{T2}"
                 bati=""
                 ;;
             *)
-                bat="%{T3}${bat}\%%{T2}"
+                bat="%{T3}${bat}% %{T2}"
                 ;;
         esac
-        echo "BAT${fgb}${bati} ~ ${fgn}$bat" > "$fifo"
+        echo "BAT${fgb}${bati} ${fgn}$bat" > "$fifo"
         sleep 120
     done &
 }
 # Volume            
 check_vol() {                                                 
-	while :; do      
-      	vol="$(pacmd list-sinks|grep -A 15 '* index'| awk '/volume: front/{ print $5 }' | sed 's/%//g')"
+	while :; do
+      	vol="$(pacmd list-sinks | grep -A 15 '* index'| awk '/volume: front/{ print $5 }' | sed 's/%//g')"
 
     	if [ "$vol" -ge "0" ] && [ "$vol" -lt "30" ]; then
 			voli=""
@@ -101,7 +110,8 @@ check_vol() {
         else
             voli="墳"
         fi
-        echo "VOL${fgb}$voli ~ %{T3}${fgn}${vol}% %{T2}" > "$fifo"
+
+        echo "VOL${fgb}$voli %{T3}${fgn}${vol}%%%{T2}" > "$fifo"
         sleep 60
    done &
 }
@@ -112,7 +122,7 @@ check_mus() {
 		title="$(cmus-remote -Q | grep "tag title " | sed "s/tag title //")"
 		album="$(cmus-remote -Q | grep "tag album " | sed "s/tag album //")"
 		artist="$(cmus-remote -Q | grep "tag artist " | sed "s/tag artist //")"
-		echo "MUS${fgb} ~ ${fgn}%{T3}$title %{T-}${fgb}by%{T2} ${fga}%{T3}$artist%{T2}" > $fifo &
+		echo "MUS${fgb} ${fgn}%{T3}$title %{T-}${fgb}by%{T2} ${fga}%{T3}$artist%{T2}" > $fifo &
 	else
 		echo "MUS" > $fifo &
 	fi
@@ -138,10 +148,10 @@ check_tag() {
 check_todo() {
 	while :; do
 		todo="$(todo.sh | head -n -2 | wc -l)"
-		if [ "$todo" > 0 ]; then
-			echo "TOD${fgb}${fgn} %{T3}$todo ${fga}todo${fgn}%{T2}" > $fifo
+		if [ "$todo" -gt 0 ]; then
+			echo "TOD${fgb}${fgn} %{T3}$todo%{T2}" > $fifo
 		else
-			echo "TOD${fga}陼${fgn}" > $fifo
+			echo "TOD${fga}陼 0 tasks${fgn}" > $fifo
 		fi
 		sleep 20
 	done &
@@ -158,10 +168,6 @@ check_wm() {
 			focus_changed*)
 				#check_hidden ;;
 				;;
-			window_title_changed*cmus*)
-				check_mus ;;
-			window_title_changed*-*-*)
-				check_mus ;;
 			UPDATE_PANEL)
 				update ;;
 		esac
@@ -191,7 +197,7 @@ parse_fifo() {
 				update ;;
 			*) ;;
 		esac
-		echo "%{T-}%{l}%{O1}$desktop%{T2}  %{B-}%{O20}${music} %{c}%{T3}${fgn}${date}%{T-} %{r}${volume}  ${network} ${vpnname}   ${battery}  %{A:eww open todo:}%{A3:eww close todo:} ${todo} %{A}%{A}"
+		echo "%{T-}%{l}%{O1}%{A:eww open side-light:}%{A3:eww open side-light:}$desktop%{T2}  %{B-}%{O20}${music}%{A}%{A} %{c}%{T3}%{A:eww close calendar-light || eww open calendar-light:}%{A3:eww close calendar-light || eww open calendar-light:}${fgn}${date}%{A}%{A}%{T-} %{r}%{A:eww close utilities-light || eww open utilities-light:}%{A3:eww close utilities-light || eww open utilities-light:}${volume}   ${network} ${vpnname}    ${battery}   ${todo} %{A}%{A} "
     done < <(tail -f "$fifo")
 }
 
@@ -208,4 +214,3 @@ update() {
 
 update
 parse_fifo
-check_tag

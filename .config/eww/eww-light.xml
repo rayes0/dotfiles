@@ -1,0 +1,177 @@
+<eww>
+	<definitions>
+		<def name="sidebar-light">
+			<box orientation="v" space-evenly="false" class="main-light">
+				<button onclick="eww close side-light" class="side-close" hexpand="true"></button>
+				<box class="time" orientation="h" space-evenly="false" halign="center">
+					<box class="hour">{{hour}}</box>
+					<box class="semicolon">:</box>
+					<box class="min">{{min}}</box>
+					<box class="ampm">{{ampm}}</box>
+				</box>
+				<box class="date" orientation="h" space-evenly="false" halign="center">{{weekday}}, {{month}} {{day_num}}</box>
+				<button class="weather-toggle" onclick="kill -s USR2 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)" halign="center" visible="{{mus_whenrunning}}">{{toggle_text}}</button>
+				<box class="weather" orientation="v" halign="center" space-evenly="false" visible="{{mus_whennotplaying}}" valign="center" hexpand="true">
+					<box space-evenly="false" halign="center" visible="{{whennotconnected}}" valign="center" orientation="v">
+						<button onclick="kill -s VTALRM $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)"><label text="Could not connect to wttr.in" valign="center" halign="center" style="margin-top:30px;font-size:18px;"/></button>
+						<button onclick="kill -s VTALRM $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)"><label text="Last try at {{weather_lastcheck}}" valign="center" halign="center" style="margin-top:5px;font-size:16px;"/></button>
+						<button onclick="kill -s VTALRM $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)"><label text="{{retry_status}}" valign="center" halign="center" style="font-size:16px;margin-top:5px;"/></button>
+					</box>
+					<box orientation="h" halign="center" space-evenly="false" valign="center" visible="{{whenconnected}}">
+						<box orientation="v" space-evenly="false" valign="start" style="min-width: 150px;">
+							<label class="weather-icon" text="{{weather_icon}}" halign="start"/>
+							<label class="weather-desc" text="{{weather_desc}}" halign="start"/>
+							<label class="weather-wind" text="  {{weather_wind}}" halign="start"/>
+						</box>
+						<box class="weather-info" orientation="v" space-evenly="false" valign="center">
+							<label class="weather-temp" text="{{weather_temp}}" halign="start"/>
+							<label class="weather-ftemp" text="Feels like {{weather_ftemp}}" halign="start"/>
+							<expander class="weather-expander" name="Show more" vexpand="true" expanded="false">
+								<box orientation="v" space-evenly="false" halign="start" valign="baseline">
+									<box orientation="h" space-evenly="false" halign="start" valign="baseline">
+										<label class="weather-sunrise" text="瀞  {{weather_sunrise}}   " halign="start"/>
+										<label class="weather-sunset" text="漢  {{weather_sunset}}" halign="start"/>
+									</box>
+									<box orientation="h" space-evenly="false" halign="start" valign="baseline">
+										<label class="weather-area" text="  {{weather_area}}" halign="start"/>
+										<label class="weather-region" text=" ({{weather_country}})" halign="start"/>
+									</box>
+									<label class="weather-lastcheck" text="Last Updated: {{weather_lastcheck}}" halign="start"/>
+								</box>
+							</expander>
+						</box>
+					</box>
+				</box>
+				<box class="weather-mus" orientation="h" halign="start" valign="baseline" space-evenly="false" visible="{{mus_whennotplaying}}" hexpand="true">
+					<box orientation="h" space-evenly="false" hexpand="true" valign="baseline">
+						<button class="weather-mus-status" onclick="kill -s USR2 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)" halign="start" valign="center" visible="{{mus_whenrunning}}"> {{mus_status}}:</button>
+						<button class="weather-mus-song" onclick="kill -SIGURG $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)" halign="start" wrap="false" valign="center" visible="{{mus_whenrunning}}">{{mus_song}}</button>
+					</box>
+					<label class="weather-mus-time" text="{{mus_position_min}} / {{mus_duration_min}}" halign="end" valign="baseline" visible="{{mus_whenrunning}}"/>
+				</box>
+				<box class="music-info" orientation="h" space-evenly="false" visible="{{mus_whenplaying}}">
+					<box class="album-art" style="background-image: url('{{mus_image}}');"></box>
+					<box class="music-text" orientation="v" space-evenly="false" valign="center" visible="{{mus_whenplaying}}">
+						<label/>
+						<label text=" {{mus_status}}" halign="start"/>
+						<label/>
+						<label class="music-song" text="{{mus_song}}" halign="start" wrap="false"/>
+						<label text="{{mus_album}}" halign="start" wrap="false"/>
+						<label text="{{mus_artist}}" halign="start" wrap="false"/>
+						<label class="music-time" text="{{mus_position_min}} / {{mus_duration_min}}" halign="start"/>
+					</box>
+				</box>
+				<button class="music-norun" onclick="{{startterm}} cmus" visible="{{mus_whenkilled}}" halign="center">Cmus is not running. Click to start.</button>
+				<scale halign="center" class="music-slide" min="0" max="{{mus_duration}}" value="{{mus_position}}" style="margin:0px;"/>
+				<box class="music-controls" orientation="h" space-evenly="false" active="{{mus_whenrunning}}" hexpand="true" halign="center">
+					<button onclick="cmus-remote --prev" class="music-buttons" halign="center"></button>
+					<button onclick="cmus-remote --pause" class="music-buttons" halign="center">懶</button>
+					<button onclick="cmus-remote --next" class="music-buttons" halign="center"></button>
+				</box>
+				<box orientation="h" space-evenly="false" valign="center" halign="center">
+					<box space-evenly="false" halign="start" valign="center" orientation="v">
+						<label class="sliders" text=" {{volume}}%" halign="start" valign="center"/>
+						<label class="sliders" text=" {{brightness}}%" halign="start" valign="center"/>
+					</box>
+					<box class="sliders" space-evenly="false" halign="end" valign="center" orientation="v">
+						<scale min="0" max="100" value="{{volume}}" onchange="~/.config/eww/scripts/check-sys.sh vol {}"/>
+						<scale min="0" max="100" onchange="~/.config/eww/scripts/check-sys.sh light {}" value="{{brightness}}"/>
+					</box>
+				</box>
+				<box class="userinfo" halign="center" space-evenly="false" orientation="h">
+					<box halign="center" space-evenly="false" orientation="v">
+						<box class="face-img" style="background-image: url('{{homedir}}/.face.png');"></box>
+						<label class="username" text="{{usernm}}"/>
+						<label class="hostname" text="@{{hostnm}}"/>
+					</box>
+					<box orientation="v" space-evenly="false" valign="center">
+						<box class="sysinfo" orientation="h" space-evenly="false">
+							<label class="syslabel" text="  "/>
+							<label class="sysinfo-text" text="{{todo-apri-num}}"/>
+							<label text=" high priority, "/>
+							<label class="sysinfo-text" text="{{todo-total}}"/>
+							<label text=" total"/>
+						</box>
+						<box class="sysinfo" orientation="h" space-evenly="false">
+							<label class="syslabel" text="  "/>
+							<label class="sysinfo-text" text="{{uptime}}"/>
+							<label text=" uptime"/>
+						</box>
+						<box class="sysinfo" orientation="h" space-evenly="false">
+							<label class="syslabel" text="  "/>
+							<label class="sysinfo-text" text="{{cpuavg}} "/>
+							<label text="avg"/>
+						</box>
+						<box class="sysinfo" orientation="h" space-evenly="false">
+							<label class="syslabel" text="﫭  "/>
+							<label class="sysinfo-text" text="{{mem}} "/>
+							<label text="used"/>
+						</box>
+						<box class="sysinfo" orientation="h" space-evenly="false">
+							<label class="syslabel" text="  "/>
+							<label class="sysinfo-text" text="{{disk}} "/>
+							<label text="free"/>
+						</box>
+					</box>
+				</box>
+				<box class="powermenu" space-evenly="true" orientation="h" halign="center">
+					<button class="powerbuttons" onclick="~/.config/eww/scripts/power-buttons.sh lock"></button>
+					<button class="powerbuttons" onclick="~/.config/eww/scripts/power-buttons.sh suspend">鈴</button>
+					<button class="powerbuttons" onclick="~/.config/eww/scripts/power-buttons.sh logout"></button>
+					<button class="powerbuttons" onclick="powermenu.sh">ﳁ</button>
+				</box>
+			</box>
+		</def>
+		<def name="calendar-light">
+			<box class="main-light" orientation="h" space-evenly="false">
+				<box class="calendar-light" orientation="v" space-evenly="false">
+					<label class="calendar-year" text="{{year_cal}}" halign="start"/>
+					<label class="calendar-date" text="{{weekday_cal}}, {{month_cal}} {{day_num_cal}}" halign="start"/>
+					<calendar show-day-names="true" show-heading="true" halign="start" valign="center" onclick="~/.config/eww/scripts/calendar.sh {}"/>
+				</box>
+				<box class="calendar-info" orientation="v" space-evenly="false" halign="start" valign="center" hexpand="true">
+					<box class="quote-container" orientation="v" hexpand="false" vexpand="true">
+						<label class="quote" halign="start" text="&quot;{{quote-text}}&quot;" wrap="true" width="20" hexpand="false" vepxand="true"/>
+						<box orientation="h">
+							<box class="quote-info" orientation="h" space-evenly="false">
+								<label class="quote-author" text="- {{quote-author}} "/>
+								<label class="quote-title-dark" text="({{quote-title}})"/>
+							</box>
+							<box orientation="v" space-evenly="false" valign="center">
+								<label class="quote-number" text="#{{quote-number}}" halign="end"/>
+								<label class="quote-time" text="{{quote-time}} min until new quote" halign="end"/>
+							</box>
+						</box>
+					</box>
+					<box class="calendar-container-light" orientation="v" space-evenly="false">
+						<box space-evenly="false" orientation="h">
+							<label class="next-app-text" text="Next: &quot;"/>
+							<label class="next-app" text="{{next_appointment}}"/>
+							<label class="next-app-text" text="&quot; in "/>
+							<label class="next-app" text="{{next_appointment_time}}"/>
+						</box>
+						<expander name="Appointments" vexpand="true" expanded="false">
+							<box orientation="h" space-evenly="false">
+								<label class="app-times" text="{{appointment_times}}"/>
+								<label class="app-names" text="{{appointment_names}}"/>
+							</box>
+						</expander>
+						<expander name="Tasks" vexpand="true" expanded="false">
+							<label class="todo-names" text="{{todo}}" halign="start"/>
+						</expander>
+					</box>
+				</box>
+			</box>
+		</def>
+	</definitions>
+	<windows>
+		<window name="side-light">
+			<geometry anchor="top left" x="0px" y="0px" width="500px" height="100%"/>
+			<widget><sidebar-light/></widget>
+		</window>
+		<window name="calendar-light">
+			<geometry anchor="top center" x="0px" y="35px" width="800px" height="250px"/>
+			<widget><calendar-light/></widget>
+		</window>
+	</windows>
+</eww>

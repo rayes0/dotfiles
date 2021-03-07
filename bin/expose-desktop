@@ -12,18 +12,18 @@ if [ -f "$file" ]; then
 #	fi
 	while : 
 	do
-	        window="$(sed -n "$i"p $file)"
-        	if [ -z "$window" ]; then
+		window="$(sed -n "$i"p $file)"
+    	if [ -z "$window" ]; then
 			rm -r /tmp/expose-desktop
 			rm -r /tmp/hidden-windows
 			xdotool set_desktop $current_workspace
-	                exit
-	        else
-			if ! grep -q "$window" /tmp/hidden-windows; then
-        	        	wmctrl -r "$window" -b remove,hidden
-	               		i="$((i+1))"
-			else
-				i="$((i+1))"
+	    	    exit
+	    	else
+	   		if ! grep -q "$window" /tmp/hidden-windows; then
+        	    wmctrl -r "$window" -b remove,hidden
+	    	      	i="$((i+1))"
+	    	else
+	   			i="$((i+1))"
 			fi
 		fi
 	done

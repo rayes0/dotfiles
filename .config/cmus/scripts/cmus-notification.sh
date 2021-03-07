@@ -34,11 +34,11 @@ By $ARTIST"
 
 sec2min() { printf "%d:%02d" "$((10#$1 / 60))" "$((10#$1 % 60))"; }
 
-TOT_TIME=$( sec2min $(cmus-remote -Q | grep "duration" | sed "s/duration //") )
+TOT_TIME=$( sec2min $(cmus-remote -Q | grep "duration" | cut -d' ' -f2) )
 
 for i in {1..5}
    do
-	CUR_TIME=$( sec2min $(cmus-remote -Q | grep "position" | sed "s/position //") )
+	CUR_TIME=$( sec2min $(cmus-remote -Q | grep "position" | cut -d' ' -f2") )
 
 	TIME="$CUR_TIME/$TOT_TIME"
 	
