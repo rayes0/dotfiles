@@ -82,13 +82,16 @@ Run `eww windows` to get a list of all windows.
 
 Sidebar (music and weather mode):
 
-![sidebar](img/side-music.png) ![sidebar](img/side-weather.png)
+<p float="left">
+	<img src="img/side-music.png" height="400" />
+	<img src="img/side-weather.png" height="400" />
+</p>
 
 All credit for weather goes to wttr.in
 
 Calendar:
 
-![calendar](img/calendar.png)
+<img src="img/calendar.png" height="400" />
 
 Each widget also has a dark mode.
 
