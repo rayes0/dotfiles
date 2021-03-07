@@ -148,7 +148,8 @@ hc set mouse_recenter_gap 0
 hc set raise_on_focus 1
 
 ## menus
-hc keybind $mod-d spawn dmenu_run -i -h 30 -nf \#6c605a -nb \#ede6e3 -sf \#6c605a -sb \#c8c2bf -shb \#c8c2bf -nhb \#ede6e3 -shf \#9c7b9c
+#hc keybind $mod-d spawn dmenu_run -i -h 30 -nf \#6c605a -nb \#ede6e3 -sf \#6c605a -sb \#c8c2bf -shb \#c8c2bf -nhb \#ede6e3 -shf \#9c7b9c
+hc keybind $mod-d spawn rofi -show run -theme launcher_light.rasi
 hc keybind $mod-m spawn rofi -show drun -theme launcher_light.rasi
 hc keybind $mod-w spawn rofi -no-lazy-grab -show window -theme window_menu_light.rasi
 hc keybind $mod-p spawn rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' -config ~/.config/rofi/clipboard.rasi -m -4

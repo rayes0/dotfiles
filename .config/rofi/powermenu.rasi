@@ -1,0 +1,64 @@
+configuration {
+  show-icons: false;
+}
+
+* {
+  /* General */
+  icon-font:                            "SFMono Nerd Font 48";
+  // font is 50px wide at this size
+  option-6-listview-spacing:            60px;
+
+  menu-window-padding:                  50px;
+  menu-element-padding:                 50px 67px 50px 67px;
+}
+
+/* ########### */
+
+#window {
+  fullscreen: false;
+  anchor: center;
+  location: center;
+  width: 1220px;
+  height: 290px;
+  x-offset: 0%;
+  y-offset: 0%;
+}
+
+/* ########### */
+
+* {
+  background-color: rgba(0, 0, 0, 0);
+  text-color: rgba(203, 203, 203, 0.2);
+  font: @icon-font;
+}
+
+#horibox {
+  children: [ listview ];
+}
+#listview {
+  layout: horizontal;
+}
+#element.selected {
+  text-color: #bebebe;
+}
+
+/* ########### */
+
+#window {
+  background-color: rgba(58, 58, 58, 1.0);
+  children: [ horibox ];
+  padding: 0px;
+}
+#horibox {
+  padding: 0px;
+}
+#listview {
+  padding: @menu-window-padding;
+  spacing: @option-6-listview-spacing;
+  lines: 5;
+}
+#element {
+  font: @icon-font;
+  padding: @menu-element-padding;
+}
+

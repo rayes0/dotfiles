@@ -6,7 +6,7 @@ Most of the info in this README are copy and pasted sections from some notes I t
 
 Also take a look at my colorscheme repos (![this](https://github.com/rayes0/sayo/) and ![this](https://github.com/rayes0/blossom.vim)).
 
-## Info
+# Info
 - Distro: Fedora
 - Main WM: spectrwm
 - Dark theme: ![sayo](https://github.com/rayes0/sayo/)
@@ -33,7 +33,7 @@ Distraction-free, focused on usability and productivity.
 
 ![hlwm](img/hlwm-preview.png)
 
-### Bash and Readline Configuration
+# Bash and Readline Configuration
 
 Relevant files: `.inputrc`
 
@@ -72,11 +72,11 @@ alias egrep='egrep --color=auto'
 export HISTCONTROL=ignoreboth
 ```
 
-### Widgets
+# Widgets
 
 Implemented though ![eww](https://github.com/elkowar/eww)
 
-##### Previews
+### Previews
 
 Run `eww windows` to get a list of all windows.
 
@@ -91,11 +91,11 @@ All credit for weather goes to wttr.in
 
 Calendar:
 
-<img src="img/calendar.png" height="200" />
+<img src="img/calendar.png" style="height:100%;max-height:200px;"/>
 
 Each widget also has a dark mode.
 
-##### Info
+### Info
 
 **Relevant files:**
 
@@ -104,13 +104,13 @@ Each widget also has a dark mode.
 - `bin/powermenu.sh` (script for powermenu)
   - `.config/rofi/powermenu.rasi` (theme for powermenu)
   - `.config/rofi/confirm.rasi` (confirmation for powermenu)
-- `.config/cmus/scripts/cmus-status.sh` (used as the status program in cmus so that eww variables can be updated whenever cmus changes without the need for spamming a shell command every couple seconds)
+- `.config/cmus/scripts/cmus-status.sh` (needed to update eww variables whenever cmus changes)
 
 **What you need for these to work:**
 
-- The above relevant files (obviously) as well as `eww` installed somewhere in your `PATH`
-- SF Mono Nerd Font (used for icons and as a main font)
-- Victor Mono Font (used for cursive italics)
+- The above relevant files (obviously)
+- `eww` installed somewhere in your `PATH`
+- SF Mono Nerd Font (used for icons and as a main font), and Victor Mono Font (used for cursive italics)
 - `light` (![https://github.com/haikarainen/light](https://github.com/haikarainen/light)) (used to control brightness, has many advantages over xbacklight, such as not relying on X, and saving the value between reboots)
 - `pacmd` and `pactl` from the `pulseaudio-utils` package (used to control volume and audio sinks instead of alsamixer mainly for easier handling of multiple sinks, may or may not be installed as a dependency of pulseaudio depending on your distro)
 - `ffmpeg` to extract cover art from files
@@ -133,7 +133,40 @@ These are assuming you have already copied the relevant files listed above to th
 
 To toggle an eww window: `eww close <WINDOW_NAME> || eww open <WINDOW_NAME>`
 
-##### Todo.sh
+### Wrapper script
+
+Relevant files: `bin/start-eww`
+
+Make sure you use this script instead of starting eww by just running `eww daemon`. Most parts of the setup are integrated with this script.
+
+The script will start the eww daemon and control the updating of various eww variables over the course of time that eww is running, mainly through user signals. This prevents the need to spam shell commands every couple seconds/milleseconds, when an eww window is opened and saves a whole bunch of cpu.
+
+To use it, just configure your wm to autorun the script on startup. This will start the eww daemon and watch for signals, as well as update a whole bunch of one-time variables. Here are the signals used by the script, which should cause minimal interference with system signals:
+
+- SIGUSR1 - update volume and brightness
+- SIGUSR2 - toggle between weather and music mode for the sidebar
+- SIGVTALRM - updates weather information
+- SIGURG - update cmus status, song, and album art
+
+If you are unclear on what these mean, read the `signal(7)` manpage.
+
+The script will create a pidfile at `${XDG_RUNTIME_DIR}/eww-wrapper.lock`, so this is the fastest and most reliable way to send signals for our usecase:
+
+```
+kill -s <signal> $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)
+```
+
+As an example, if I had wanted to create a keybind to increase the brightness using the command `light -A 5`, I would do something like this:
+
+```
+light -A 5; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)
+```
+
+This will change the brightness and then update eww, only when the keybind is pressed, saving the need to check over the value every x seconds while still getting instant updates.
+
+Note that signals can also be sent by directly specifying the signal (eg: `kill -SIGUSR1`) or by using the signal number (eg: `kill -10`), but these are not rigidly defined, so best use the POSIX compliant and portable way above.
+
+### Todo.sh
 
 **Relevant files:** `.config/eww/scripts/check-todo.sh`
 
@@ -141,14 +174,13 @@ I manage my todo list with the ![todo.txt](https://github.com/todotxt/todo.txt) 
 
 **What you need:**
 - `todo.sh`, a script from ![todo.txt cli](https://github.com/todotxt/todo.txt-cli). The script will require some configuration to work. See the documentation on the linked page for how to do this.
-- If you use vim/nvim as a text editor and want to use it to edit your todo files, I strongly recommend you install the todo.txt ![vim plugin](https://gitlab.com/dbeniamine/todo.txt-vim) by dbeniamine. This is not required for the todo widget to work, but it is a good way to do more complex edits on your todo files that would be hard to do with just the todo.txt cli.
 
 After you've configured the todo.txt cli, all the todo widgets should work without further modifications.
 
 To help prioritize tasks, if there are any pending (A) priority tasks, the todo widget will show **only** those. After you have completed all the (A) priority tasks, the widget will show the rest of the tasks.
 
 
-##### Cover Art
+### Cover Art
 
 **Relevant files:** `.config/eww/scripts/check-cmus.sh` and `.config/eww/scripts/cmus-info.sh`
 
@@ -175,53 +207,18 @@ How cover art is extracted:
 2. If the file doesn't exist, the script tries to extract an embedded image from the metadata tags of the file using ffmpeg. If that works, it will save the image as `cover.jpg` in the parent folder for later use with other songs in the same album. If that fails, no cover art will be shown (a blank transparent box will be shown in it's place).
 
 
-##### Wrapper script
-
-Relevant files: `bin/start-eww`
-
-Make sure you use this script instead of starting eww by just running `eww daemon`. Most parts of the setup are integrated with this script.
-
-The script will start the eww daemon and control the updating of various eww variables over the course of time that eww is running, mainly through user signals. This prevents the need to spam shell commands every couple seconds/milleseconds, when an eww window is opened and saves a whole bunch of cpu.
-
-To use it, just configure your wm to autorun the script on startup. This will start the eww daemon and watch for signals, as well as update a whole bunch of one-time variables. Here are the signals used by the script, which should cause minimal interference with system signals:
-
-- SIGUSR1 - update volume and brightness
-- SIGUSR2 - toggle between weather and music mode for the sidebar
-- SIGVTALRM - updates weather information
-- SIGURG - update cmus status, song, and album art
-
-If you are unclear on what these mean, read the `signal(7)` manpage.
-
-The script will create a pidfile at `${XDG_RUNTIME_DIR}/eww-wrapper.lock`, so this is the most reliable way to send signals for our usecase:
-
-```
-kill -s <signal> $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)
-```
-
-This is better than pkill and killall because those two will send the signal to all child processes as well, which is useless for us and takes up quite a bit more time, creating more delay in the update.
-
-As an example, if I had wanted to create a keybind to increase the brightness using the command `light -A 5`, and I wanted to update the variable in eww every time I issue the keybinding, I would do something like this:
-
-```
-light -A 5; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)
-```
-
-This will change the brightness and then update eww, only when the keybind is pressed, saving the need to check over the value every x seconds while still getting instant updates.
-
-Note that signals can also be sent by directly specifying the signal (eg: `kill -SIGUSR1`) or by using the signal number (eg: `kill -10`), but these are neither rigidly defined nor POSIX compliant.
-
-## Other info
+# Other info
 
 Just some interesting things to note about these setups. You can skip this section if you want.
 
-##### Where are the quotes from?
+## Where are the quotes from?
 
 I scraped them from less-real.com with a script I made (![here](https://github.com/rayes0/scripts) if you are interested). I have not checked over all 8600 quotes and I make no guarantees to the quality either.
 
 If you want to use a custom quote file, just replace the `.config/eww/quotes.json` file with the json file you want to use. Your json file must follow the format outlined ![here](https://github.com/rayes0/scripts/get-quotes).
 
 
-##### Why cmus instead of mpd?
+## Why cmus instead of mpd?
 
 - cmus is *really fast*. It starts up instantly even with huge music libraries. Searching and filtering is very quick.
 - Very little memory and cpu usage
