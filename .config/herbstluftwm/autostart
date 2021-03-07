@@ -160,7 +160,7 @@ hc keybind $mod-o spawn urxvt-open
 hc keybind $mod-b spawn ~/bin/hlwm/hidebar.sh
 hc keybind $mod-z spawn zim-choose
 hc keybind $mod-Shift-m spawn music
-hc keybind $mod-n spawn ~/.config/cmus/scripts/cmus-notification-italic.sh
+hc keybind $mod-n spawn ~/.config/cmus/scripts/cmus-notification.sh
 hc keybind $mod-Shift-v spawn vim-anywhere
 
 # applications
