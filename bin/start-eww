@@ -1,0 +1,182 @@
+#!/bin/bash
+# wrapper script for eww
+
+# Allow only one instance. set -C is requited becase we need an atomic action here
+set -C
+lockf="${XDG_RUNTIME_DIR}/eww-wrapper.lock"
+! echo "$$" > "$lockf" && echo "An instance is already running" && exit 1
+
+# Remove the pidfile and kill eww if the wrapper script exits
+cleanup() {
+	eww kill &>/dev/null
+	rm ${XDG_RUNTIME_DIR}/eww-wrapper.lock
+    [[ -z "$(jobs -p)" ]] || kill $(jobs -p) &>/dev/null
+	exit
+}
+trap 'cleanup' EXIT
+
+# eww takes some time to start
+# Since this is only run on the initial startup, a small delay is okay
+eww daemon
+eww ping &>/dev/null || sleep 3s
+eww ping &>/dev/null || sleep 5s
+if ! eww ping &>/dev/null; then
+	echo -e "\nThe eww daemon failed to start. Try running 'eww logs'."
+	exit 1
+fi
+
+# Source the eww-prefs file
+source ~/.config/eww/eww-prefs
+
+# One time variables. Only updated once on eww startup
+eww update homedir="$HOME" &
+eww update usernm="$(whoami)" &
+eww update hostnm="$(hostname)" &
+eww update startterm="$term_command" &
+
+# Initializing calendar
+~/.config/eww/scripts/calendar.sh "$(date -d 'last month' +%-d.%-m.%+4Y)" &
+
+# Brighness and volume
+sig1() {
+	# Need awk to do some math here, even though its slow :(
+	eww update volume="$(pacmd list-sinks | grep -A 15 '* index'| awk '/volume: front/{ print substr($5, 1, length($5)-1) }')" &
+	eww update brightness="$(light | cut -d'.' -f1)" &
+}
+
+sig2() {
+	current="$(eww state | grep 'mus_whennotplaying:')"
+	
+	if [[ "${current/mus_whennotplaying: /}" == "true" ]]; then
+		eww update mus_whennotplaying="false" &
+		eww update mus_whenplaying="true" &
+		eww update toggle_text=" Show weather" &
+	elif [[ "${current/mus_whennotplaying: /}" == "false" ]]; then
+		eww update mus_whennotplaying="true" &
+		eww update mus_whenplaying="false" &
+		eww update toggle_text=" Show music" &
+	fi
+}
+
+weather-update() {
+	~/.config/eww/scripts/weather.sh
+}
+
+# Used for converting to minutes
+changetomin() { printf "%d:%02d" "$((10#$1 / 60))" "$((10#$1 % 60))"; }
+
+cmus-info() {
+	case $1 in
+		status) # returns 'stopped', 'paused', or 'playing'
+			echo "$cmus_stats" | grep "status " | cut -d' ' -f2 ;;
+		title)
+			title="$(echo "$cmus_stats" | grep "tag title ")"
+			title="${title/tag title /}"
+			if [[ ${#title} -gt 15 ]]; then
+				echo "${title:0:12} ..."
+				return 0
+			else
+				echo "$title"
+			fi
+			;;
+		album)
+			album="$(echo "$cmus_stats" | grep "tag album ")"
+			album="${album/tag album /}"
+			if [[ ${#album} -gt 15 ]]; then
+				echo "${album:0:12} ..."; return 0
+			else
+				echo "$album"
+			fi
+			;;
+		artist)
+			artist="$(echo "$cmus_stats" | grep "tag artist ")"
+			artist="${artist/tag artist /}"
+			if [[ ${#artist} -gt 15 ]]; then
+				echo "${artist:0:12} ..."
+				return 0
+			else
+				echo "$artist"
+			fi
+			;;
+		image)
+			file="$(echo "$cmus_stats" | grep "file")"
+			file="${file/file /}"
+			folder="${file%/*}"
+			flist="$( find "$folder" -type f )"
+			if echo "$flist" | grep -i ".jpeg\|.png\|.jpg" &>/dev/null; then
+				echo "$flist" | grep -i "cover.jpg\|cover.png\|front.jpg\|front.png\|folder.jpg\|folder.png" | head -n1
+			else
+				ffmpeg -i "$file" "$folder/cover.jpg" >/dev/null 2>&1
+				echo "$folder/cover.jpg"
+			fi
+			;;
+		duration)
+			echo "$cmus_stats" | grep "duration" | cut -d' ' -f2 ;;
+		duration-min) # duration in minutes
+			changetomin "$(cmus-info duration)" ;;
+	esac
+}
+
+# run most of these in parallel so that we can go faster
+cmus-change() {
+	# Only compute these once
+	# Not very clean, this will result in an extra call to cmus when it isn't running, but it is the best way I can think of currently
+	cmus_stats="$(cmus-remote -Q)"
+	status="$(cmus-info status)"
+
+	# Clear some variables and exit function if cmus isn't running
+	if ! pgrep -x cmus >/dev/null; then
+		eww update mus_whenkilled="true" &
+		eww update mus_whenplaying="false" &
+		eww update mus_whennotplaying="true" &
+		eww update toggle_text=" Show music" &
+		eww update mus_whenrunning="false" &
+		eww update mus_image="" &
+		eww update mus_position="0" &
+		eww update mus_duration="0" &
+		return 0
+	fi
+
+	eww update mus_whenrunning="true" &
+	eww update mus_whenkilled="false" &
+
+	#if [ "$status" == "stopped" ]; then
+	#else # This has to be when playing
+	#fi
+
+	pos="$(echo "$cmus_stats" | grep "position" | cut -d' ' -f2)"
+	eww update mus_position="$pos" &
+	eww update mus_position_min="$(changetomin "$pos")" &
+
+	eww update mus_duration="$(cmus-info duration)" &
+	eww update mus_duration_min="$(cmus-info duration-min)" &
+	eww update mus_image="$(cmus-info image)" &
+	eww update mus_song="$(cmus-info title)" &
+	eww update mus_album="$(cmus-info album)" &
+	eww update mus_artist="$(cmus-info artist)" &
+	eww update mus_status="${status^}" &
+}
+
+# This needs the wait so that sleep doesn't take over the script
+idle() {
+	sleep infinity &
+	wait
+}
+
+# Trap signals
+trap 'sig1; idle' SIGUSR1
+trap 'sig2; idle' SIGUSR2
+trap 'weather-update; idle' SIGVTALRM
+trap 'cmus-change; idle' SIGURG
+
+# Update everything on startup
+sig1
+cmus-change
+pgrep -x cmus >/dev/null && eww update mus_whennotplaying="false" && eww update toggle_text=" Show weather"
+
+# Update quotes and weather on startup
+~/.config/eww/scripts/quotes.sh &
+~/.config/eww/scripts/weather.sh
+
+# Idle and wait for signals
+idle

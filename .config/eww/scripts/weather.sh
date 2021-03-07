@@ -75,7 +75,8 @@ case "$desc" in
 	'Sunny')
 		icon="" ;;
 	'Partly cloudy')
-		icon="" ;;
+		#icon="" ;;
+		icon="杖" ;;
 	'Very Cloudy'|'Cloudy'|'Overcast')
 		icon="" ;;
 	'Clear')
