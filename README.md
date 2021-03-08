@@ -37,16 +37,11 @@ Distraction-free, focused on usability and productivity.
 
 Relevant files: `.inputrc`
 
-Provides some enhancements for the bash shell (or any input program using readline):
-
 - Switch between emacs and vi mode with `alt-e`. Adaptive prompt shows which mode your in.
 - Better tab completion (highlighted completions according to `LS_COLORS`, only one tap of tab needed, case insensitive, skips already completed text, and visible completion stats)
 - Better history scrolling, marks changed lines and preserves cursor position
-- Some other small things, check the file for more info
 
-May cause errors and unexpected behaviour when used with readline-supporting shells other than bash, I use bash as my primary shell so I haven't tested it.
-
-Some `.bashrc` settings. Mainly notes for myself since I didn't include my actual `.bashrc`:
+Cool `.bashrc` settings:
 
 ```sh
 # Better cd, allows cool stuff like autocorrection and autocd
@@ -129,7 +124,7 @@ These are assuming you have already copied the relevant files listed above to th
 2. Modify if needed: `bin/powermenu.sh` to set commands appropriate to your system for locking the screen, powering off, etc.
 3. Read and follow the instructions below for todo.sh, cover art and the wrapper script
 4. Set up cmus:
-  - Type `:set status_display_program=~/.config/cmus/scripts/cmus-status.sh` into the cmus command line
+   - Type `:set status_display_program=~/.config/cmus/scripts/cmus-status.sh` into the cmus command line
 5. Modify the `~/.config/eww/scripts/eww-prefs` to set weather units and such
 
 To toggle an eww window: `eww close <WINDOW_NAME> || eww open <WINDOW_NAME>`
@@ -208,7 +203,7 @@ Just some interesting things to note about these setups. You can skip this secti
 
 I scraped them from less-real.com with a script I made (![here](https://github.com/rayes0/scripts) if you are interested). I have not checked over all 8600 quotes and I make no guarantees to the quality either.
 
-If you want to use a custom quote file, just replace the `.config/eww/quotes.json` file with the json file you want to use. Your json file must follow the format outlined ![here](https://github.com/rayes0/scripts/get-quotes).
+If you want to use a custom quote file, just replace the `.config/eww/quotes.json` file with the json file you want to use. Your json file must follow the format outlined ![here](https://github.com/rayes0/scripts/tree/main/get-quotes).
 
 
 ## Why cmus instead of mpd?
