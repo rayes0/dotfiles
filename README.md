@@ -99,9 +99,9 @@ Each widget also has a dark mode.
 
 **Relevant files:**
 
-- Wrapper script: `bin/start-eww` (purpose explained below)
+- Wrapper script: `bin/start-eww`
 - Everything in the `.config/eww` directory
-- `bin/powermenu.sh` (script for powermenu)
+- `bin/powermenu.sh`
   - `.config/rofi/powermenu.rasi` (theme for powermenu)
   - `.config/rofi/confirm.rasi` (confirmation for powermenu)
 - `.config/cmus/scripts/cmus-status.sh` (needed to update eww variables whenever cmus changes)
@@ -111,26 +111,26 @@ Each widget also has a dark mode.
 - The above relevant files (obviously)
 - `eww` installed somewhere in your `PATH`
 - SF Mono Nerd Font (used for icons and as a main font), and Victor Mono Font (used for cursive italics)
-- `light` (![https://github.com/haikarainen/light](https://github.com/haikarainen/light)) (used to control brightness, has many advantages over xbacklight, such as not relying on X, and saving the value between reboots)
-- `pacmd` and `pactl` from the `pulseaudio-utils` package (used to control volume and audio sinks instead of alsamixer mainly for easier handling of multiple sinks, may or may not be installed as a dependency of pulseaudio depending on your distro)
-- `ffmpeg` to extract cover art from files
+- `light` (![https://github.com/haikarainen/light](https://github.com/haikarainen/light)) to control brightness
+- `pacmd` and `pactl` from the `pulseaudio-utils` package (for multiple audio sinks)
+- `ffmpeg` to extract cover art
 - `cmus` as a music player
   - Other music players will require quite a bit of work to adapt to this setup (look at the wrapper script and the sidebar config if you want to know why)
-- `todo.sh`, a script from the ![todo.txt cli](https://github.com/todotxt/todo.txt-cli). Used for managing the todo list (more info below)
-- `calcurse` as a calendar, for the appointment widget
-- GNU `date`, not other variants because the calendar widget selects dates using `date -d`.
+- `todo.sh`, a script from the ![todo.txt cli](https://github.com/todotxt/todo.txt-cli)
+- `calcurse` as a calendar
+- GNU `date`
 - `jq` to parse quotes from a json file. Note that I have not checked over all 8600 quotes from the provided quote file, and I make no guarantees towards the quality either. Check the Other Info section if you want to use a custom quote file.
 
 **Steps you need to take:**
 
 These are assuming you have already copied the relevant files listed above to their proper locations.
 
-1. User profile picture: An image file located at `~/.face.png` (note the **png** extension) will be used. Get an image and move it to that location.
-2. Modify if needed (check the file to see) `bin/powermenu.sh` to set commands appropriate to your system for locking the screen, powering off, etc.
+1. User profile picture: `~/.face.png` (note the **png** extension) will be used. Get an image and move it to that location.
+2. Modify if needed: `bin/powermenu.sh` to set commands appropriate to your system for locking the screen, powering off, etc.
 3. Read and follow the instructions below for todo.sh, cover art and the wrapper script
 4. Set up cmus:
-  - Type this into the cmus command line: `:set status_display_program=~/.config/cmus/scripts/cmus-status.sh`, which will set the cmus status program required to update eww on song changes. Check through the file and make edits if needed before doing this.
-5. Modify the `~/.config/eww/scripts/eww-prefs` file according to the instructions which are commented out in the file. This file is executed by the eww wrapper script and contains some variables that you need to set (namely the command to launch your terminal and location and units for weather info)
+  - Type `:set status_display_program=~/.config/cmus/scripts/cmus-status.sh` into the cmus command line
+5. Modify the `~/.config/eww/scripts/eww-prefs` to set weather units and such
 
 To toggle an eww window: `eww close <WINDOW_NAME> || eww open <WINDOW_NAME>`
 
@@ -138,11 +138,11 @@ To toggle an eww window: `eww close <WINDOW_NAME> || eww open <WINDOW_NAME>`
 
 Relevant files: `bin/start-eww`
 
-Make sure you use this script instead of starting eww by just running `eww daemon`. Most parts of the setup are integrated with this script.
+Make sure you use this script instead of starting eww by just running `eww daemon`. Most parts of the setup are integrated with this script. You probably want to have your wm autostart it.
 
 The script will start the eww daemon and control the updating of various eww variables over the course of time that eww is running, mainly through user signals. This prevents the need to spam shell commands every couple seconds/milleseconds, when an eww window is opened and saves a whole bunch of cpu.
 
-To use it, just configure your wm to autorun the script on startup. This will start the eww daemon and watch for signals, as well as update a whole bunch of one-time variables. Here are the signals used by the script, which should cause minimal interference with system signals:
+Here are the signals used by the script, which should cause minimal interference with system signals:
 
 - SIGUSR1 - update volume and brightness
 - SIGUSR2 - toggle between weather and music mode for the sidebar
@@ -198,15 +198,7 @@ another_album
   └── cover.jpg <- same for this one
 ```
 
-As seen in the example file tree, the script will save album art as a `cover.jpg` file in the parent directory of the song you are currently playing, so it doesn't have to extract it from the song every time.
-
 The script doesn't change your actual music files in any way. It just extracts a cover image. Everything else besides cover art will still work if you don't have this structure, however the widget will display the wrong cover for most of your files.
-
-How cover art is extracted:
-
-1. The script will check the parent folder of the currently playing file for an jpg or png cover file (eg: `cover.jpg`, `front.png`, `folder.jpg`, etc.). If the file exists, it is used as the cover image.
-2. If the file doesn't exist, the script tries to extract an embedded image from the metadata tags of the file using ffmpeg. If that works, it will save the image as `cover.jpg` in the parent folder for later use with other songs in the same album. If that fails, no cover art will be shown (a blank transparent box will be shown in it's place).
-
 
 # Other info
 
