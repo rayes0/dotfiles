@@ -15,11 +15,14 @@
 					<box class="ampm">{{ampm}}</box>
 				</box>
 				<box class="date" orientation="h" space-evenly="false" halign="center">{{weekday}}, {{month}} {{day_num}}</box>
-				<box valign="center" visible="{{mus_whenrunning}}">
-					<button class="toggle" onclick="killall -s USR1 start-eww">toggle</button>
-				</box>
+				<button class="weather-toggle" onclick="kill -s USR2 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)" halign="center" visible="{{mus_whenrunning}}">{{toggle_text}}</button>
 				<box class="weather" orientation="v" halign="center" space-evenly="false" visible="{{mus_whennotplaying}}" valign="center" hexpand="true">
-					<box orientation="h" halign="center" space-evenly="false" valign="center">
+					<box space-evenly="false" halign="center" visible="{{whennotconnected}}" valign="center" orientation="v">
+						<button onclick="kill -s VTALRM $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)"><label text="Could not connect to wttr.in" valign="center" halign="center" style="margin-top:30px;font-size:18px;"/></button>
+						<button onclick="kill -s VTALRM $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)"><label text="Last try at {{weather_lastcheck}}" valign="center" halign="center" style="margin-top:5px;font-size:16px;"/></button>
+						<button onclick="kill -s VTALRM $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)"><label text="{{retry_status}}" valign="center" halign="center" style="font-size:16px;margin-top:5px;"/></button>
+					</box>
+					<box orientation="h" halign="center" space-evenly="false" valign="center" visible="{{whenconnected}}">
 						<box orientation="v" space-evenly="false" valign="start" style="min-width: 150px;">
 							<label class="weather-icon" text="{{weather_icon}}" halign="start"/>
 							<label class="weather-desc" text="{{weather_desc}}" halign="start"/>
@@ -30,16 +33,26 @@
 							<label class="weather-ftemp" text="Feels like {{weather_ftemp}}" halign="start"/>
 							<expander class="weather-expander" name="Show more" vexpand="true" expanded="false">
 								<box orientation="v" space-evenly="false" halign="start" valign="baseline">
-									<label class="weather-sunrise" text="瀞  {{weather_sunrise}}" halign="start"/>
-									<label class="weather-sunset" text="漢  {{weather_sunset}}" halign="start"/>
+									<box orientation="h" space-evenly="false" halign="start" valign="baseline">
+										<label class="weather-sunrise" text="瀞  {{weather_sunrise}}   " halign="start"/>
+										<label class="weather-sunset" text="漢  {{weather_sunset}}" halign="start"/>
+									</box>
 									<box orientation="h" space-evenly="false" halign="start" valign="baseline">
 										<label class="weather-area" text="  {{weather_area}}" halign="start"/>
 										<label class="weather-region" text=" ({{weather_country}})" halign="start"/>
 									</box>
+									<label class="weather-lastcheck" text="Last Updated: {{weather_lastcheck}}" halign="start"/>
 								</box>
 							</expander>
 						</box>
 					</box>
+				</box>
+				<box class="weather-mus" orientation="h" halign="start" valign="baseline" space-evenly="false" visible="{{mus_whennotplaying}}" hexpand="true">
+					<box orientation="h" space-evenly="false" hexpand="true" valign="baseline">
+						<button class="weather-mus-status" onclick="kill -s USR2 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)" halign="start" valign="center" visible="{{mus_whenrunning}}"> {{mus_status}}:</button>
+						<button class="weather-mus-song" onclick="kill -SIGURG $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)" halign="start" wrap="false" valign="center" visible="{{mus_whenrunning}}">{{mus_song}}</button>
+					</box>
+					<label class="weather-mus-time" text="{{mus_position_min}} / {{mus_duration_min}}" halign="end" valign="baseline" visible="{{mus_whenrunning}}"/>
 				</box>
 				<box class="music-info" orientation="h" space-evenly="false" visible="{{mus_whenplaying}}">
 					<box class="album-art" style="background-image: url('{{mus_image}}');"></box>
@@ -54,12 +67,11 @@
 					</box>
 				</box>
 				<button class="music-norun" onclick="{{startterm}} cmus" visible="{{mus_whenkilled}}" halign="center">Cmus is not running. Click to start.</button>
-				<box class="music-norun" visible="{{mus_whenstopped}}" halign="center">Cmus is not currently playing anything</box>
 				<scale halign="center" class="music-slide" min="0" max="{{mus_duration}}" value="{{mus_position}}" style="margin:0px;"/>
-				<box class="music-controls" orientation="h" space-evenly="false" halign="center" active="{{mus_whenrunning}}">
-					<button onclick="cmus-remote --prev" class="music-buttons"></button>
-					<button onclick="cmus-remote --pause" class="music-buttons">懶</button>
-					<button onclick="cmus-remote --next" class="music-buttons"></button>
+				<box class="music-controls" orientation="h" space-evenly="false" active="{{mus_whenrunning}}" hexpand="true" halign="center">
+					<button onclick="cmus-remote --prev" class="music-buttons" halign="center"></button>
+					<button onclick="cmus-remote --pause" class="music-buttons" halign="center">懶</button>
+					<button onclick="cmus-remote --next" class="music-buttons" halign="center"></button>
 				</box>
 				<box orientation="h" space-evenly="false" valign="center" halign="center">
 					<box space-evenly="false" halign="start" valign="center" orientation="v">
