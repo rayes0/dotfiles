@@ -48,29 +48,30 @@ Xft.dpi: 96
 
 !! Xterm
 XTerm.vt100.scrollBar: false
+XTerm*internalBorder: 30
 
 !! URxvt Appearance
 *.font: xft:SF Mono:style=Regular:size=11,xft:Noto Serif CJK JP:style=SemiBold:size=11,xft:symbola:size=12:minspace=False
 *.boldFont: xft:SF Mono:style=Bold:size=11,xft:Noto Serif CJK JP:style=Black:size=11
 *.italicFont: xft:SF Mono:style=Regular Italic:size=11,xft:Noto Serif CJK JP:style=Italic:size=11
 *.boldItalicFont: xft:SF Mono:style=Bold Italic:size=11,xft:Noto Serif CJK JP:style=Bold Italic:size=11
-URxvt.letterSpace: 0
-URxvt.lineSpace: 0
+URxvt.letterSpace: -1
+URxvt.lineSpace: 2
 URxvt.geometry: 92x26
-URxvt.internalBorder: 35
+URxvt.internalBorder: 30
 URxvt.cursorBlink: true
 URxvt.cursorUnderline: false
 URxvt.saveline: 2048
 URxvt.scrollBar: false
 URxvt.scrollBar_right: false
 URxvt.scrollTtyOutput:  false
-!URxvt.depth: 32
+URxvt.depth: 32
 URxvt.iso14755: false
 
 URxvt.iconFile: /home/rayes/.icons/Papirus-Dark-Custom/22x22/apps/utilities-terminal.svg
 URxvt.urgentOnBell: true
-URxvt.visualBell: true
-URxvt.bell-command: notify-send -i bell "urxvt" "bell"
+URxvt.visualBell: false
+URxvt.bell-command: notify-send -h string:x-canonical-private-synchronous:urxvtbell -i bell "urxvt" "bell"
 
 !! Common Keybinds for Navigations
 URxvt.keysym.Shift-Up: command:\033]720;1\007
@@ -81,7 +82,7 @@ URxvt.keysym.Control-Right: \033[1;5C
 URxvt.keysym.Control-Left: \033[1;5D
 
 !! Perls
-URxvt.perl-ext-common : default,keyboard-select,resize-font,url-select,bell-command,prevent-close
+URxvt.perl-ext-common : default,keyboard-select,resize-font,url-select,bell-command,confirm-paste,prevent-close
 URxvt.keysym.A-Escape: perl:keyboard-select:activate
 URxvt.keyboard-select.clipboard: true
 
@@ -92,4 +93,3 @@ URxvt.url-select.launcher: url-parse
 
 !! Rofi
 rofi.font: Noto Sans 11
-

@@ -1,0 +1,1 @@
+/home/rayes/myrepos/sayo/Vim/sayo.vim

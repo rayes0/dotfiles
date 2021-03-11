@@ -1,0 +1,9 @@
+configuration {
+  modi: "drun,run,ssh";
+  show-icons:         true;
+  icon-theme:         "Papirus";
+  location: 5;
+  yoffset: -50;
+  xoffset: -20;
+}
+

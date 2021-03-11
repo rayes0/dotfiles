@@ -30,19 +30,20 @@ hc keybind $mod-k     focus up
 hc keybind $mod-l     focus right
 
 # moving clients in tiling and floating mode
-hc keybind $mod-Shift-Left  shift left
-hc keybind $mod-Shift-Down  shift down
-hc keybind $mod-Shift-Up    shift up
-hc keybind $mod-Shift-Right shift right
+hc keybind $mod-Shift-Left  shift_edge left
+hc keybind $mod-Shift-Down  shift_edge down
+hc keybind $mod-Shift-Up    shift_edge up
+hc keybind $mod-Shift-Right shift_edge right
 hc keybind $mod-Shift-h     shift left
 hc keybind $mod-Shift-j     shift down
 hc keybind $mod-Shift-k     shift up
 hc keybind $mod-Shift-l     shift right
 
 # splitting frames
-hc keybind $mod-u			split   auto
-hc keybind $mod-Shift-u		split   bottom  0.5
-hc keybind $mod-Control-u	split   right   0.5
+#hc keybind $mod-u chain , set frame_border_width 2 , split auto
+hc keybind $mod-u split auto
+hc keybind $mod-Shift-u	 chain , set frame_border_width 2 , split bottom 0.5
+hc keybind $mod-Control-u chain, set frame_border_width 2 , split right 0.5
 hc keybind $mod-Control-space split explode
 
 hc keybind $mod-i attr clients.focus.minimized true
@@ -80,8 +81,8 @@ hc keybind $mod-period use_index +1 --skip-visible
 hc keybind $mod-comma  use_index -1 --skip-visible
 
 # layouting
-#hc keybind $mod-space floating toggle
 hc keybind $mod-space attr clients.focus.floating toggle
+hc keybind $mod-Shift-space floating toggle
 hc keybind $mod-t pseudotile toggle
 hc keybind $mod-e fullscreen toggle
 # The following cycles through the available layouts within a frame, but skips
@@ -117,23 +118,27 @@ hc keybind $mod-Down  spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -2%; kil
 hc attr theme.tiling.reset 1
 hc attr theme.floating.reset 1
 hc set frame_border_active_color '#fccec1'
-hc set frame_border_normal_color '#ede6e3'
+hc set frame_border_normal_color '#c8c2bf'
 hc set frame_bg_normal_color '#ede6e3'
 hc set frame_bg_active_color '#ede6e3'
-hc set frame_border_width 1
-hc set always_show_frame off
+hc set frame_border_width 0
+hc keybind $mod-b cycle_value frame_border_width 2 0
+hc set always_show_frame on
 hc set frame_bg_transparent on
 hc set frame_transparent_width 0
-hc set frame_gap 6
+hc set frame_gap 8
+hc keybind $mod-g cycle_value frame_gap 0 8
 
+hc attr theme.floating.padding_top 20
 hc attr theme.active.color '#ce9c85'
-hc attr theme.normal.color '#ede6e3'
+#hc attr theme.normal.color '#c8c2bf'
+hc attr theme.normal.color '#a09c80'
 hc attr theme.urgent.color orange
 hc attr theme.inner_width 0
 hc attr theme.inner_color '#ede6e3'
 hc attr theme.border_width 0
 hc attr theme.floating.border_width 0
-hc attr theme.floating.outer_width 3
+hc attr theme.floating.outer_width 0
 hc attr theme.floating.outer_color '#ede6e3'
 hc attr theme.active.inner_color '#c8c2bf'
 hc attr theme.active.outer_color '#c8c2bf'
@@ -145,7 +150,7 @@ hc set frame_padding 0
 hc set smart_window_surroundings off
 hc set smart_frame_surroundings on
 hc set mouse_recenter_gap 0
-hc set raise_on_focus 1
+hc set raise_on_focus 0
 
 ## menus
 #hc keybind $mod-d spawn dmenu_run -i -h 30 -nf \#6c605a -nb \#ede6e3 -sf \#6c605a -sb \#c8c2bf -shb \#c8c2bf -nhb \#ede6e3 -shf \#9c7b9c
@@ -158,8 +163,9 @@ hc keybind $mod-Shift-r spawn sh -c 'eww close utilities-light || eww open utili
 hc keybind $mod-Shift-e spawn sh -c 'eww close calendar-light || eww open calendar-light' &
 hc keybind $mod-y spawn keepmenu
 hc keybind $mod-o spawn urxvt-open
-hc keybind $mod-b spawn ~/bin/hlwm/hidebar.sh
+hc keybind $mod-Shift-b spawn ~/bin/hlwm/hidebar.sh
 hc keybind $mod-z spawn zim-choose
+hc keybind $mod-s spawn cd-dir
 hc keybind $mod-Shift-m spawn music
 hc keybind $mod-n spawn ~/.config/cmus/scripts/cmus-notification.sh
 hc keybind $mod-Shift-v spawn vim-anywhere
@@ -171,7 +177,7 @@ hc keybind $mod-Shift-i spawn icecat --ProfileManager
 hc keybind $mod-Shift-p spawn icecat -P Professional
 hc keybind $mod-Shift-d spawn icecat -P Development
 
-hc keybind $mod-g spawn gimp
+hc keybind $mod-Shift-g spawn gimp
 hc keybind $mod-f spawn urxvtc -e ranger
 
 # Other keybinds

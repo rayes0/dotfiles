@@ -136,7 +136,7 @@
 				</box>
 				<box class="calendar-info" orientation="v" space-evenly="false" halign="start" valign="center" hexpand="true">
 					<box class="quote-container" orientation="v" hexpand="false" vexpand="true">
-						<label class="quote" halign="start" text="&quot;{{quote-text}}&quot;" wrap="true" width="20" hexpand="false" vepxand="true"/>
+						<label class="quote" halign="start" text="&quot;{{quote-text}}&quot;" wrap="true" width="20"/>
 						<box orientation="h">
 							<box class="quote-info" orientation="h" space-evenly="false">
 								<label class="quote-author-dark" text="- {{quote-author}} "/>

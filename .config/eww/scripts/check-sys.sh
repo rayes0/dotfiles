@@ -16,6 +16,7 @@ case $1 in
 	up) # deals with uptime less than a minute, where the command `uptime` doesn't work
 		time="$(uptime -p )"
 		time="${time/up }"
+		time="${time/ day,/d}"
 		time="${time/ days,/d}"
 		time="${time/ hours,/h}"
 		time="${time/ minutes/m}"

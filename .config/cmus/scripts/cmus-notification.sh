@@ -38,7 +38,7 @@ TOT_TIME=$( sec2min $(cmus-remote -Q | grep "duration" | cut -d' ' -f2) )
 
 for i in {1..5}
    do
-	CUR_TIME=$( sec2min $(cmus-remote -Q | grep "position" | cut -d' ' -f2") )
+	CUR_TIME=$( sec2min $(cmus-remote -Q | grep "position" | cut -d' ' -f2) )
 
 	TIME="$CUR_TIME/$TOT_TIME"
 	

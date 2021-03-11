@@ -3,7 +3,7 @@
 # Restart the eww wrapper completely after changing
 
 # Set this to the command you want to use to launch terminal programs
-term_command='urxvtc -e'
+term_command='urxvtc -name URxvtFloat -e'
 
 # Location for weather (in a valid fromat for wttr.in)
 weather_location='Calgary'

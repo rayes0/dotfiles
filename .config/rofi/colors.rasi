@@ -1,0 +1,9 @@
+* {
+  accent:           #796155;
+  background:       rgba(58,58,58, 1.0);
+  background-light: rgba(0, 0, 0, 0);
+  foreground:       #bebebe;
+  foreground-alt:   #bebebe;
+  on:               #796155;
+  off:              #53433a;
+}
