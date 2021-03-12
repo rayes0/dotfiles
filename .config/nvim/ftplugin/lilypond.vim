@@ -17,7 +17,7 @@ function! LilypondPreview()
     silent execute '!' g:pdf_viewer g:pdf '&>/dev/null &'
 endfunction
 
-call LilypondPreview()
+silent call LilypondPreview()
 
 " on exit, remove the pdf as it is no longer needed "
 autocmd VimLeave *.ly execute '!rm' g:pdf

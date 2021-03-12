@@ -18,6 +18,7 @@ mod=Mod4   # Use the super key as the main modifier
 hc keybind $mod-Shift-q spawn powermenu.sh
 hc keybind $mod-q reload
 hc keybind $mod-x close_and_remove
+hc keybind $mod-Shift-x close
 hc keybind $mod-Return spawn "urxvtc"
 hc keybind $mod-Shift-Return spawn urxvtc -name URxvtFloat
 hc keybind $mod-Shift-Delete spawn lock
@@ -122,7 +123,7 @@ hc set frame_border_normal_color '#c8c2bf'
 hc set frame_bg_normal_color '#ede6e3'
 hc set frame_bg_active_color '#ede6e3'
 hc set frame_border_width 0
-hc keybind $mod-b cycle_value frame_border_width 2 0
+hc keybind $mod-Shift-b cycle_value frame_border_width 2 0
 hc set always_show_frame on
 hc set frame_bg_transparent on
 hc set frame_transparent_width 0
@@ -163,7 +164,7 @@ hc keybind $mod-Shift-r spawn sh -c 'eww close utilities-light || eww open utili
 hc keybind $mod-Shift-e spawn sh -c 'eww close calendar-light || eww open calendar-light' &
 hc keybind $mod-y spawn keepmenu
 hc keybind $mod-o spawn urxvt-open
-hc keybind $mod-Shift-b spawn ~/bin/hlwm/hidebar.sh
+hc keybind $mod-b spawn ~/bin/hlwm/hidebar.sh
 hc keybind $mod-z spawn zim-choose
 hc keybind $mod-s spawn cd-dir
 hc keybind $mod-Shift-m spawn music
