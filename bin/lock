@@ -1,0 +1,10 @@
+#!/bin/bash
+# Starts mantablockscreen and pauses dunst to prevent missed notifications
+
+killall -SIGUSR1 dunst
+mantablockscreen &
+sleep 2
+xset dpms force off
+wait
+killall -SIGUSR2 dunst
+

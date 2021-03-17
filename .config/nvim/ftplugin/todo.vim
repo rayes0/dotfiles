@@ -12,3 +12,4 @@ imap <buffer> @ @<C-X><C-O>
 " let g:Todo_fold_char='@'
 
 au VimEnter * hi link TodoContext Comment
+au VimEnter todo.txt normal zR

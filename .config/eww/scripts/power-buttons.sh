@@ -7,13 +7,13 @@ answer=$(echo -e "no\nyes" | rofi -dmenu -i -no-fixed-num-lines -p "${1^} now?" 
 # Change commands in here to match your system
 case $1 in
 	lock)
-		mantablockscreen & ;;
+		~/bin/lock & ;;
 	suspend)
 		cmus-remote -u
-		mantablockscreen &
+		~/bin/lock &
 		systemctl suspend ;;
 	logout)
-		pkill -U $(whoami) ;;
+		pkill -U "$(whoami)" ;;
 	hibernate)
 		systemctl hibernate ;;
 	reboot)

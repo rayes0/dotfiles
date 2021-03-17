@@ -1,9 +1,7 @@
 " PLUGINS
 
-" Plugins will be downloaded under the specified directory.
 call plug#begin('~/.config/nvim/plugged')
 
-" Declare the list of plugins.
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'reedes/vim-pencil'
@@ -15,7 +13,12 @@ Plug 'ferrine/md-img-paste.vim'
 Plug 'luffah/vim-zim'
 "Plug 'rayes0/blossom.vim'
 Plug 'dbeniamine/todo.txt-vim'
-Plug 'vim-voom/VOoM'
+"Plug 'vim-voom/VOoM'
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'ervandew/supertab'
+Plug 'dense-analysis/ale'
+"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 
 call plug#end()
 
@@ -28,9 +31,13 @@ packloadall
 set tabstop=4 shiftwidth=4 softtabstop=4 expandtab smarttab autoindent
 set wrap breakindent
 
+"set ignorecase
+"set smartcase "autoswitch to case-sensitive if capital letters are used
+
 let g:netrw_dirhistmax = 0
 
-"inoremap \ \<C-N>
+au CursorHold * checktime
+
 set completeopt=menuone,noinsert
 
 autocmd BufNewFile,BufRead *.mdown set filetype=pandoc
@@ -101,7 +108,7 @@ function! ToggleHiddenAll()
     endif
 endfunction
 
-nnoremap <C-a> :call ToggleHiddenAll()<CR>
+noremap <C-a> :call ToggleHiddenAll()<CR>
 
 set rulerformat=%25(%)
 set rulerformat+=%=
@@ -142,10 +149,9 @@ set rulerformat+=\ \|\ %Y%*
 " PLUGIN SETTINGS
 
 let g:limelight_conceal_ctermfg = '240'
+let g:goyo_width = '110'
 
 let g:templates_directory = '~/.config/nvim/templates'
-
-let g:goyo_width = '110'
 
 " FOLDING
 
@@ -157,12 +163,32 @@ vnoremap <F9> zf
 " Set colorscheme at end to prevent pandoc from overriding
 set termguicolors
 colorscheme blossom
+"colorscheme rose-pine-dawn
 " colorscheme sayo
 
 " KEYMAPS
 
-nmap <silent> <F4> :NERDTreeToggle<CR> 
-nmap <silent> <leader>f :NERDTreeToggle<CR> 
-nmap <silent> <leader>g :Goyo<CR> 
-nmap <silent> <leader>l :Limelight!!<CR>
-nmap <silent> <leader><leader> :noh<CR>
+nnoremap <silent> <leader><leader> :set hlsearch!<CR>
+nnoremap <silent> <leader><leader> :noh<CR>
+noremap <silent> <F5> :setlocal spell!<CR>
+
+noremap <C-s> :w<CR>
+
+" scroll window in next frame
+nnoremap <silent> <leader>j <c-w>w<c-d><c-w>W
+nnoremap <silent> <leader>d <c-w>w<c-u><c-w>W
+
+" Save, restore, and clear sessions
+nmap <leader>ss :wa<cr>:mksession! $HOME/.nvimsessions/
+nmap <leader>rs :wa<cr>:source $HOME/.nvimsessions/
+nmap <leader>ds :!rm -r "$HOME/.nvimsessions/*"
+
+" Open file located in the same directory as the current one
+nmap <leader>e :e <c-r>=expand('%:p:h').'/'<cr>
+
+map <silent> <C-l> :set relativenumber!<CR>
+
+noremap <silent> <F4> :NERDTreeToggle<CR> 
+noremap <silent> <leader>f :NERDTreeToggle<CR> 
+noremap <silent> <leader>g :Goyo<CR> 
+noremap <silent> <leader>l :Limelight!!<CR>

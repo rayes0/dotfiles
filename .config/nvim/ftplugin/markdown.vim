@@ -30,6 +30,7 @@ function MarkdownLevel()
     endif
     return "=" 
 endfunction
+
 au BufEnter Volume*.md setlocal foldexpr=MarkdownLevel()  
 au BufEnter Volume*.md setlocal foldmethod=expr
 

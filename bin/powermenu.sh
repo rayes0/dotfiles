@@ -57,7 +57,7 @@ case $chosen in
     $suspend)
         cmus-remote -u
         amixer set Master mute
-	mantablockscreen &
+	    mantablockscreen &
         systemctl suspend
         ;;
     $logout)

@@ -1,12 +1,20 @@
 #!/bin/bash
-# toggles herbbar
+# toggles herbbar and changes some settings to provide notifications for barless mode
+# This resets when hlwm is restarted
 
 number=$(herbstclient list_monitors | wc -l)
 theme="$(cat /tmp/systheme)"
+mod=Mod4
 
-if pgrep -x herbbar; then
+if pgrep -x herbbar >/dev/null 2>&1; then
+    # barless mode
 	pkill herbbar
+    herbstclient keybind $mod-Up spawn bash -c '~/bin/volume/vol-up.sh'
+    herbstclient keybind $mod-Down spawn bash -c '~/bin/volume/vol-down.sh'
 else
+    # normal mode
+    herbstclient keybind $mod-Up spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar1.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)'
+    herbstclient keybind $mod-Down spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar2.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)'
 	case $theme in
 		light)
 			case $number in

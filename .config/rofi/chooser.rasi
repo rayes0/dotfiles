@@ -17,11 +17,15 @@ window {
 }
 
 prompt {
-	font: "Victor Mono Bold Italic 12";
-	margin:					0 20px 10px 0;
+	margin:					0 5px 10px 0;
 }
 
 entry {
+    margin-bottom:          10px;
+	font: "Victor Mono Bold Italic 13";
     expand: 				true;
 }
 
+element {
+    padding: 0 0 5px 10px;
+}

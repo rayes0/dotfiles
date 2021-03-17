@@ -1,5 +1,4 @@
 SoftPencil
-augroup VimEnter * Goyo 110
 setlocal spell spelllang=en_ca
 
 let g:zim_notebook = '~/Notes/Zim'
@@ -60,14 +59,11 @@ function ZimLevel()
 endfunction
 
 autocmd VimEnter * setlocal foldmethod=expr
-autocmd VimEnter * hi link zimHeader Comment
-autocmd VimEnter * hi link zimHeaderParam Comment
 setlocal foldexpr=ZimLevel()
 
-"syn match zimHeader /^[^:]*:/ contained contains=@NoSpell nextgroup=ZimHeaderParam
-"syn match zimHeaderParam /.*/ contained contains=@NoSpell
-"syn region zimHeaderRegion
-"      \ start=/\%1l^\(Content-Type\|Wiki-Format\|Creation-Date\):\%1l\c/
-"      \ end=/\%4l\([A-Z]*:.*\)\?\c/
-"      \ contains=zimHeader transparent fold keepend extend
-"hi link vimModeline LineNr
+" Syntax
+autocmd VimEnter * hi! link zimHeader Comment
+autocmd VimEnter * hi! link zimHeaderParam Comment
+autocmd VimEnter * hi! link zimStyleItalic markdownItalic
+autocmd VimEnter * hi! link zimStyleBold markdownBold
+

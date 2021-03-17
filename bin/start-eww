@@ -4,7 +4,7 @@
 # Allow only one instance. set -C is requited becase we need an atomic action here
 set -C
 lockf="${XDG_RUNTIME_DIR}/eww-wrapper.lock"
-! echo "$$" > "$lockf" && echo "An instance is already running" && exit 1
+! echo "$$" &>/dev/null > "$lockf" && echo "It looks like an instance of this script is already running. If you are sure this is not the case, then remove '${XDG_RUNTIME_DIR}/eww-wrapper.lock' and try again." && exit 1
 
 # Remove the pidfile and kill eww if the wrapper script exits
 cleanup() {

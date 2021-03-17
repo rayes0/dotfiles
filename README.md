@@ -35,7 +35,7 @@ Distraction-free, focused on usability and productivity.
 
 # Bash and Readline Configuration
 
-Relevant files: `.inputrc`
+**Relevant files: `.inputrc`**
 
 - Switch between emacs and vi mode with `alt-e`. Adaptive prompt shows which mode your in.
 - Better tab completion (highlighted completions according to `LS_COLORS`, only one tap of tab needed, case insensitive, skips already completed text, and visible completion stats)
@@ -51,6 +51,7 @@ shopt -s cdspell
 # History
 shopt -s histappend
 shopt -s histverify
+export HISTCONTROL=ignoreboth
 
 # Use neovim for manpages
 export MANPAGER='nvim +Man!'
@@ -63,8 +64,9 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-# Other useful things
-export HISTCONTROL=ignoreboth
+# Alert for long running commands. Usage:
+# sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history | tail -n 1 | sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')" "Command completed"'
 ```
 
 # Widgets

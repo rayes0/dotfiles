@@ -44,7 +44,7 @@ hc keybind $mod-Shift-l     shift right
 #hc keybind $mod-u chain , set frame_border_width 2 , split auto
 hc keybind $mod-u split auto
 hc keybind $mod-Shift-u	 chain , set frame_border_width 2 , split bottom 0.5
-hc keybind $mod-Control-u chain, set frame_border_width 2 , split right 0.5
+hc keybind $mod-Control-u chain , set frame_border_width 2 , split right 0.5
 hc keybind $mod-Control-space split explode
 
 hc keybind $mod-i attr clients.focus.minimized true
@@ -83,7 +83,7 @@ hc keybind $mod-comma  use_index -1 --skip-visible
 
 # layouting
 hc keybind $mod-space attr clients.focus.floating toggle
-hc keybind $mod-Shift-space floating toggle
+hc keybind $mod-Shift-c floating toggle
 hc keybind $mod-t pseudotile toggle
 hc keybind $mod-e fullscreen toggle
 # The following cycles through the available layouts within a frame, but skips
@@ -105,6 +105,7 @@ hc keybind $mod-BackSpace   cycle_monitor
 hc keybind $mod-Tab         cycle_all +1
 hc keybind $mod-Shift-Tab   cycle_all -1
 hc keybind $mod-c cycle
+hc keybind $mod-r raise $(xdotool getactivewindow)
 #hc keybind $mod-i jumpto urgent
 
 hc keybind $mod-Left  focus left
@@ -151,7 +152,7 @@ hc set frame_padding 0
 hc set smart_window_surroundings off
 hc set smart_frame_surroundings on
 hc set mouse_recenter_gap 0
-hc set raise_on_focus 0
+#hc set raise_on_focus 0
 
 ## menus
 #hc keybind $mod-d spawn dmenu_run -i -h 30 -nf \#6c605a -nb \#ede6e3 -sf \#6c605a -sb \#c8c2bf -shb \#c8c2bf -nhb \#ede6e3 -shf \#9c7b9c
@@ -167,6 +168,7 @@ hc keybind $mod-o spawn urxvt-open
 hc keybind $mod-b spawn ~/bin/hlwm/hidebar.sh
 hc keybind $mod-z spawn zim-choose
 hc keybind $mod-s spawn cd-dir
+hc keybind $mod-Shift-s spawn cd-dir float
 hc keybind $mod-Shift-m spawn music
 hc keybind $mod-n spawn ~/.config/cmus/scripts/cmus-notification.sh
 hc keybind $mod-Shift-v spawn vim-anywhere

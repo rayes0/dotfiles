@@ -30,12 +30,14 @@ configuration {
 	padding: 10px;
 }
 
-#prompt {
-}
-
 #textbox-prompt-colon {
 	expand: false;
 	str: " >  ";
+    font: "Victor Mono 12";
+}
+
+#entry {
+    font: "Victor Mono Bold Italic 11";
 }
 
 #element {

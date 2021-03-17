@@ -90,6 +90,9 @@ check_bat() {
                 bat="%{T3}${bat}% %{T2}"
                 ;;
         esac
+	    if ! pgrep -x "xautolock" >/dev/null 2>&1; then
+            bat="${bat} %{T1}(caf)%{T2}"
+        fi
         echo "BAT${fgb}${bati} ${fgn}$bat" > "$fifo"
         sleep 120
     done &
@@ -120,7 +123,7 @@ check_mus() {
     # no while loop, refresh the bar with pkill whenever you launch cmus
 	if pgrep -x "cmus" >/dev/null 2>&1; then
 		title="$(cmus-remote -Q | grep "tag title " | sed "s/tag title //")"
-		album="$(cmus-remote -Q | grep "tag album " | sed "s/tag album //")"
+		#album="$(cmus-remote -Q | grep "tag album " | sed "s/tag album //")"
 		artist="$(cmus-remote -Q | grep "tag artist " | sed "s/tag artist //")"
 		echo "MUS${fgb} ${fgn}%{T3}$title %{T-}${fgb}by%{T2} ${fga}%{T3}$artist%{T2}" > $fifo &
 	else
@@ -197,7 +200,7 @@ parse_fifo() {
 				update ;;
 			*) ;;
 		esac
-		echo "%{T-}%{l}%{O1}%{A:eww open side-light:}%{A3:eww open side-light:}$desktop%{T2}  %{B-}%{O20}${music}%{A}%{A} %{c}%{T3}%{A:eww close calendar-light || eww open calendar-light:}%{A3:eww close calendar-light || eww open calendar-light:}${fgn}${date}%{A}%{A}%{T-} %{r}%{A:eww close utilities-light || eww open utilities-light:}%{A3:eww close utilities-light || eww open utilities-light:}${volume}   ${network} ${vpnname}    ${battery}   ${todo} %{A}%{A} "
+		echo "%{T-}%{l}%{O1}%{A:eww open side-light:}%{A3:eww open side-light:}${desktop}%{T2}  %{B-}%{O20}${music}%{A}%{A} %{c}%{T3}%{A:eww close calendar-light || eww open calendar-light:}%{A3:eww close calendar-light || eww open calendar-light:}${fgn}${date}%{A}%{A}%{T-} %{r}%{A:eww close utilities-light || eww open utilities-light:}%{A3:eww close utilities-light || eww open utilities-light:}${volume}   ${network} ${vpnname}    ${battery}   ${todo} %{A}%{A} "
     done < <(tail -f "$fifo")
 }
 
@@ -210,6 +213,7 @@ update() {
 	check_vol
 	check_mus
 	check_todo
+    check_lock
 }
 
 update
