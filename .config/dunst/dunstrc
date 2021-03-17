@@ -175,7 +175,7 @@
     ### Misc/Advanced ###
 
     # dmenu path.
-    dmenu = /usr/bin/dmenu -p dunst:
+    dmenu = rofi -i -dmenu -theme launcher_light.rasi -p dunst
 
     # Browser for opening urls in context menu.
     browser = /usr/bin/firefox -new-tab
@@ -236,7 +236,7 @@
     history = ctrl+grave
 
     # Context menu.
-    context = ctrl+shift+period
+    context = mod1+grave
 
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.
@@ -317,6 +317,14 @@
 #    appname = Pidgin
 #    summary = *twitter.com*
 #    urgency = normal
-#
+
+# Ignore history for these
+[Brightness]
+    stack_tag = brightness
+    history_ignore = yes
+[Barless]
+    stack_tag = barless-info
+    history_ignore = yes
+
 # vim: ft=cfg
 

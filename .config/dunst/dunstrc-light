@@ -1,5 +1,5 @@
  [global]
-    font = SF Mono 11,Victor Mono Italic 11
+    font = SF Mono 11,Victor Mono 11
 
     ### Display ###
 
@@ -125,7 +125,7 @@
     #   %p  progress value if set ([  0%] to [100%]) or nothing
     #   %n  progress value if set without any extra characters
     # Markup is allowed
-    format = "<b>%s</b>\n%b\n%n"
+    format = "<b><i>%s</i></b>\n%b\n%n"
 
     # Alignment of message text.
     # Possible values are "left", "center" and "right".
@@ -175,7 +175,7 @@
     ### Misc/Advanced ###
 
     # dmenu path.
-    dmenu = /usr/bin/dmenu -p dunst:
+    dmenu = rofi -i -dmenu -theme launcher_light.rasi -p dunst
 
     # Browser for opening urls in context menu.
     browser = /usr/bin/firefox -new-tab
@@ -236,7 +236,7 @@
     history = ctrl+grave
 
     # Context menu.
-    context = ctrl+shift+period
+    context = mod1+grave
 
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.
@@ -293,11 +293,6 @@
 #    summary = "foobar"
 #    format = ""
 
-#[history-ignore]
-#    # This notification will not be saved in history
-#    summary = "foobar"
-#    history_ignore = yes
-
 #[signed_on]
 #    appname = Pidgin
 #    summary = "*signed on*"
@@ -317,6 +312,14 @@
 #    appname = Pidgin
 #    summary = *twitter.com*
 #    urgency = normal
-#
+
+# Ignore history for these
+[Brightness]
+    stack_tag = brightness
+    history_ignore = yes
+[Barless]
+    stack_tag = barless-info
+    history_ignore = yes
+
 # vim: ft=cfg
 
