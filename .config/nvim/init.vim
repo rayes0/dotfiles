@@ -28,7 +28,7 @@ filetype plugin indent on
 syntax on
 packloadall
 
-set tabstop=4 shiftwidth=4 softtabstop=4 expandtab smarttab autoindent
+set tabstop=4 shiftwidth=4 softtabstop=4 smarttab autoindent
 set wrap breakindent
 
 "set ignorecase
@@ -168,6 +168,10 @@ colorscheme blossom
 
 " KEYMAPS
 
+" Yank to system clipboard
+map <leader>y "+y<CR>
+map <leader>p "+p<CR>
+
 nnoremap <silent> <leader><leader> :set hlsearch!<CR>
 nnoremap <silent> <leader><leader> :noh<CR>
 noremap <silent> <F5> :setlocal spell!<CR>
@@ -186,7 +190,7 @@ nmap <leader>ds :!rm -r "$HOME/.nvimsessions/*"
 " Open file located in the same directory as the current one
 nmap <leader>e :e <c-r>=expand('%:p:h').'/'<cr>
 
-map <silent> <C-l> :set relativenumber!<CR>
+map <silent> <C-l><C-l> :set number! relativenumber!<CR>
 
 noremap <silent> <F4> :NERDTreeToggle<CR> 
 noremap <silent> <leader>f :NERDTreeToggle<CR> 

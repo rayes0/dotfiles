@@ -137,7 +137,7 @@ Relevant files: `bin/start-eww`
 
 Make sure you use this script instead of starting eww by just running `eww daemon`. Most parts of the setup are integrated with this script. You probably want to have your wm autostart it.
 
-The script will start the eww daemon and control the updating of various eww variables over the course of time that eww is running, mainly through user signals. This prevents the need to spam shell commands every couple seconds/milleseconds, when an eww window is opened and saves a whole bunch of cpu.
+The script will start the eww daemon and control the updating of various eww variables over the course of time that eww is running, mainly through user signals. This prevents the need to spam shell commands every couple seconds/milliseconds when an eww window is opened and saves a whole bunch of cpu.
 
 Here are the signals used by the script, which should cause minimal interference with system signals:
 

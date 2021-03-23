@@ -138,13 +138,16 @@ check_tag() {
 	fi
 	tags=""
 	for t in "${tags_list[@]}"; do
-		if [[ "$t" == \#*  ]]; then
-			tags="${tags}$bgf%{U#60584f}%{+u} ${t#?} %{B-}%{-u}"
-		elif [[ "$t" == +* ]]; then
-			tags="${tags}%{U#60584f}%{+u} ${t#?} %{B-}%{-u}"
-		elif [[ "$t" == :* || "$t" == -* || "$t" == %* ]]; then
-			tags="${tags} ${t#?} "
-		fi
+		case $t in
+            '.'11|'.'12|'.'13|'.'14|':'11|':'12|':'13|':'14)
+                tags="$tags" ;;
+            '#'*)
+			    tags="${tags}$bgf%{U#60584f}%{+u} ${t#?} %{B-}%{-u}" ;;
+            '+'*)
+			    tags="${tags}%{U#60584f}%{+u} ${t#?} %{B-}%{-u}" ;;
+            ':'*|'-'*|'%'*)
+			    tags="${tags} ${t#?} " ;;
+        esac
 	done
 	echo "DES$tags" > $fifo &
 }
@@ -159,6 +162,10 @@ check_todo() {
 		sleep 20
 	done &
 }
+check_hide() {
+    number=$(herbstclient attr my_minimized_windows)
+    echo "MIN$number" > $fifo &
+}
 
 check_wm() {
 	while read -r line; do
@@ -168,9 +175,8 @@ check_wm() {
 			tag_flags)
 				check_tag
 				check_mus ;;
-			focus_changed*)
-				#check_hidden ;;
-				;;
+			UPDATE_HIDDEN)
+                check_hide ;;
 			UPDATE_PANEL)
 				update ;;
 		esac
@@ -196,6 +202,8 @@ parse_fifo() {
 				music="${line#???}" ;;
 			TOD*)
 				todo="${line#???}" ;;
+            MIN*)
+                hidden="${line#???}" ;;
 			UPD*)
 				update ;;
 			*) ;;
@@ -214,6 +222,7 @@ update() {
 	check_mus
 	check_todo
     check_lock
+#    check_hide
 }
 
 update
