@@ -44,11 +44,11 @@ Distraction-free, focused on usability and productivity.
 Cool `.bashrc` settings:
 
 ```sh
-# Better cd, allows cool stuff like autocorrection and autocd
+# Better cd, allows cool stuff like autocorrection and autocd by just typing the path
 shopt -s autocd
 shopt -s cdspell
 
-# History
+# History improvements to not endlessly clog your history file
 shopt -s histappend
 shopt -s histverify
 export HISTCONTROL=ignoreboth
@@ -57,6 +57,7 @@ export HISTCONTROL=ignoreboth
 export MANPAGER='nvim +Man!'
 
 # Useful aliases
+alias sl='ls'
 alias la='ls -A'
 alias ll='ls -al'
 alias ls='ls --color=auto'
@@ -64,7 +65,7 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-# Alert for long running commands. Usage:
+# Notify after long running command finishes. Usage:
 # sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history | tail -n 1 | sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')" "Command completed"'
 ```

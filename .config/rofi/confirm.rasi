@@ -9,7 +9,6 @@ window {
     width:      			300px;
     padding:    			25px;
     location:               center;
-    y-offset:               -5em;
 }
 
 prompt {

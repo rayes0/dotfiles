@@ -19,6 +19,7 @@ Plug 'ervandew/supertab'
 Plug 'dense-analysis/ale'
 "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+Plug 'tpope/vim-surround'
 
 call plug#end()
 
@@ -177,6 +178,8 @@ nnoremap <silent> <leader><leader> :noh<CR>
 noremap <silent> <F5> :setlocal spell!<CR>
 
 noremap <C-s> :w<CR>
+
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " scroll window in next frame
 nnoremap <silent> <leader>j <c-w>w<c-d><c-w>W

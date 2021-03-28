@@ -325,6 +325,9 @@
 [Barless]
     stack_tag = barless-info
     history_ignore = yes
+[UrxvtPreventclose]
+    stack_tag = preventclose
+    history_ignore = yes
 
 # vim: ft=cfg
 

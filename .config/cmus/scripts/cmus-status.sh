@@ -5,6 +5,7 @@
 kill -SIGURG $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock) &
 
 # These are for updating the song in my status bars. You can delete/comment these if you don't use my bar scripts
-pkill -SIGUSR1 herbbar &
-pkill -SIGUSR1 coffeebar &
-
+killall -SIGUSR1 musicstat.sh &
+killall -SIGUSR1 herbbar &
+killall -SIGUSR1 coffeebar &
+exit 0

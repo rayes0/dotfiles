@@ -62,7 +62,7 @@ case "$desc" in
 		icon="流" ;;
 	*sleet*)
 		icon="" ;;
-	*rain*|*drizzle*)
+	*rain*|*drizzle*|*shower*)
 		case "$desc" in 
 			*thunder*)
 				icon="" ;;

@@ -57,10 +57,12 @@ case $chosen in
     $suspend)
         cmus-remote -u
         amixer set Master mute
-	    mantablockscreen &
+		~/bin/lock &
         systemctl suspend
         ;;
     $logout)
+		pkill herbbar coffeebar lemonbar
+		pkill eww
         pkill -KILL -U $user
         ;;
 esac

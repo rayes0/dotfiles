@@ -4,7 +4,7 @@
 # Global values should be located at /etc/inputrc
 $include /etc/inputrc
 
-set editing-mode emacs
+set editing-mode vi
 set show-mode-in-prompt on
 
 # Prevent pasted characters from being interpreted as commands
@@ -17,6 +17,9 @@ set keymap vi-insert
 "\ee": emacs-editing-mode
 set keymap vi-command
 "\ee": emacs-editing-mode
+
+# Prevent annoying esc delay
+set keyseq-timeout 0
 
 # Switch between cursor types, note that the linux console uses different escape sequences
 $if term=linux

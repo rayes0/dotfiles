@@ -18,6 +18,7 @@ window {
 
 prompt {
 	margin:					0 5px 10px 0;
+	font: "Victor Mono Bold Italic 13";
 }
 
 entry {

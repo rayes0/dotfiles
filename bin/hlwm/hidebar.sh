@@ -13,8 +13,8 @@ if pgrep -x herbbar >/dev/null 2>&1; then
     herbstclient keybind $mod-Down spawn bash -c '~/bin/volume/vol-down.sh'
 else
     # normal mode
-    herbstclient keybind $mod-Up spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar1.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)'
-    herbstclient keybind $mod-Down spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar2.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock)'
+    herbstclient keybind $mod-Up spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar1.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock); killall -s USR1 volume.sh'
+    herbstclient keybind $mod-Down spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar2.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock); killall -s USR1 volume.sh'
 	case $theme in
 		light)
 			case $number in
