@@ -1,7 +1,7 @@
 #!/bin/bash
 # wrapper script for eww
 
-# Allow only one instance. set -C is requited becase we need an atomic action here
+# Allow only one instance. set -C is required becase we need an atomic action here
 set -C
 lockf="${XDG_RUNTIME_DIR}/eww-wrapper.lock"
 ! echo "$$" &>/dev/null > "$lockf" && echo "It looks like an instance of this script is already running. If you are sure this is not the case, then remove '${XDG_RUNTIME_DIR}/eww-wrapper.lock' and try again." && exit 1
@@ -9,7 +9,7 @@ lockf="${XDG_RUNTIME_DIR}/eww-wrapper.lock"
 # Remove the pidfile and kill eww if the wrapper script exits
 cleanup() {
 	eww kill &>/dev/null
-	rm ${XDG_RUNTIME_DIR}/eww-wrapper.lock
+	rm "${XDG_RUNTIME_DIR}/eww-wrapper.lock"
     [[ -z "$(jobs -p)" ]] || kill $(jobs -p) &>/dev/null
 	exit
 }
@@ -63,7 +63,7 @@ weather-update() {
 }
 
 # Used for converting to minutes
-changetomin() { printf "%d:%02d" "$((10#$1 / 60))" "$((10#$1 % 60))"; }
+changetomin() { printf "%d:%02d" "$(($1 / 60))" "$(($1 % 60))"; }
 
 cmus-info() {
 	case $1 in
