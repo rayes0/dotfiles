@@ -66,7 +66,7 @@
 						<label class="music-time" text="{{mus_position_min}} / {{mus_duration_min}}" halign="start"/>
 					</box>
 				</box>
-				<button class="music-norun" onclick="{{startterm}} cmus" visible="{{mus_whenkilled}}" halign="center">Cmus is not running. Click to start.</button>
+				<button class="music-norun" onclick="~/.config/eww/scripts/start-cmus.sh" visible="{{mus_whenkilled}}" halign="center">Cmus is not running. Click to start.</button>
 				<scale halign="center" class="music-slide" min="0" max="{{mus_duration}}" value="{{mus_position}}" style="margin:0px;"/>
 				<box class="music-controls" orientation="h" space-evenly="false" active="{{mus_whenrunning}}" hexpand="true" halign="center">
 					<button onclick="cmus-remote --prev" class="music-buttons" halign="center"></button>
