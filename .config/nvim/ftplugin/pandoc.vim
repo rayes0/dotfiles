@@ -12,19 +12,25 @@ let g:file = expand('%:p')
 let g:pdf = "/tmp/" . expand('%:t:r') . ".pdf"
 
 function NotesPreview()
-    " compile the pdf from this file, then start the pdf viewer "
+    " compile the pdf from this file, then start the pdf viewer
     silent execute '!pandoc' '-f markdown' '--filter pandoc-crossref' g:file '-o' g:pdf
     silent execute '!' g:pdf_viewer g:pdf '&>/dev/null &'
 endfunction
 
+function Compile()
+	:w
+    silent execute '!pandoc' '-f markdown' '--filter pandoc-crossref' g:file '-o' g:pdf
+endfunction
+
 "call NotesPreview()
+nmap <silent> <C-i> :call NotesPreview()<CR>
 
 " when saving, also recompile the pdf (this should update the viewer automatically) "
-autocmd BufWritePost *.mdown execute '!pandoc' '-f markdown' '--filter pandoc-crossref' g:file '-o' g:pdf
+"autocmd! BufWritePost *.mdown execute '!pandoc' '-f markdown' '--filter pandoc-crossref' g:file '-o' g:pdf
+nmap <C-p> :call Compile()<CR>
 
 autocmd VimLeave *.mdown execute '!rm' g:pdf
 
-nmap <C-p> :call NotesPreview()<CR>
 nmap <buffer><silent> <leader>p :call mdip#MarkdownClipboardImage()<CR>
 
 " there are some defaults for image directory and image name, you can change them

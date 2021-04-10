@@ -1,8 +1,4 @@
 configuration {
-    drun-display-format: "{icon} {name}";
-    display-drun: "Apps";
-	show-icons: true;
-	icon-theme: "Papirus-Dark-Custom";
 	location: 0;
 	yoffset: 0;
     xoffset: 0;	
@@ -11,8 +7,6 @@ configuration {
 	bw: 0;
     fullscreen: false;
     show-icons: true;
-	terminal: "urxvt";
-	sidebar-mode: false;
 }
 
 * {

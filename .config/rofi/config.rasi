@@ -2,7 +2,7 @@ configuration {
     modi: "drun,run,ssh";
     drun-display-format: "{icon} {name}";
     show-icons:         true;
-    icon-theme:         "Papirus";
+    icon-theme:         "Zafiro";
 	location: 0;
 	yoffset: 0;
 	xoffset: 0;

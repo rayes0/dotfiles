@@ -69,4 +69,3 @@ set history-preserve-point on
 # Will mark with an asterisk when history is changed
 set mark-modified-lines on
 
-

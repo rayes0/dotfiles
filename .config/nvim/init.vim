@@ -3,9 +3,18 @@
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'junegunn/goyo.vim'
-Plug 'junegunn/limelight.vim'
+Plug 'vim-scripts/taglist.vim'
 Plug 'reedes/vim-pencil'
 Plug 'preservim/nerdtree'
+"Plug 'vim-voom/VOoM'
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'ervandew/supertab'
+Plug 'dense-analysis/ale'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+Plug 'tpope/vim-surround'
+"Plug 'yuttie/comfortable-motion.vim'
+Plug 'vim-scripts/taglist.vim'
 Plug 'vim-latex/vim-latex'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
@@ -13,13 +22,8 @@ Plug 'ferrine/md-img-paste.vim'
 Plug 'luffah/vim-zim'
 "Plug 'rayes0/blossom.vim'
 Plug 'dbeniamine/todo.txt-vim'
-"Plug 'vim-voom/VOoM'
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'ervandew/supertab'
-Plug 'dense-analysis/ale'
-"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
-Plug 'tpope/vim-surround'
+Plug 'mzlogin/vim-smali'
+Plug 'arzg/vim-substrata'
 
 call plug#end()
 
@@ -39,15 +43,9 @@ let g:netrw_dirhistmax = 0
 
 au CursorHold * checktime
 
-set completeopt=menuone,noinsert
-
 autocmd BufNewFile,BufRead *.mdown set filetype=pandoc
 autocmd BufNewFile *.mdown r ~/.config/nvim/templates/template.mdown | set expandtab
 autocmd BufNewFile *.mkdwn r ~/.config/nvim/templates/template.mkdwn
-
-map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 " TABLINE
 
@@ -111,18 +109,11 @@ endfunction
 
 noremap <C-a> :call ToggleHiddenAll()<CR>
 
-set rulerformat=%25(%)
+set rulerformat=%20(%)
 set rulerformat+=%=
 "set rulerformat+=%{&modified?'*':''}
 set rulerformat+=\ %v:%l\ ~\ %p%%
 set rulerformat+=\ \|\ %Y%*
-
-"set statusline=
-"set statusline+=\ %{toupper(g:currentmode[mode()])}
-"set statusline+=\ %{&modified?'[+]':''}
-"set statusline+=%=
-"set statusline+=\ %v:%l\/%L
-"set statusline+=\ %Y%4*
 
 "let g:currentmode = {
 "            \ 'n'  : 'normal',
@@ -154,6 +145,24 @@ let g:goyo_width = '110'
 
 let g:templates_directory = '~/.config/nvim/templates'
 
+let g:ale_linters = {
+    \ 'python': ['pylint'],
+    \ 'vim': ['vint'],
+    \ 'cpp': ['clang'],
+    \ 'c': ['clang']
+\}
+
+" Completion
+"set omnifunc=syntaxcomplete#Complete
+set omnifunc=deoplete#complete
+set completefunc=deoplete#complete
+set completeopt=menuone,noinsert
+
+let g:deoplete#enable_at_startup = 1
+call deoplete#custom#option('auto_complete', 'false')
+let g:SuperTabSetDefaultCompletionType = "context"
+let g:SuperTabContextDefaultCompletionType = "<c-x><c-u>"
+
 " FOLDING
 
 inoremap <F9> <C-O>za
@@ -178,6 +187,8 @@ nnoremap <silent> <leader><leader> :noh<CR>
 noremap <silent> <F5> :setlocal spell!<CR>
 
 noremap <C-s> :w<CR>
+noremap! <C-BS> <C-w>
+noremap! <C-h> <C-w>
 
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
@@ -199,3 +210,11 @@ noremap <silent> <F4> :NERDTreeToggle<CR>
 noremap <silent> <leader>f :NERDTreeToggle<CR> 
 noremap <silent> <leader>g :Goyo<CR> 
 noremap <silent> <leader>l :Limelight!!<CR>
+
+map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+noremap <silent> <F8> :TlistToggle<CR>
+
+noremap <silent> <C-c> :ALEToggle<CR>

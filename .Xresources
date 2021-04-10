@@ -51,12 +51,12 @@ XTerm.vt100.scrollBar: false
 XTerm*internalBorder: 30
 
 !! URxvt Appearance
-*.font: xft:SF Mono:style=Regular:size=11,xft:Noto Serif CJK JP:style=SemiBold:size=11,xft:symbola:size=12:minspace=False
-*.boldFont: xft:SF Mono:style=Bold:size=11,xft:Noto Serif CJK JP:style=Black:size=11
-*.italicFont: xft:SF Mono:style=Regular Italic:size=11,xft:Noto Serif CJK JP:style=Italic:size=11
-*.boldItalicFont: xft:SF Mono:style=Bold Italic:size=11,xft:Noto Serif CJK JP:style=Bold Italic:size=11
-URxvt.letterSpace: -1
-URxvt.lineSpace: 2
+*.font: xft:SF Mono:style=Regular:pixelsize=15,xft:Noto Serif CJK JP:style=SemiBold:size=11,xft:symbola:size=12:minspace=False
+*.boldFont: xft:SF Mono:style=Semibold:pixelsize=15,xft:Noto Serif CJK JP:style=Black:size=11
+*.italicFont: xft:Victor Mono:style=Medium Italic:pixelsize=15,xft:Noto Serif CJK JP:style=Italic:size=11
+*.boldItalicFont: xft:Victor Mono:style=Bold Italic:pixelsize=15,xft:Noto Serif CJK JP:style=Bold Italic:size=11
+URxvt.letterSpace: 0
+URxvt.lineSpace: 1
 URxvt.geometry: 92x26
 URxvt.internalBorder: 30
 URxvt.cursorBlink: true

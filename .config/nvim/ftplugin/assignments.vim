@@ -16,7 +16,7 @@ endfunction
 call NotesPreview()
 
 " when saving, also recompile the pdf (this should update the viewer automatically) "
-autocmd BufWritePost *.mkdwn execute '!pandoc' '-f markdown' g:file '-o' g:pdf
+autocmd! BufWritePost *.mkdwn execute '!pandoc' '-f markdown' g:file '-o' g:pdf
 
 autocmd VimLeave *.mkdwn execute '!rm' g:pdf
 

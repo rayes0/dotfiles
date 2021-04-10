@@ -5,7 +5,7 @@ subtitle: Subtitle
 author: Author
 date: Date
 numbersections: true
-autoEqnLabels: true
+autoEqnLabels: false
 geometry:
 - top=30mm
 - left=20mm

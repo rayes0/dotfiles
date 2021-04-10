@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 # My herbstluftwm configuration
-	
+
 feh --bg-fill ~/Pictures/wallpapers/neutral/foggy-mountain_trees.jpg	
 
 # ======== Basic Things ======== #
@@ -34,6 +34,8 @@ hc keybind $mod-j           focus down
 hc keybind $mod-k           focus up
 hc keybind $mod-l           focus right
 hc keybind $mod-BackSpace   cycle_monitor
+#hc keybind $mod-Tab         cycle_all +1	
+#hc keybind $mod-Shift-Tab   cycle_all -1	
 hc keybind $mod-Tab         cycle_all +1	
 hc keybind $mod-Shift-Tab   cycle_all -1	
 hc keybind $mod-c			cycle_all
@@ -81,9 +83,9 @@ hc keybind $mod-$alt-space floating toggle
 hc keybind $mod-e fullscreen toggle
 hc set default_frame_layout horizontal
 # cycle layouts
-hc keybind $mod-Shift-space    \
-	or , and . compare tags.focus.curframe_wcount = 2    \
-	. cycle_layout +1 vertical horizontal max vertical grid    \
+hc keybind $mod-Shift-space \
+	or , and . compare tags.focus.curframe_wcount = 2 \
+	. cycle_layout +1 max horizontal vertical grid \
 	, cycle_layout +1
 # minimize and maximize
 hc silent new_attr int my_minimized_counter 0
@@ -128,13 +130,26 @@ for i in "${!tag_names[@]}" ; do
     if [ -n "$key" ] ; then
         hc keybind "$mod-$key" use_index "$i"
         hc keybind "$mod-Shift-$key" move_index "$i"
-		#hc keybind "$mod-Control-$key" `
+		hc keybind "$mod-Control-$key" chain , move_index "$i" , use_index "$i"
+		hc keybind "$mod-$alt-$key" chain \
+			, sprintf FOCNAME "%s" tags.focus.name chain \
+				: set_attr tags.focus.name temp \
+				: sprintf UNFNAME "%s" tags.${i}.name chain \
+					+ set_attr tags.$i.name FOCNAME \
+					+ set_attr tags.by-name.temp.name UNFNAME \
+			, sprintf FOCTAG "%s" tags.focus.index \
+				set_attr tags.$i.index FOCTAG \
+			, set_attr tags.focus.index $i \
+			, use_index $i \
+			, emit_hook UPDATE_PANEL
     fi
 done
 
 ### Tag switching operations
 hc keybind $mod-period use_index +1 --skip-visible
 hc keybind $mod-comma  use_index -1 --skip-visible
+#hc keybind $mod-Shift-> move_index +1 --skip-visible
+#hc keybind $mod-Shift-< move_index -1 --skip-visible
 hc keybind $mod-a use_previous
 
 
@@ -154,7 +169,7 @@ hc set always_show_frame on
 hc set frame_bg_transparent on
 hc set frame_transparent_width 0
 hc set frame_gap 8
-hc set frame_padding 0
+hc set frame_padding -2
 hc set smart_frame_surroundings on
 
 ### Theme Keybinds
@@ -169,7 +184,7 @@ hc attr theme.urgent.color orange
 hc attr theme.inner_width 0
 hc attr theme.inner_color '#ede6e3'
 hc attr theme.border_width 0
-hc attr theme.floating.border_width 0
+hc attr theme.floating.border_width 1
 hc attr theme.floating.outer_width 0
 hc attr theme.floating.outer_color '#ede6e3'
 hc attr theme.active.inner_color '#c8c2bf'
@@ -177,7 +192,7 @@ hc attr theme.active.outer_color '#c8c2bf'
 hc attr theme.background_color '#ede6e3'
 
 # Window Settings
-hc set window_gap 0
+hc set window_gap 2
 hc set smart_window_surroundings on
 hc set mouse_recenter_gap 0
 hc set raise_on_focus 0
@@ -283,16 +298,17 @@ rulespawn() {(
     ) &
 }
 if herbstclient silent new_attr bool my_not_first_autostart ; then
-	start-eww &
+	start-eww-pipewire &
 	RULES=( tag=12 focus=off )
     rulespawn urxvt -e tmux new-session -A -D -s weechat "weechat" &
-	sleep 5
 	RULES=( tag=11 focus=off)
 	rulespawn urxvt -e ~/bin/tmux/time-manage.sh &
 fi
 
 ### Some other programs
-pkill picom
-picom --config ~/.config/picom-rounded.conf --shadow-opacity 0.25 &
+#pkill picom
+#picom --config ~/.config/picom-rounded-herb.conf --shadow-opacity 0.25 &
+#picom --config ~/.config/picom-herb.conf --shadow-opacity 0.25 &
 pkill dunst
 dunst -config ~/.config/dunst/dunstrc-light &
+setxkbmap -layout us,us -variant ,norman -option grp:shifts_toggle

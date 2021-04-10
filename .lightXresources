@@ -7,7 +7,7 @@
 
 ! black
 *.color0: #ede6e3
-*.color8: #c8c2bf
+*.color8: #dad3d0
 
 ! red
 *.color1: #ce9c85
@@ -34,8 +34,8 @@
 *.color14: #75998e
 
 ! white
-*.color7: #6c605a
-*.color15: #6c605a
+*.color7: #685c56
+*.color15: #938680
 
 !! Fonts
 Xft.autohint: true
@@ -51,10 +51,10 @@ XTerm.vt100.scrollBar: false
 XTerm*internalBorder: 30
 
 !! URxvt Appearance
-*.font: xft:SF Mono:style=Regular:pixelsize=15,xft:Noto Serif CJK JP:style=SemiBold:size=11,xft:symbola:size=12:minspace=False
-*.boldFont: xft:SF Mono:style=Semibold:pixelsize=15,xft:Noto Serif CJK JP:style=Black:size=11
-*.italicFont: xft:Victor Mono:style=Medium Italic:pixelsize=15,xft:Noto Serif CJK JP:style=Italic:size=11
-*.boldItalicFont: xft:Victor Mono:style=Bold Italic:pixelsize=15,xft:Noto Serif CJK JP:style=Bold Italic:size=11
+*.font: xft:SF Mono:style=Regular:pixelsize=15,xft:Noto Serif CJK JP:style=SemiBold:pixelsize=15,xft:symbola:pixelsize=15:minspace=false
+*.boldFont: xft:SF Mono:style=Semibold:pixelsize=15,xft:Noto Serif CJK JP:style=Black:pixelsize=15
+*.italicFont: xft:Victor Mono:style=Medium Italic:pixelsize=15,xft:Noto Serif CJK JP:style=Italic:pixelsize=15
+*.boldItalicFont: xft:Victor Mono:style=Bold Italic:pixelsize=15,xft:Noto Serif CJK JP:style=Bold Italic:pixelsize=15
 URxvt.letterSpace: 0
 URxvt.lineSpace: 1
 URxvt.geometry: 92x26
@@ -89,7 +89,7 @@ URxvt.keyboard-select.clipboard: true
 URxvt.resize-font.step: 0.5
 
 URxvt.keysym.M-u: perl:url-select:select_next
-URxvt.url-select.launcher: url-parse
+URxvt.url-select.launcher: /home/rayes/bin/urxvt/urxvt-url
 
 !! Rofi
 rofi.font: Noto Sans 11

@@ -1,6 +1,7 @@
 SoftPencil
 setlocal spell spelllang=en_ca
 
+let g:zim_wiki_lang = 'en'
 let g:zim_notebook = '~/Notes/Zim'
 let g:zim_notebooks_dir = '~/Notes/Zim'
 let g:zim_keymapping={
