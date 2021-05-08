@@ -100,7 +100,8 @@ check_bat() {
 # Volume            
 check_vol() {                                                 
 	while :; do
-      	vol="$(pacmd list-sinks | grep -A 15 '* index'| awk '/volume: front/{ print $5 }' | sed 's/%//g')"
+      	#vol="$(pacmd list-sinks | grep -A 15 '* index'| awk '/volume: front/{ print $5 }' | sed 's/%//g')"
+		vol="$(pactl list sinks | grep -m 1 "Volume:" | awk '{print $5}' | sed 's/%//g')"
 
     	if [ "$vol" -ge "0" ] && [ "$vol" -lt "30" ]; then
 			voli=""
@@ -208,7 +209,7 @@ parse_fifo() {
 				update ;;
 			*) ;;
 		esac
-		echo "%{T-}%{l}%{O1}%{A:eww open side-light:}%{A3:eww open side-light:}${desktop}%{T2}  %{B-}%{O20}${music}%{A}%{A} %{c}%{T3}%{A:eww close calendar-light || eww open calendar-light:}%{A3:eww close calendar-light || eww open calendar-light:}${fgn}${date}%{A}%{A}%{T-} %{r}%{A:eww close utilities-light || eww open utilities-light:}%{A3:eww close utilities-light || eww open utilities-light:}${volume}   ${network} ${vpnname}   ${battery}   ${todo} %{A}%{A} "
+		echo "%{T-}%{l}%{O1}%{A:eww close side-light || eww open side-light:}%{A3:eww close side-light || eww open side-light:}${desktop}%{T2}  %{B-}%{O20}${music}%{A}%{A} %{c}%{T3}%{A:eww close calendar-light || eww open calendar-light:}%{A3:eww close calendar-light || eww open calendar-light:}${fgn}${date}%{A}%{A}%{T-} %{r}%{A:eww close utilities-light || eww open utilities-light:}%{A3:eww close utilities-light || eww open utilities-light:}${volume}   ${network} ${vpnname}   ${battery}   ${todo} %{A}%{A} "
     done < <(tail -f "$fifo")
 }
 

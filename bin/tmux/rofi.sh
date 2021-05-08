@@ -25,7 +25,7 @@ case "$selected" in
 	*)
 		selected="${selected/ (attached)/}"
 		selected="${selected/ (detached)/}"
-		urxvtc -hold -e tmux attach -t "${selected}" &
+		urxvtc -e tmux attach -t "${selected}" &
 		;;
 esac
 

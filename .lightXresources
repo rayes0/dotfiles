@@ -1,11 +1,12 @@
+! vim: ft=xdefaults
 !! Colorscheme
 
 ! special
 *.foreground: #6c605a
 *.background: #ede6e3
-!*.cursorColor: #937f74
+.cursorColor: #937f74
 
-! black
+!black
 *.color0: #ede6e3
 *.color8: #dad3d0
 
@@ -50,11 +51,19 @@ Xft.dpi: 96
 XTerm.vt100.scrollBar: false
 XTerm*internalBorder: 30
 
+!! Fonts
+URxvt.font: xft:SF Mono:style=Regular:pixelsize=15,xft:Noto Serif CJK JP:style=SemiBold:pixelsize=15,xft:symbola:pixelsize=15:minspace=false
+URxvt.boldFont: xft:SF Mono:style=Semibold:pixelsize=15,xft:Noto Serif CJK JP:style=Black:pixelsize=15
+URxvt.italicFont: xft:Victor Mono:style=Medium Italic:pixelsize=15,xft:Noto Serif CJK JP:style=Italic:pixelsize=15
+URxvt.boldItalicFont: xft:Victor Mono:style=Bold Italic:pixelsize=15,xft:Noto Serif CJK JP:style=Bold Italic:pixelsize=15
+
+!! Emacs
+!Emacs.font: SF Mono:antialias=True:pixelsize=15
+!Emacs.menuBar: off
+!Emacs.toolbar: off
+!emacs.verticalScrollBars: off
+
 !! URxvt Appearance
-*.font: xft:SF Mono:style=Regular:pixelsize=15,xft:Noto Serif CJK JP:style=SemiBold:pixelsize=15,xft:symbola:pixelsize=15:minspace=false
-*.boldFont: xft:SF Mono:style=Semibold:pixelsize=15,xft:Noto Serif CJK JP:style=Black:pixelsize=15
-*.italicFont: xft:Victor Mono:style=Medium Italic:pixelsize=15,xft:Noto Serif CJK JP:style=Italic:pixelsize=15
-*.boldItalicFont: xft:Victor Mono:style=Bold Italic:pixelsize=15,xft:Noto Serif CJK JP:style=Bold Italic:pixelsize=15
 URxvt.letterSpace: 0
 URxvt.lineSpace: 1
 URxvt.geometry: 92x26

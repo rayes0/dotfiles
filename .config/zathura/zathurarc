@@ -42,7 +42,7 @@ set render-loading              true
 # verbose
 set recolor-lightcolor          "#fdfbe3" # base3
 set recolor-darkcolor           "#657b83" # base00
-set recolor                     "true"
+#set recolor                     "true"
 # set recolor-keephue             true      # keep original color
 
 set selection-clipboard clipboard
@@ -58,8 +58,12 @@ set scroll-step 50
 
 # Keybinds
 unmap f
-map f toggle_fullscreen
-map [fullscreen] f toggle_fullscreen
+map f navigate next
+#map f toggle_fullscreen
+#map [fullscreen] f toggle_fullscreen
+
+unmap b
+map b navigate previous
 
 unmap S
 map S toggle_statusbar

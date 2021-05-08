@@ -2,6 +2,7 @@
 documentclass: article
 title: Title
 subtitle: Subtitle
+toc-title: Contents
 author: Author
 date: Date
 numbersections: true

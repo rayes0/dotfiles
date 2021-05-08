@@ -34,4 +34,10 @@ endfunction
 au BufEnter Volume*.md setlocal foldexpr=MarkdownLevel()  
 au BufEnter Volume*.md setlocal foldmethod=expr
 
+
+setlocal rulerformat=%30(%)
+setlocal rulerformat+=%=%{wordcount().words}\ words,
+setlocal rulerformat+=\ %p%%
+setlocal rulerformat+=\ \|\ %Y%*%{&modified?'*':''}
+
 cd %:p:h

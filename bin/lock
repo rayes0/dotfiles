@@ -8,7 +8,7 @@ killall -SIGUSR1 dunst
 fg_color="6c605aff"
 
 i3lock -e -f \
-	--color=ede6e3ff \
+	--color=ede6e3ff --indicator \
 	--insidevercolor=c8c2bfff --insidewrongcolor=ce9c85ff --insidecolor=c8c2bfff \
 	--ringvercolor=c8c2bfff --ringwrongcolor=ce9c85ff --ringcolor=c8c2bf \
 	--keyhlcolor=a09c80ff --bshlcolor=cd9c85ff --separatorcolor=c8c2bfff \
@@ -21,7 +21,7 @@ i3lock -e -f \
 	--radius 80 --ring-width 6 \
 	--timestr="%H:%M" --timesize=110 \
 	--datestr="%a, %b %d" --datesize=40 \
-	--clock --date-font="Victor Mono:style=italic" --time-font="SFMono Nerd Font:style=bold" \
+	--force-clock --date-font="Victor Mono:style=italic" --time-font="SFMono Nerd Font:style=bold" \
 	--datecolor=$fg_color --timecolor=$fg_color --greetercolor=$fg_color \
 	--pass-media-keys --pass-screen-keys --pass-power-keys --pass-volume-keys
 

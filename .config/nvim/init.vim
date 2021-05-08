@@ -2,33 +2,64 @@
 
 call plug#begin('~/.config/nvim/plugged')
 
-Plug 'junegunn/goyo.vim'
-Plug 'vim-scripts/taglist.vim'
-Plug 'reedes/vim-pencil'
-Plug 'preservim/nerdtree'
-"Plug 'vim-voom/VOoM'
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'ervandew/supertab'
+" Linting, Completiong, Language packs
 Plug 'dense-analysis/ale'
+"Plug 'Shougo/echodoc.vim'
+Plug 'Sheerun/vim-polyglot'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
-Plug 'tpope/vim-surround'
-"Plug 'yuttie/comfortable-motion.vim'
-Plug 'vim-scripts/taglist.vim'
-Plug 'vim-latex/vim-latex'
+Plug 'deoplete-plugins/deoplete-dictionary'
+" Editing
+Plug 'reedes/vim-pencil'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'ferrine/md-img-paste.vim'
+Plug 'lervag/vimtex'
 Plug 'luffah/vim-zim'
-"Plug 'rayes0/blossom.vim'
-Plug 'dbeniamine/todo.txt-vim'
+Plug 'tpope/vim-surround'
 Plug 'mzlogin/vim-smali'
+" Helpful Utilities
+Plug 'vim-scripts/taglist.vim'
+Plug 'preservim/nerdtree'
+Plug 'preservim/nerdcommenter'
+Plug 'troydm/shellasync.vim'
+"Plug 'vim-voom/VOoM'
+Plug 'isa/vim-matchit'
+Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+Plug 'vim-scripts/taglist.vim'
+" Themes
 Plug 'arzg/vim-substrata'
+"Plug 'rayes0/blossom'
+" Other Cool Things
+Plug 'junegunn/goyo.vim'
+Plug 'dbeniamine/todo.txt-vim'
+"Plug 'yuttie/comfortable-motion.vim'
 
 call plug#end()
 
+" PLUGIN SETTINGS
+
+let g:limelight_conceal_ctermfg = '240'
+let g:goyo_width = '110'
+
+let g:templates_directory = '~/.config/nvim/templates'
+
+let g:ale_linters = {
+    \ 'python': ['pylint'],
+    \ 'vim': ['vint'],
+    \ 'cpp': ['clang'],
+    \ 'c': ['clang']
+\}
+
+
+" GENERAL SETTINGS
+
+set termguicolors
+colorscheme blossom
+"colorscheme rose-pine-dawn
+"colorscheme sayo
+"colorscheme substrata
+
 set nocompatible
-filetype on
 filetype plugin indent on
 syntax on
 packloadall
@@ -50,7 +81,6 @@ autocmd BufNewFile *.mkdwn r ~/.config/nvim/templates/template.mkdwn
 " TABLINE
 
 set tabline=%!MyTabLine()
-
 function MyTabLine()
 	let s = ''
 	for i in range(tabpagenr('$'))
@@ -107,7 +137,7 @@ function! ToggleHiddenAll()
     endif
 endfunction
 
-noremap <C-a> :call ToggleHiddenAll()<CR>
+noremap <silent><C-a> :call ToggleHiddenAll()<CR>
 
 set rulerformat=%20(%)
 set rulerformat+=%=
@@ -138,30 +168,46 @@ set rulerformat+=\ \|\ %Y%*
 "                   \}
 
 
-" PLUGIN SETTINGS
-
-let g:limelight_conceal_ctermfg = '240'
-let g:goyo_width = '110'
-
-let g:templates_directory = '~/.config/nvim/templates'
-
-let g:ale_linters = {
-    \ 'python': ['pylint'],
-    \ 'vim': ['vint'],
-    \ 'cpp': ['clang'],
-    \ 'c': ['clang']
-\}
-
 " Completion
-"set omnifunc=syntaxcomplete#Complete
-set omnifunc=deoplete#complete
-set completefunc=deoplete#complete
-set completeopt=menuone,noinsert
+set omnifunc=syntaxcomplete#Complete
+set completeopt=longest,menuone,noinsert
 
 let g:deoplete#enable_at_startup = 1
-call deoplete#custom#option('auto_complete', 'false')
-let g:SuperTabSetDefaultCompletionType = "context"
-let g:SuperTabContextDefaultCompletionType = "<c-x><c-u>"
+"call deoplete#custom#option('auto_complete', 'true')
+call deoplete#custom#option('auto_complete_popup', 'manual')
+call deoplete#custom#option('auto_complete_delay', '0')
+call deoplete#custom#option('camel_case', 'true')
+call deoplete#custom#option('ignore_case', 'true')
+"call deoplete#custom#option('candidate_marks', [''
+
+call deoplete#custom#var('around', {
+			\ 'range_above': 20,
+			\ 'range_below': 20,
+			\ 'mark_above': '↑',
+			\ 'mark_below': '↓',
+			\ 'mark_changes': '*', })
+
+call deoplete#custom#var('file', { 'enable_slash_completion': v:true, })
+
+call deoplete#custom#filter('converter_reorder_attr', 'attrs_order', {
+			\ '_': { 'kind': [
+			\			'File',
+			\			'Buffer',
+			\		]}})
+
+inoremap <silent><expr> <TAB>
+			\ pumvisible() ? "\<C-n>" :
+			\ <SID>check_back_space() ? "\<TAB>" :
+			"\ deoplete#manual_complete()
+			\ deoplete#complete()
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr><C-g> deoplete#undo_completion()
+
+function! s:check_back_space() abort
+	let col = col('.') - 1
+	return !col || getline(".")[col - 1] =~ '\s'
+endfunction
+
 
 " FOLDING
 
@@ -170,11 +216,6 @@ nnoremap <F9> za
 onoremap <F9> <C-C>za
 vnoremap <F9> zf
 
-" Set colorscheme at end to prevent pandoc from overriding
-set termguicolors
-colorscheme blossom
-"colorscheme rose-pine-dawn
-" colorscheme sayo
 
 " KEYMAPS
 
@@ -189,8 +230,6 @@ noremap <silent> <F5> :setlocal spell!<CR>
 noremap <C-s> :w<CR>
 noremap! <C-BS> <C-w>
 noremap! <C-h> <C-w>
-
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " scroll window in next frame
 nnoremap <silent> <leader>j <c-w>w<c-d><c-w>W
@@ -218,3 +257,4 @@ map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans
 noremap <silent> <F8> :TlistToggle<CR>
 
 noremap <silent> <C-c> :ALEToggle<CR>
+

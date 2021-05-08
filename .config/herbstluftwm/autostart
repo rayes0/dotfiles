@@ -226,6 +226,7 @@ hc keybind $mod-n spawn ~/.config/cmus/scripts/cmus-notification.sh
 hc keybind $mod-Shift-v spawn vim-anywhere
 hc keybind $mod-Shift-q spawn powermenu.sh
 hc keybind $mod-b spawn ~/bin/hlwm/hidebar.sh
+hc keybind $mod-Shift-Delete spawn lock
 
 ### Volume and Brightness
 hc keybind $mod-Up    spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar1.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock); killall -s USR1 volume.sh'
@@ -242,7 +243,8 @@ hc keybind $mod-Shift-d spawn icecat -P Development
 
 hc keybind $mod-Shift-g spawn gimp
 hc keybind $mod-f spawn urxvtc -e ranger
-hc keybind $mod-Shift-Delete spawn lock
+
+hc keybind $mod-Shift-c spawn emacsclient -c
 
 
 # ======== Rules ======== #
@@ -265,13 +267,11 @@ hc rule instance='URxvtFloat' floating=on
 hc rule instance='gl' class='mpv' floating=on
 hc rule instance='feh' floating=on
 hc rule instance='lxpolkit' floating=on
-hc rule instance='urxvt' title='weechat' tag=12
-hc rule class='Zathura' floating=on
+#hc rule class='Zathura' floating=on
 
 
 # ===== Run Commands ===== #
 "${cmds[@]}" &
-
 
 # ======== Autostarting Applications ======== #
 ### Bar and monitors
@@ -290,21 +290,6 @@ case $number in
 		~/bin/hlwm/herbbar | lemonbar -n bar -B \#ede6e3 -F \#6c605a -f 'SF Mono:size=10.8' -f 'Victor Mono:style=Italic:size=10.8' -f 'Victor Mono:style=SemiBold Italic:size=10.8' -f 'Noto Serif CJK JP:style=SemiBold:size=10.8' -f 'Noto Sans CJK JP:size=10.8' -g 1920x30+0+0 | sh & ;;
 esac
 
-### Only autostart on first run
-rulespawn() {(
-    # this rule also requires, that the client sets the _NET_WM_PID property
-    herbstclient rule once pid=$BASHPID maxage=10 "${RULES[@]}"
-    exec "$@"
-    ) &
-}
-if herbstclient silent new_attr bool my_not_first_autostart ; then
-	start-eww-pipewire &
-	RULES=( tag=12 focus=off )
-    rulespawn urxvt -e tmux new-session -A -D -s weechat "weechat" &
-	RULES=( tag=11 focus=off)
-	rulespawn urxvt -e ~/bin/tmux/time-manage.sh &
-fi
-
 ### Some other programs
 #pkill picom
 #picom --config ~/.config/picom-rounded-herb.conf --shadow-opacity 0.25 &
@@ -312,3 +297,18 @@ fi
 pkill dunst
 dunst -config ~/.config/dunst/dunstrc-light &
 setxkbmap -layout us,us -variant ,norman -option grp:shifts_toggle
+
+### Only autostart on first run
+#rulespawn() {(
+#    # this rule also requires, that the client sets the _NET_WM_PID property
+#    herbstclient rule once pid=$BASHPID maxage=10 "${RULES[@]}"
+#    exec "$@"
+#    ) &
+#}
+if herbstclient silent new_attr bool my_not_first_autostart ; then
+	start-eww-pipewire &
+	herbstclient rule instance='URxvtWeechat' tag=12
+    urxvtc -name "URxvtWeechat" -e tmux new-session -A -D -s weechat "weechat" &
+	herbstclient rule instance='URxvtCalendar' tag=11
+	urxvtc -name "URxvtCalendar" -e ~/bin/tmux/time-manage.sh &
+fi

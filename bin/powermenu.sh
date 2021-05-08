@@ -62,7 +62,7 @@ case $chosen in
         ;;
     $logout)
 		pkill herbbar coffeebar lemonbar
-		pkill eww
+		pkill eww start-eww
         pkill -KILL -U $user
         ;;
 esac
