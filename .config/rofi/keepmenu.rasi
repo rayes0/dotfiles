@@ -1,0 +1,56 @@
+configuration {
+	show-icons: false;
+	location: 0;
+	yoffset: 0;
+	xoffset: 0;
+	fullscreen: false;
+	terminal: "urxvt";
+	columns: 1;
+	sidebar-mode: false;
+}
+
+* {
+	font: "SF Mono 11";
+	background-color: #2a2a2a;
+	text-color: #bebebe;
+}
+
+#window {
+	background-color: #2a2a2a;
+	width: 50%;
+	height: 50%;
+	padding: 30px;
+}
+
+#inputbar {
+	children: [ prompt, textbox-prompt-colon, entry ];
+	padding: 10px;
+}
+
+#prompt {
+   font: "Victor Mono Italic 12";
+}
+
+#entry {
+   font: "Victor Mono Bold Italic 12";
+}
+
+#textbox-prompt-colon {
+	expand: false;
+	str: " >  ";
+}
+
+#element {
+	padding: 10px;
+	border-radius: 5px;
+}
+
+#element.selected {
+	background-color: #3a3a3a;
+	padding: 12px;
+}
+
+element-icon {
+	size: 1.1em;
+}
+

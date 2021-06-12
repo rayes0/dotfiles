@@ -1,0 +1,69 @@
+configuration {
+	location: 0;
+	yoffset: 0;
+    xoffset: 0;	
+	fake-transparency: false;
+	hide-scrollbar: true;
+	bw: 0;
+    fullscreen: false;
+    show-icons: true;
+}
+
+* {
+  background-color: rgba(0, 0, 0, 0);
+  font: "SF Mono 11";
+  text-color: #6c605a;
+}
+
+window {
+  padding : 0px;
+  height: 60%;
+  width: 35%;
+  transparency: "real";
+  /*background-color: rgba(230, 218, 214, 1.0);*/
+  background-color: #e6dad6;
+}
+
+mainbox {
+  children: [ inputbar, listview ];
+  padding: 0% 0% 0% 0%;
+  border: 0;
+  border-radius: 0;
+}
+
+listview {
+  columns: 1;
+  padding: 0;
+  spacing: 2;
+}
+
+element {
+  border: 0;
+  padding: 12 12 12 12;
+  border-radius: 0;
+}
+
+element-icon {
+  size: 1.1em ;
+}
+
+element selected {
+  text-color: #cc6652;
+}
+
+inputbar {
+  children: [entry];
+  padding: 4 4 0 0;
+  background-color: rgba(0, 0, 0, 0);
+  border: 0 0 0 4;
+  border-color: #cc6652;
+}
+
+prompt {
+  enabled: false;
+}
+
+entry {
+  text-color: #6c605a;
+  padding: 8 12 8 12;
+}

@@ -1,0 +1,75 @@
+configuration {
+//    drun-display-format: "{icon} {name}";
+    display-drun: "Apps";
+	show-icons: true;
+	location: 1;
+	yoffset: 0;
+    xoffset: 0;	
+	fake-transparency: false;
+	hide-scrollbar: true;
+	bw: 0;
+    fullscreen: false;
+    show-icons: true;
+	terminal: "urxvt";
+	sidebar-mode: false;
+}
+
+@import "colors.rasi"
+
+* {
+  background-color: @background-light;
+  font: "SF Mono 11";
+  text-color: @foreground;
+}
+
+window {
+  height: 100%;
+  width: 25%;
+  transparency: "real";
+  background-color: @background;
+}
+
+mainbox {
+  children: [ inputbar, listview ];
+  padding: 0% 0% 0% 0%;
+  border: 0;
+  border-radius: 0;
+}
+
+listview {
+  columns: 1;
+  padding: 0;
+  spacing: 2;
+}
+
+element {
+  border: 0;
+  padding: 12 12 12 12;
+  border-radius: 0;
+}
+
+element-icon {
+    size:             1.1em ;
+}
+
+element selected {
+  text-color: @accent;
+}
+
+inputbar {
+  children: [entry];
+  padding: 4 4 0 0;
+  /* change this colors to change style*/
+  background-color: @background-light;
+  border: 0 0 0 4;
+  border-color: @accent;
+}
+
+prompt {
+  enabled: false;
+}
+
+entry {
+  text-color: @foreground;
+  padding: 8 12 8 12;
+}

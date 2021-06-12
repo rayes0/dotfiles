@@ -1,0 +1,118 @@
+ [global]
+    font = SF Mono 11,Victor Mono 11
+
+    ### Display ###
+
+    # Which monitor should the notifications be displayed on.
+    monitor = 0
+    follow = keyboard
+    geometry = "700x50-19+50"
+    #geometry = "303x80-19+24"
+
+    # Show how many messages are currently hidden (because of geometry).
+    indicate_hidden = yes
+    # Shrink window if it's smaller than the width.  Will be ignored if
+    # width is 0.
+    shrink = yes
+
+    transparency = 0
+    notification_height = 0
+    separator_height = 4
+
+    padding = 16
+    horizontal_padding = 14
+    frame_width = 0
+    frame_color = "#ede6e3"
+    separator_color = auto
+
+    # Sort messages by urgency.
+    sort = yes
+    idle_threshold = 120
+
+    ### Text ###
+    line_height = 4
+    word_wrap = no
+    show_age_threshold = 60
+
+    markup = full
+    format = "<b><i>%s</i></b>\n%b\n%n"
+    alignment = left
+    ignore_newline = no
+
+    stack_duplicates = true
+    hide_duplicate_count = false
+
+    # Display indicators for URLs (U) and actions (A).
+    show_indicators = yes
+
+    ### Icons ###
+
+    icon_position = left
+    max_icon_size = 180
+
+    # Paths to default icons.
+    icon_folders = /home/rayes/.icons/zafiro/actions/22:/home/rayes/.icons/zafiro/apps/scalable:/home/rayes/.icons/zafiro/categories/22:/home/rayes/.icons/zafiro/devices/22:/home/rayes/.icons/zafiro/emblems/22:/home/rayes/.icons/zafiro/panel/22:/home/rayes/.icons/zafiro/status/22
+
+    ### History ###
+
+    sticky_history = yes
+    history_length = 20
+
+    ### Misc/Advanced ###
+
+    dmenu = rofi -i -dmenu -theme launcher_light.rasi -p dunst
+    browser = /usr/bin/firefox -new-tab
+
+    # Always run rule-defined scripts, even if the notification is suppressed
+    always_run_script = true
+
+    title = Dunst
+    class = Dunst
+
+    startup_notification = false
+
+    ### Legacy
+    force_xinerama = false
+
+[experimental]
+    per_monitor_dpi = false
+
+[shortcuts]
+    close = ctrl+space
+    close_all = ctrl+shift+space
+    history = ctrl+grave
+    context = mod1+grave
+
+[urgency_low]
+    background = "#e6dad6"
+    foreground = "#6c605a"
+    timeout = 2
+
+[urgency_normal]
+    background = "#e6dad6"
+    foreground = "#6c605a"
+    timeout = 4
+
+[urgency_critical]
+    background = "#e6dad6"
+    foreground = "#6c605a"
+    timeout = 0
+
+# SCRIPTING
+
+#[logging]
+	#script = ~/bin/dunst/dunst-log.sh
+
+# Ignore history for these
+[Brightness]
+    stack_tag = brightness
+    history_ignore = yes
+[Barless]
+    stack_tag = barless-info
+    history_ignore = yes
+[Calibre]
+	summary = "calibre"
+    history_ignore = yes
+
+# vim: ft=cfg
+

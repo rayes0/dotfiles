@@ -1,0 +1,32 @@
+configuration {
+	fullscreen: false;
+	terminal: "urxvt";
+	columns: 1;
+}
+* {
+	background-color:		#e6dad6;
+    text-color:             #6c605a;
+	font:				 	"SF Mono 12";
+}
+
+window {
+    width:      			20%;
+	height:					40%;
+    padding:    			25px;
+    location:               center;
+}
+
+prompt {
+	margin:					0 5px 10px 0;
+	font: "Victor Mono Bold Italic 13";
+}
+
+entry {
+    margin-bottom:          10px;
+	font: "Victor Mono Bold Italic 13";
+    expand: 				true;
+}
+
+element {
+    padding: 0 0 5px 10px;
+}

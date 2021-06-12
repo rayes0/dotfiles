@@ -1,0 +1,90 @@
+configuration {
+    drun-display-format: "{icon} {name}";
+    display-drun: "Applications";
+	show-icons: true;
+	location: 0;
+	yoffset: 0;
+    xoffset: 0;
+	columns: 3;
+	fake-transparency: false;
+	hide-scrollbar: true;
+	bw: 0;
+    fullscreen: false;
+    show-icons: true;
+	terminal: "urxvt";
+	sidebar-mode: true;
+}
+
+@import "colors.rasi"
+
+* {
+  text-font:                            "SF Mono 11";
+
+  inputbar-margin:                      3px 3px;
+  prompt-padding:                       10px 10px;
+  entry-padding:                        10px 0px 10px 0px;
+  list-element-padding:                 15px;
+  list-element-margin:                  @inputbar-margin;
+  list-element-border:                  0px 0px 0px 4px;
+
+  apps-textbox-prompt-colon-padding:    10px -5px 0px 0px;
+}
+
+#window {
+  width: 50%;
+  height: 50%;
+ padding: 20px 20px;
+ background-color: @background;
+}
+
+* {
+  background-color: @background-light;
+  text-color: @foreground;
+  font: @text-font;
+}
+
+inputbar,
+prompt,
+textbox-prompt-colon,
+entry {
+ 
+}
+
+#inputbar {
+  children: [ prompt, textbox-prompt-colon, entry ];
+  margin: @inputbar-margin;
+}
+
+#prompt {
+  padding: @prompt-padding;
+  background-color: @accent;
+  text-color: @foreground-alt;
+}
+
+#textbox-prompt-colon {
+  expand: false;
+  str: "  ::  ";
+  padding: @apps-textbox-prompt-colon-padding;
+}
+
+#entry {
+  text-color: @foreground;
+  padding: @entry-padding;
+}
+
+#element {
+  padding: @list-element-padding;
+  margin: @list-element-margin;
+  border: @list-element-border;
+  border-color: @background-light;
+}
+
+element-icon {
+  size:             1.1em ;
+}
+
+#element.selected {
+  background-color: @background;
+  text-color: @accent;
+  border-color: @accent;
+}

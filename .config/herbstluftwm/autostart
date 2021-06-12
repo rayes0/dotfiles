@@ -1,0 +1,315 @@
+#!/usr/bin/bash
+# My herbstluftwm configuration
+
+~/.fehbg &
+
+# ======== Basic Things ======== #
+# Make so that everything is only piped to one instance of herbstclient
+IFS=$'\n'
+cmds=(herbstclient chain )
+hc() {
+	cmds+=(:-: "$@" )
+}
+#xrdb ~/.lightXresources
+xrdb ~/.bitmapXresources
+hc keyunbind --all  # remove all existing keybindings
+#hc set tree_style '╾│ ├└╼─┐'
+mod=Mod4   # super key
+alt=Mod1  # alt key
+hc unlock  # just in case we ran with --locked
+
+# ======== Window Keybindings ======== #
+### Basic binds
+hc chain
+hc keybind $mod-q reload
+hc keybind $mod-x close_and_remove
+hc keybind $mod-Shift-x close
+hc keybind $mod-Return spawn "urxvtc"
+hc keybind $mod-Shift-Return spawn urxvtc -name URxvtFloat
+
+### Focusing
+hc set focus_crosses_monitor_boundaries 1
+hc set swap_monitors_to_get_tag 0
+hc keybind $mod-h           focus left
+hc keybind $mod-j           focus down
+hc keybind $mod-k           focus up
+hc keybind $mod-l           focus right
+hc keybind $mod-BackSpace   cycle_monitor
+#hc keybind $mod-Tab         cycle_all +1	
+#hc keybind $mod-Shift-Tab   cycle_all -1	
+hc keybind $mod-Tab         cycle_all +1	
+hc keybind $mod-Shift-Tab   cycle_all -1	
+hc keybind $mod-c			cycle_all
+#hc keybind $mod-i jumpto urgent
+
+hc keybind $mod-Left  focus left
+hc keybind $mod-Right focus right
+
+### Moving
+hc keybind $mod-Shift-Left  shift_edge left
+hc keybind $mod-Shift-Down  shift_edge down
+hc keybind $mod-Shift-Up    shift_edge up
+hc keybind $mod-Shift-Right shift_edge right
+hc keybind $mod-Shift-h     shift left
+hc keybind $mod-Shift-j     shift down
+hc keybind $mod-Shift-k     shift up
+hc keybind $mod-Shift-l     shift right
+
+hc keybind $mod-$alt-h		mirror horizontal
+hc keybind $mod-$alt-l		mirror horizontal
+hc keybind $mod-$alt-j		mirror vertical
+hc keybind $mod-$alt-k		mirror vertical
+
+### Frames
+hc keybind $mod-u split auto
+hc keybind $mod-Shift-u	 chain , set frame_border_width 2 , split bottom 0.5
+hc keybind $mod-Control-u chain , set frame_border_width 2 , split right 0.5
+hc keybind $mod-Control-space split explode
+
+### Resizing
+resizestep=0.02
+hc keybind $mod-Control-h       resize left +$resizestep
+hc keybind $mod-Control-j       resize down +$resizestep
+hc keybind $mod-Control-k       resize up +$resizestep
+hc keybind $mod-Control-l       resize right +$resizestep
+hc keybind $mod-Control-Left    resize left +$resizestep
+hc keybind $mod-Control-Down    resize down +$resizestep
+hc keybind $mod-Control-Up      resize up +$resizestep
+hc keybind $mod-Control-Right   resize right +$resizestep
+
+### Layout Operations
+hc keybind $mod-space attr clients.focus.floating toggle
+hc keybind $mod-$alt-space floating toggle
+#hc keybind $mod-t pseudotile toggle
+hc keybind $mod-e fullscreen toggle
+hc set default_frame_layout horizontal
+# cycle layouts
+hc keybind $mod-Shift-space \
+	or , and . compare tags.focus.curframe_wcount = 2 \
+	. cycle_layout +1 max horizontal vertical grid \
+	, cycle_layout +1
+# minimize and maximize
+hc silent new_attr int my_minimized_counter 0
+hc silent new_attr int my_minimized_windows 0
+hc keybind $mod-i spawn ~/bin/hlwm/minimize.sh
+hc keybind $mod-o mktemp string MINCLIENT mktemp int LASTIDATT chain \
+  . set_attr LASTIDATT 0 \
+  . foreach CLIENT clients. and \
+    , sprintf MINATT "%c.minimized" CLIENT \
+        compare MINATT "=" "true" \
+    , sprintf TAGATT "%c.tag" CLIENT substitute FOCUS "tags.focus.name" \
+        compare TAGATT "=" FOCUS \
+    , sprintf CURRENTIDATT "%c.my_minimized_age" CLIENT and \
+      : substitute LASTID LASTIDATT \
+          compare CURRENTIDATT 'gt' LASTID \
+      : substitute CURRENTID CURRENTIDATT \
+          set_attr LASTIDATT CURRENTID \
+    , set_attr MINCLIENT CLIENT \
+  . and \
+    , compare MINCLIENT "!=" "" \
+    , substitute CLIENT MINCLIENT chain \
+      : sprintf MINATT "%c.minimized" CLIENT \
+          set_attr MINATT false \
+      : sprintf CURRENTIDATT "%c.my_minimized_age" CLIENT \
+          remove_attr CURRENTIDATT
+  #. emit_hook UPDATE_HIDDEN
+
+### Mouse binds
+hc mouseunbind --all
+hc mousebind $mod-Button1 move
+hc mousebind $mod-Button2 zoom
+hc mousebind $mod-Button3 resize
+
+
+# ======== Workspaces/Tags ======== #
+tag_names=( {1..14} )
+tag_keys=( {1..9} 0 F{1..4} )
+hc rename default "${tag_names[0]}" || true
+for i in "${!tag_names[@]}" ; do
+    hc add "${tag_names[$i]}"
+    key="${tag_keys[$i]}"
+    if [ -n "$key" ] ; then
+        hc keybind "$mod-$key" use_index "$i"
+        hc keybind "$mod-Shift-$key" move_index "$i"
+		hc keybind "$mod-Control-$key" chain , move_index "$i" , use_index "$i"
+		hc keybind "$mod-$alt-$key" chain \
+			, sprintf FOCNAME "%s" tags.focus.name chain \
+				: set_attr tags.focus.name temp \
+				: sprintf UNFNAME "%s" tags.${i}.name chain \
+					+ set_attr tags.$i.name FOCNAME \
+					+ set_attr tags.by-name.temp.name UNFNAME \
+			, sprintf FOCTAG "%s" tags.focus.index \
+				set_attr tags.$i.index FOCTAG \
+			, set_attr tags.focus.index $i \
+			, use_index $i \
+			, emit_hook UPDATE_PANEL
+    fi
+done
+
+### Tag switching operations
+hc keybind $mod-period use_index +1 --skip-visible
+hc keybind $mod-comma  use_index -1 --skip-visible
+#hc keybind $mod-Shift-> move_index +1 --skip-visible
+#hc keybind $mod-Shift-< move_index -1 --skip-visible
+hc keybind $mod-a use_previous
+
+
+# ======== Theme ======== #
+hc attr theme.tiling.reset 1
+hc attr theme.floating.reset 1
+
+### Frame colors
+hc set frame_border_active_color '#fccec1'
+hc set frame_border_normal_color '#c8c2bf'
+hc set frame_bg_normal_color '#ede6e3'
+hc set frame_bg_active_color '#ede6e3'
+
+### Frame settings
+hc set frame_border_width 0
+hc set always_show_frame on
+hc set frame_bg_transparent on
+hc set frame_transparent_width 0
+hc set frame_gap 8
+hc set frame_padding -2
+hc set smart_frame_surroundings on
+
+### Theme Keybinds
+hc keybind $mod-g cycle_value frame_gap 0 8
+hc keybind $mod-Shift-b cycle_value frame_border_width 2 0
+
+### Window colors
+hc attr theme.floating.padding_top 20
+hc attr theme.active.color '#ce9c85'
+hc attr theme.normal.color '#a09c80'
+hc attr theme.urgent.color orange
+hc attr theme.inner_width 0
+hc attr theme.inner_color '#ede6e3'
+hc attr theme.border_width 0
+hc attr theme.floating.border_width 1
+hc attr theme.floating.outer_width 0
+hc attr theme.floating.outer_color '#ede6e3'
+hc attr theme.active.inner_color '#c8c2bf'
+hc attr theme.active.outer_color '#c8c2bf'
+hc attr theme.background_color '#ede6e3'
+
+# Window Settings
+hc set window_gap 2
+hc set smart_window_surroundings on
+hc set mouse_recenter_gap 0
+hc set raise_on_focus 0
+hc set update_dragged_clients 1
+
+
+# ======== Application Keybindings ======== #
+### Menus
+#hc keybind $mod-d spawn dmenu_run -i -h 30 -nf \#6c605a -nb \#ede6e3 -sf \#6c605a -sb \#c8c2bf -shb \#c8c2bf -nhb \#ede6e3 -shf \#9c7b9c
+hc keybind $mod-d spawn rofi -show run -theme launcher_light.rasi
+hc keybind $mod-m spawn rofi -show drun -theme launcher_light.rasi
+hc keybind $mod-w spawn rofi -no-lazy-grab -show window -theme window_menu_light.rasi
+hc keybind $mod-p spawn rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' -config ~/.config/rofi/clipboard.rasi -m -4
+hc keybind $mod-t spawn ~/bin/tmux/rofi.sh
+hc keybind $mod-Shift-w spawn sh -c 'eww close side-light || eww open side-light'
+hc keybind $mod-Shift-e spawn sh -c 'eww close calendar-light || eww open calendar-light'
+hc keybind $mod-y spawn keepmenu
+hc keybind $mod-Shift-o spawn urxvt-open
+hc keybind $mod-Shift-z spawn zim-choose
+hc keybind $mod-r spawn cd-dir
+hc keybind $mod-Shift-r spawn cd-dir float
+hc keybind $mod-Shift-m spawn music
+
+### Status notifs (for when barless)
+hc keybind $mod-s spawn ~/bin/notifs/show-status.sh
+#hc keybind $mod-Shift-s
+hc keybind $mod-z spawn ~/bin/notifs/hlwm-workspace.sh
+
+### Useful Utilities
+hc keybind $mod-n spawn ~/.config/cmus/scripts/cmus-notification.sh
+hc keybind $mod-Shift-v spawn vim-anywhere
+hc keybind $mod-Shift-q spawn ~/bin/powermenu.sh
+hc keybind $mod-b spawn ~/bin/hlwm/hidebar.sh
+hc keybind $mod-Shift-Delete spawn ~/bin/lock
+
+### Volume and Brightness
+hc keybind $mod-Up    spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar1.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock); killall -s USR1 volume.sh'
+hc keybind $mod-Down  spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar2.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock); killall -s USR1 volume.sh'
+hc keybind XF86MonBrightnessUp spawn sh -c '~/bin/brightness/light-up.sh; pkill -SIGUSR1 start-eww'
+hc keybind XF86MonBrightnessDown spawn sh -c '~/bin/brightness/light-down.sh; pkill -SIGUSR1 start-eww'
+
+### Applications
+hc keybind $mod-Shift-t spawn flatpak run com.github.micahflee.torbrowser-launcher
+hc keybind $mod-Shift-f spawn firefox --ProfileManager
+hc keybind $mod-Shift-i spawn icecat --ProfileManager
+hc keybind $mod-Shift-p spawn icecat -P Professional
+hc keybind $mod-Shift-d spawn icecat -P Development
+
+hc keybind $mod-Shift-g spawn gimp
+hc keybind $mod-f spawn urxvtc -e ranger
+
+hc keybind $mod-Shift-c spawn emacsclient -c
+
+
+# ======== Rules ======== #
+hc unrule -F
+
+### Generic rules
+hc rule focus=on # normally focus new clients
+hc rule floatplacement=center
+hc rule windowtype~'_NET_WM_WINDOW_TYPE_(DIALOG|UTILITY|SPLASH)' floating=on
+hc rule windowtype='_NET_WM_WINDOW_TYPE_DIALOG' focus=on
+hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
+
+### Terminal Rules
+hc rule instance='URxvtTasks' floating=on
+hc rule instance='URxvtFuzzy' floating=on
+hc rule instance='URxvtZim' floating=on
+hc rule instance='URxvtFloat' floating=on
+
+### Application Rules
+hc rule instance='gl' class='mpv' floating=on
+hc rule instance='feh' floating=on
+hc rule instance='lxpolkit' floating=on
+#hc rule class='Zathura' floating=on
+
+
+# ===== Run Commands ===== #
+"${cmds[@]}" &
+
+# ======== Autostarting Applications ======== #
+### Bar and monitors
+#autorandr -c
+#if pgrep herbbar >/dev/null 2>&1 ; then
+#	pkill herbbar
+#	pkill lemonbar
+#fi
+#herbstclient detect_monitors
+#number=$(herbstclient list_monitors | wc -l)
+#case $number in
+#	2)
+#		~/bin/hlwm/herbbar | lemonbar -n bar -B \#ede6e3 -F \#6c605a -f 'SF Mono:size=10.8' -f 'Victor Mono:style=Italic:size=10.8' -f 'Victor Mono:style=SemiBold Italic:size=10.8' -f 'Noto Serif CJK JP:style=SemiBold:size=10.8' -f 'Noto Sans CJK JP:size=10.8' -g 1920x30+0+0 | sh &
+#		~/bin/hlwm/herbbar 2 | lemonbar -n bar -B \#ede6e3 -F \#6c605a -f 'SF Mono:size=10.8' -f 'Victor Mono:style=Italic:size=10.8' -f 'Victor Mono:style=SemiBold Italic:size=10.8' -f 'Noto Serif CJK JP:style=SemiBold:size=10.8' -f 'Noto Sans CJK JP:size=10.8' -g 1920x30+1920+0 | sh & ;;
+#	1|*)
+#		~/bin/hlwm/herbbar | lemonbar -n bar -B \#ede6e3 -F \#6c605a -f 'SF Mono:size=10.8' -f 'Victor Mono:style=Italic:size=10.8' -f 'Victor Mono:style=SemiBold Italic:size=10.8' -f 'Noto Serif CJK JP:style=SemiBold:size=10.8' -f 'Noto Sans CJK JP:size=10.8' -g 1920x30+0+0 | sh & ;;
+#esac
+#
+#### Some other programs
+##pkill picom
+##picom --config ~/.config/picom-rounded-herb.conf --shadow-opacity 0.25 &
+##picom --config ~/.config/picom-herb.conf --shadow-opacity 0.25 &
+#pkill dunst
+#dunst -config ~/.config/dunst/dunstrc-light &
+#setxkbmap -layout us,us -variant ,norman -option grp:shifts_toggle
+#
+#### Only autostart on first run
+##rulespawn() {(
+##    # this rule also requires, that the client sets the _NET_WM_PID property
+##    herbstclient rule once pid=$BASHPID maxage=10 "${RULES[@]}"
+##    exec "$@"
+##    ) &
+##}
+#if herbstclient silent new_attr bool my_not_first_autostart ; then
+#	start-eww-pipewire &
+#	herbstclient rule instance='URxvtWeechat' tag=12
+#    urxvtc -name "URxvtWeechat" -e tmux new-session -A -D -s weechat "weechat" &
+#	herbstclient rule instance='URxvtCalendar' tag=11
+#	urxvtc -name "URxvtCalendar" -e ~/bin/tmux/time-manage.sh &
+#fi

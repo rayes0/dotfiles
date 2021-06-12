@@ -1,0 +1,21 @@
+* {
+    background-color:       #2a2a2a;
+    text-color:             #bebebe;
+	font:				 	"SF Mono 12";
+}
+
+window {
+    background-color:       #2a2a2a;
+    width:      			300px;
+    padding:    			25px;
+    location:               center;
+}
+
+prompt {
+	margin:					0 20px 0 0;
+}
+
+entry {
+    expand: 				true;
+    text-color:				#bebebe;
+}

@@ -1,0 +1,67 @@
+configuration {
+	show-icons: true;
+	drun-display-format: "{icon} {name}";
+	display-drun: "﩯";
+	display-run: "";
+	display-ssh: "";
+	location: 0;
+	yoffset: 0;
+	xoffset: 0;
+	fullscreen: false;
+	terminal: "urxvt";
+	columns: 3;
+	sidebar-mode: true;
+}
+
+* {
+	font: "Victor Mono Italic 11";
+	background-color: #e6dad6;
+	text-color: #685c56;
+}
+
+#window {
+	width: 50%;
+	height: 50%;
+	padding: 30px;
+}
+
+#inputbar {
+	children: [ prompt, textbox-prompt-colon, entry ];
+	padding: 10px;
+}
+
+#textbox-prompt-colon {
+	expand: false;
+	str: " >  ";
+    font: "Victor Mono 12";
+}
+
+#entry {
+    font: "Victor Mono Bold Italic 11";
+}
+
+#element {
+	padding: 15px;
+}
+
+#element.selected {
+	background-color: rgba(108, 96, 90, 0.13);
+	padding: 15px;
+}
+
+element-icon {
+	size: 1.1em;
+}
+
+#mode-switcher {
+	children: [ button ];
+}
+
+button {
+	border-radius: 5px;
+	padding: 5px;
+}
+
+button.selected {
+	background-color: #e3d0cb;
+}
