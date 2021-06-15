@@ -10,7 +10,13 @@ sub on_wm_delete_window {
 		# This will ring the bell:
 		#$self->scr_bell;
 		#This will send a notification:
-		system "notify-send -h string:x-canonical-private-synchronous:preventclose -i terminal 'URxvt' 'A process is currently running'";
+		#my $action = `dunstify -h string:x-canonical-private-synchronous:preventclose -i terminal -A 'default,Ignore' -A 'close,Close anyways' 'URxvt' 'A process is currently running'`;
+		#if ($action = close) {
+		#	return 0;
+		#}else{
+		#	return 1;
+		#}
+		system("dunstify -h string:x-canonical-private-synchronous:preventclose -i terminal 'URxvt' 'A process is currently running'");
 		return 1;
 	} else {
 		return 0;

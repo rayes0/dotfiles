@@ -209,7 +209,8 @@ parse_fifo() {
 				update ;;
 			*) ;;
 		esac
-		echo "%{T-}%{l}%{O1}%{A:eww close side-light || eww open side-light:}%{A3:eww close side-light || eww open side-light:}${desktop}%{T2}  %{B-}%{O20}${music}%{A}%{A} %{c}%{T3}%{A:eww close calendar-light || eww open calendar-light:}%{A3:eww close calendar-light || eww open calendar-light:}${fgn}${date}%{A}%{A}%{T-} %{r}%{A:eww close utilities-light || eww open utilities-light:}%{A3:eww close utilities-light || eww open utilities-light:}${volume}   ${network} ${vpnname}   ${battery}   ${todo} %{A}%{A} "
+		#echo "%{T-}%{l}%{O1}%{A:eww close side-light || eww open side-light:}%{A3:eww close side-light || eww open side-light:}${desktop}%{T2}  %{B-}%{O20}${music}%{A}%{A} %{c}%{T3}%{A:eww close calendar-light || eww open calendar-light:}%{A3:eww close calendar-light || eww open calendar-light:}${fgn}${date}%{A}%{A}%{T-} %{r}%{A:eww close utilities-light || eww open utilities-light:}%{A3:eww close utilities-light || eww open utilities-light:}${volume}   ${network} ${vpnname}   ${battery}   ${todo} %{A}%{A} "
+		echo "%{T-}%{l}%{O1}%{A:eww close side-light || eww open side-light:}%{A3:eww close side-light || eww open side-light:}${desktop}%{T2}  %{B-}%{O20}${music}%{A}%{A} %{c}%{T3}%{A:eww close calendar-light || eww open calendar-light:}%{A3:eww close calendar-light || eww open calendar-light:}${fgn}${date}%{A}%{A}%{T-} %{r}%{A:eww close utilities-light || eww open utilities-light:}%{A3:eww close utilities-light || eww open utilities-light:}${volume}   ${network} ${vpnname}   ${battery}   "
     done < <(tail -f "$fifo")
 }
 
@@ -221,7 +222,7 @@ update() {
 	check_bat
 	check_vol
 	check_mus
-	check_todo
+	#check_todo
     check_lock
 #    check_hide
 }

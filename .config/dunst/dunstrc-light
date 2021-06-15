@@ -20,7 +20,8 @@
     separator_height = 4
 
     padding = 16
-    horizontal_padding = 14
+    horizontal_padding = 16
+	#text_icon_padding = 20
     frame_width = 0
     frame_color = "#ede6e3"
     separator_color = auto
@@ -51,7 +52,8 @@
     max_icon_size = 180
 
     # Paths to default icons.
-    icon_folders = /home/rayes/.icons/Papirus-Custom/22x22/actions:/home/rayes/.icons/Papirus-Custom/22x22/apps:/home/rayes/.icons/Papirus-Custom/22x22/categories:/home/rayes/.icons/Papirus-Custom/22x22/devices:/home/rayes/.icons/Papirus-Custom/22x22/emblems:/home/rayes/.icons/Papirus-Custom/22x22/panel:/home/rayes/.icons/Papirus-Custom/22x22/status
+    #icon_folders = /home/rayes/.icons/Papirus-Custom/22x22/actions:/home/rayes/.icons/Papirus-Custom/22x22/apps:/home/rayes/.icons/Papirus-Custom/22x22/categories:/home/rayes/.icons/Papirus-Custom/22x22/devices:/home/rayes/.icons/Papirus-Custom/22x22/emblems:/home/rayes/.icons/Papirus-Custom/22x22/panel:/home/rayes/.icons/Papirus-Custom/22x22/status
+	icon_path = /home/rayes/.icons/Zafiro-icons/apps/scalable:/home/rayes/.icons/Zafiro-icons/actions/22:/home/rayes/.icons/Zafiro-icons/devices/48:/home/rayes/.icons/Zafiro-icons/mimetypes/48:/home/rayes/.icons/Zafiro-icons/panel/22:/home/rayes/.icons/Zafiro-icons/status/22
 
     ### History ###
 
@@ -106,6 +108,9 @@
 # Ignore history for these
 [Brightness]
     stack_tag = brightness
+    history_ignore = yes
+[UrxvtClosePrevention]
+    stack_tag = preventclose
     history_ignore = yes
 [Barless]
     stack_tag = barless-info

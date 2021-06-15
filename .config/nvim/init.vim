@@ -4,10 +4,16 @@ call plug#begin('~/.config/nvim/plugged')
 
 " Linting, Completiong, Language packs
 Plug 'dense-analysis/ale'
+"Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 "Plug 'Shougo/echodoc.vim'
 Plug 'Sheerun/vim-polyglot'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'deoplete-plugins/deoplete-dictionary'
+Plug 'wellle/tmux-complete.vim'
+Plug 'deoplete-plugins/deoplete-lsp'
+"Plug 'nvim-lua/completion-nvim'
+Plug 'neovim/nvim-lspconfig'
+
 " Editing
 Plug 'reedes/vim-pencil'
 Plug 'vim-pandoc/vim-pandoc'
@@ -17,38 +23,70 @@ Plug 'lervag/vimtex'
 Plug 'luffah/vim-zim'
 Plug 'tpope/vim-surround'
 Plug 'mzlogin/vim-smali'
+
 " Helpful Utilities
+Plug 'mattn/webapi-vim'
 Plug 'vim-scripts/taglist.vim'
 Plug 'preservim/nerdtree'
 Plug 'preservim/nerdcommenter'
-Plug 'troydm/shellasync.vim'
+"Plug 'troydm/shellasync.vim'
 "Plug 'vim-voom/VOoM'
 Plug 'isa/vim-matchit'
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'vim-scripts/taglist.vim'
+Plug 'junegunn/vim-easy-align'
+"Plug 'glepnir/galaxyline.nvim'
+"Plug 'datwaft/bubbly.nvim'
+"Plug 'jbyuki/nabla.nvim'
+
 " Themes
 Plug 'arzg/vim-substrata'
 "Plug 'rayes0/blossom'
+
 " Other Cool Things
 Plug 'junegunn/goyo.vim'
+"Plug 'kdav5758/TrueZen.nvim'
 Plug 'dbeniamine/todo.txt-vim'
+Plug 'lukas-reineke/indent-blankline.nvim', { 'branch': 'lua' }
 "Plug 'yuttie/comfortable-motion.vim'
-
 call plug#end()
 
 " PLUGIN SETTINGS
+"nnoremap <F3> :lua require("nabla").place_inline()<CR>
+
+"let vim.g:bubbly_statusline = {j
+
+let g:indent_blankline_char = '│'
+let g:indent_blankline_show_first_indent_level = v:false
+let g:indent_blankline_filetype_exclude = ['help', 'man', 'markdown', 'pandoc', 'nerdtree']
+let g:indent_blankline_buftype_exclude = ['terminal']
 
 let g:limelight_conceal_ctermfg = '240'
-let g:goyo_width = '110'
+"let g:goyo_width = '110'
 
 let g:templates_directory = '~/.config/nvim/templates'
 
+"let g:ale_linters = {
+	"\ 'python': ['pylint'],
+	"\ 'vim': ['vint'],
+	"\ 'cpp': ['clang'],
+	"\ 'c': ['clang']
+"\}
 let g:ale_linters = {
-    \ 'python': ['pylint'],
-    \ 'vim': ['vint'],
-    \ 'cpp': ['clang'],
-    \ 'c': ['clang']
-\}
+			\ 'rust': ['analyzer', 'cargo'],
+			\}
+let g:ale_fixers = {
+			\ '*': ['remove_trailing_lines', 'trim_whitespace'],
+			\}
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_hover_cursor = 0
+let g:ale_hover_to_preview = 1
+let g:ale_floating_preview = 1
+let g:ale_hover_to_floating_preview = 1
+
+let hexokinase_ftDisabled = ['pandoc', 'markdown']
+
+let g:tmuxcomplete#trigger = ''
 
 
 " GENERAL SETTINGS
@@ -168,7 +206,10 @@ set rulerformat+=\ \|\ %Y%*
 "                   \}
 
 
-" Completion
+" Completion and LSP
+lua require'lspconfig'.rust_analyzer.setup{}
+lua require'lspconfig'.bashls.setup{}
+
 set omnifunc=syntaxcomplete#Complete
 set completeopt=longest,menuone,noinsert
 
@@ -179,6 +220,16 @@ call deoplete#custom#option('auto_complete_delay', '0')
 call deoplete#custom#option('camel_case', 'true')
 call deoplete#custom#option('ignore_case', 'true')
 "call deoplete#custom#option('candidate_marks', [''
+
+call deoplete#custom#option('keyword_patterns', { 
+			\ 'pandoc': '\\?[a-zA-Z_]\w*',
+			\ 'tex': '\\?[a-zA-Z_]\w*', })
+
+call deoplete#custom#option('sources', { 
+			\ '_': [], 
+			\ 'pandoc': ['dictionary'], })
+
+call deoplete#custom#var('terminal', 'require_same_tab', v:false)
 
 call deoplete#custom#var('around', {
 			\ 'range_above': 20,
@@ -192,20 +243,26 @@ call deoplete#custom#var('file', { 'enable_slash_completion': v:true, })
 call deoplete#custom#filter('converter_reorder_attr', 'attrs_order', {
 			\ '_': { 'kind': [
 			\			'File',
+			\           'lsp',
+			\			'dictionary',
 			\			'Buffer',
 			\		]}})
 
-inoremap <silent><expr> <TAB>
+inoremap <silent><expr> <TAB> 
 			\ pumvisible() ? "\<C-n>" :
 			\ <SID>check_back_space() ? "\<TAB>" :
 			"\ deoplete#manual_complete()
+			\ deoplete#complete()
+inoremap <silent><expr> <S-TAB>
+			\ pumvisible() ? "\<C-p>" :
+			\ <SID>check_back_space() ? "\<TAB>" :
 			\ deoplete#complete()
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr><C-g> deoplete#undo_completion()
 
 function! s:check_back_space() abort
-	let col = col('.') - 1
-	return !col || getline(".")[col - 1] =~ '\s'
+   let col = col('.') - 1
+   return !col || getline(".")[col - 1] =~ '\s'
 endfunction
 
 
@@ -219,7 +276,7 @@ vnoremap <F9> zf
 
 " KEYMAPS
 
-" Yank to system clipboard
+" Yank and paste to system clipboard
 map <leader>y "+y<CR>
 map <leader>p "+p<CR>
 
@@ -247,7 +304,8 @@ map <silent> <C-l><C-l> :set number! relativenumber!<CR>
 
 noremap <silent> <F4> :NERDTreeToggle<CR> 
 noremap <silent> <leader>f :NERDTreeToggle<CR> 
-noremap <silent> <leader>g :Goyo<CR> 
+"noremap <silent> <leader>g :Goyo<CR> 
+noremap <silent> <F12> :Goyo<CR> 
 noremap <silent> <leader>l :Limelight!!<CR>
 
 map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
@@ -258,3 +316,11 @@ noremap <silent> <F8> :TlistToggle<CR>
 
 noremap <silent> <C-c> :ALEToggle<CR>
 
+" Language settings
+
+" Shell
+let g:sh_fold_enabled = 3
+
+" Rust
+"let g:rust_conceal = 1
+let g:rust_fold = 1

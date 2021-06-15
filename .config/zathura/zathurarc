@@ -59,11 +59,13 @@ set scroll-step 50
 # Keybinds
 unmap f
 map f navigate next
+map [fullscreen] f navigate next
 #map f toggle_fullscreen
 #map [fullscreen] f toggle_fullscreen
 
 unmap b
 map b navigate previous
+map [fullscreen] b navigate previous
 
 unmap S
 map S toggle_statusbar

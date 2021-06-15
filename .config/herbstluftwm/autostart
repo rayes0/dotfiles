@@ -307,8 +307,8 @@ setxkbmap -layout us,us -variant ,norman -option grp:shifts_toggle
 #}
 if herbstclient silent new_attr bool my_not_first_autostart ; then
 	start-eww-pipewire &
-	herbstclient rule instance='URxvtWeechat' tag=12
-    urxvtc -name "URxvtWeechat" -e tmux new-session -A -D -s weechat "weechat" &
-	herbstclient rule instance='URxvtCalendar' tag=11
-	urxvtc -name "URxvtCalendar" -e ~/bin/tmux/time-manage.sh &
+	#herbstclient rule instance='URxvtWeechat' tag=12
+    #urxvtc -name "URxvtWeechat" -e tmux new-session -A -D -s weechat "weechat" &
+	#herbstclient rule instance='URxvtCalendar' tag=11
+	#urxvtc -name "URxvtCalendar" -e ~/bin/tmux/time-manage.sh &
 fi
