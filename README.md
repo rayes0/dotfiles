@@ -12,7 +12,7 @@ Also take a look at my colorscheme repos (![this](https://github.com/rayes0/sayo
 - Dark theme: ![sayo](https://github.com/rayes0/sayo/)
 - Light theme: ![blossom](https://github.com/rayes0/blossom.vim)
 - Bar: spectrwm built in bar when I'm using spectrwm, or lemonbar otherwise
-- Editor: nvim
+- Editor: emacs
 - Terminal: urxvt (patched with true color and double glyphs support)
 - Launcher: rofi
 - Music Player: cmus
