@@ -43,9 +43,11 @@ esac
 ### Modify to your system ###
 case $chosen in
     $shutdown)
+	protonvpn disconnect
         systemctl poweroff
         ;;
     $reboot)
+	protonvpn disconnect
         systemctl reboot
         ;;
     $hibernate)
@@ -55,11 +57,11 @@ case $chosen in
         cmus-remote -u
         amixer set Master mute
 		~/bin/lock &
-        systemctl suspend
+        systemctl suspend-then-hibernate
         ;;
     $logout)
-		pkill herbbar coffeebar lemonbar
-		pkill eww start-eww
+	pkill herbbar coffeebar lemonbar
+	pkill eww start-eww
         pkill -KILL -U $user
         ;;
 esac

@@ -1,15 +1,17 @@
 #!/usr/bin/bash
 # My herbstluftwm configuration
 
-~/.fehbg &
-
 # ======== Basic Things ======== #
 # Make so that everything is only piped to one instance of herbstclient
+
+~/.fehbg &
+
 IFS=$'\n'
 cmds=(herbstclient chain )
 hc() {
 	cmds+=(:-: "$@" )
 }
+
 #xrdb ~/.lightXresources
 xrdb ~/.bitmapXresources
 hc keyunbind --all  # remove all existing keybindings
@@ -17,6 +19,8 @@ hc keyunbind --all  # remove all existing keybindings
 mod=Mod4   # super key
 alt=Mod1  # alt key
 hc unlock  # just in case we ran with --locked
+hc detect_monitors # detect monitors
+
 
 # ======== Window Keybindings ======== #
 ### Basic binds
@@ -29,7 +33,7 @@ hc keybind $mod-Shift-Return spawn urxvtc -name URxvtFloat
 
 ### Focusing
 hc set focus_crosses_monitor_boundaries 1
-hc set swap_monitors_to_get_tag 0
+hc set swap_monitors_to_get_tag 1
 hc keybind $mod-h           focus left
 hc keybind $mod-j           focus down
 hc keybind $mod-k           focus up
@@ -82,7 +86,7 @@ hc keybind $mod-space attr clients.focus.floating toggle
 hc keybind $mod-$alt-space floating toggle
 #hc keybind $mod-t pseudotile toggle
 hc keybind $mod-e fullscreen toggle
-hc set default_frame_layout horizontal
+hc set default_frame_layout 1 # set horizontal layout by default
 # cycle layouts
 hc keybind $mod-Shift-space \
 	or , and . compare tags.focus.curframe_wcount = 2 \
@@ -153,6 +157,16 @@ hc keybind $mod-comma  use_index -1 --skip-visible
 #hc keybind $mod-Shift-< move_index -1 --skip-visible
 hc keybind $mod-a use_previous
 
+# ======== Function Keys ======== #
+hc keybind XF86MonBrightnessUp spawn sh -c "light -A 5; notify-send -i brightside -h string:x-canonical-private-synchronous:brightness Brightness $(light -G)%"
+hc keybind XF86MonBrightnessDown spawn sh -c "light -U 5; notify-send -i brightside -h string:x-canonical-private-synchronous:brightness Brightness $(light)%"
+
+hc keybind XF86AudioRaiseVolume spawn sh -c "pactl set-sink-volume @DEFAULT_SINK@ +2% && ~/bin/notifs/volume.sh"
+hc keybind XF86AudioLowerVolume spawn sh -c "pactl set-sink-volume @DEFAULT_SINK@ -2% && ~/bin/notifs/volume.sh"
+hc keybind XF86AudioMute spawn sh -c "pactl set-sink-mute @DEFAULT_SINK@ toggle && ~/bin/notifs/volume.sh"
+
+hc keybind $mod-c spawn sh -c "if pgrep -x hhpc; then pkill hhpc; else hhpc -i 5; fi"
+
 
 # ======== Theme ======== #
 hc attr theme.tiling.reset 1
@@ -207,15 +221,15 @@ hc keybind $mod-d spawn rofi -show run -theme launcher_light.rasi
 hc keybind $mod-m spawn rofi -show drun -theme launcher_light.rasi
 hc keybind $mod-w spawn rofi -no-lazy-grab -show window -theme window_menu_light.rasi
 hc keybind $mod-p spawn rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' -config ~/.config/rofi/clipboard.rasi -m -4
-hc keybind $mod-t spawn ~/bin/tmux/rofi.sh
-hc keybind $mod-Shift-w spawn sh -c 'eww close side-light || eww open side-light'
-hc keybind $mod-Shift-e spawn sh -c 'eww close calendar-light || eww open calendar-light'
+#hc keybind $mod-t spawn ~/bin/tmux/rofi.sh
+#hc keybind $mod-Shift-w spawn sh -c 'eww close side-light || eww open side-light'
+#hc keybind $mod-Shift-e spawn sh -c 'eww close calendar-light || eww open calendar-light'
 hc keybind $mod-y spawn keepmenu
-hc keybind $mod-Shift-o spawn urxvt-open
-hc keybind $mod-Shift-z spawn zim-choose
-hc keybind $mod-r spawn cd-dir
-hc keybind $mod-Shift-r spawn cd-dir float
-hc keybind $mod-Shift-m spawn music
+#hc keybind $mod-Shift-o spawn urxvt-open
+#hc keybind $mod-Shift-z spawn zim-choose
+#hc keybind $mod-r spawn cd-dir
+#hc keybind $mod-Shift-r spawn cd-dir float
+#hc keybind $mod-Shift-m spawn music
 
 ### Status notifs (for when barless)
 hc keybind $mod-s spawn ~/bin/notifs/show-status.sh
@@ -224,26 +238,27 @@ hc keybind $mod-z spawn ~/bin/notifs/hlwm-workspace.sh
 
 ### Useful Utilities
 hc keybind $mod-n spawn ~/.config/cmus/scripts/cmus-notification.sh
-hc keybind $mod-Shift-v spawn vim-anywhere
 hc keybind $mod-Shift-q spawn ~/bin/powermenu.sh
 hc keybind $mod-b spawn ~/bin/hlwm/hidebar.sh
 hc keybind $mod-Shift-Delete spawn ~/bin/lock
 
 ### Volume and Brightness
-hc keybind $mod-Up    spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar1.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock); killall -s USR1 volume.sh'
-hc keybind $mod-Down  spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar2.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock); killall -s USR1 volume.sh'
-hc keybind XF86MonBrightnessUp spawn sh -c '~/bin/brightness/light-up.sh; pkill -SIGUSR1 start-eww'
-hc keybind XF86MonBrightnessDown spawn sh -c '~/bin/brightness/light-down.sh; pkill -SIGUSR1 start-eww'
+#hc keybind $mod-Up    spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ +2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar1.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock); killall -s USR1 volume.sh'
+#hc keybind $mod-Down  spawn sh -c 'pactl set-sink-volume @DEFAULT_SINK@ -2%; kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/herbbar2.lock); kill -s USR1 $(cat ${XDG_RUNTIME_DIR}/eww-wrapper.lock); killall -s USR1 volume.sh'
+#hc keybind XF86MonBrightnessUp spawn sh -c '~/bin/brightness/light-up.sh; pkill -SIGUSR1 start-eww'
+#hc keybind XF86MonBrightnessDown spawn sh -c '~/bin/brightness/light-down.sh; pkill -SIGUSR1 start-eww'
 
 ### Applications
 hc keybind $mod-Shift-t spawn flatpak run com.github.micahflee.torbrowser-launcher
-hc keybind $mod-Shift-f spawn firefox --ProfileManager
-hc keybind $mod-Shift-i spawn icecat --ProfileManager
-hc keybind $mod-Shift-p spawn icecat -P Professional
-hc keybind $mod-Shift-d spawn icecat -P Development
+hc keybind $mod-Shift-f spawn flatpak run io.gitlab.librewolf-community --ProfileManager
+#hc keybind $mod-Shift-i spawn icecat --ProfileManager
+#hc keybind $mod-Shift-p spawn icecat -P Professional
+#hc keybind $mod-Shift-d spawn icecat -P Development
 
 hc keybind $mod-Shift-g spawn gimp
-hc keybind $mod-f spawn urxvtc -e ranger
+hc keybind $mod-Shift-z spawn zrythm
+hc keybind $mod-Shift-v spawn pavucontrol
+#hc keybind $mod-f spawn urxvtc -e ranger
 
 hc keybind $mod-Shift-c spawn emacsclient -c
 
@@ -268,7 +283,11 @@ hc rule instance='URxvtFloat' floating=on
 hc rule instance='gl' class='mpv' floating=on
 hc rule instance='feh' floating=on
 hc rule instance='lxpolkit' floating=on
+hc rule instance="pavucontrol" floating=on
 #hc rule class='Zathura' floating=on
+
+hc rule instance='Zrythm' class='zrythm' title='Project Progress' focus=off switchtag=off
+hc rule class='Carla2-Plugin' floating=on
 
 
 # ===== Run Commands ===== #
@@ -281,7 +300,6 @@ hc rule instance='lxpolkit' floating=on
 #	pkill herbbar
 #	pkill lemonbar
 #fi
-#herbstclient detect_monitors
 #number=$(herbstclient list_monitors | wc -l)
 #case $number in
 #	2)

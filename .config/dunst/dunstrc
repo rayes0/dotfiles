@@ -51,7 +51,7 @@
     max_icon_size = 180
 
     # Paths to default icons.
-    icon_folders = /home/rayes/.icons/zafiro/actions/22:/home/rayes/.icons/zafiro/apps/scalable:/home/rayes/.icons/zafiro/categories/22:/home/rayes/.icons/zafiro/devices/22:/home/rayes/.icons/zafiro/emblems/22:/home/rayes/.icons/zafiro/panel/22:/home/rayes/.icons/zafiro/status/22
+    icon_folders = /home/rayes/.icons/zafiro/actions/22:/home/rayes/.icons/zafiro/apps/scalable:/home/rayes/.icons/zafiro/categories/22:/home/rayes/.icons/zafiro/devices/22:/home/rayes/.icons/zafiro/emblems/22:/home/rayes/.icons/zafiro/panel/22-light:/home/rayes/.icons/zafiro/status/22
 
     ### History ###
 
@@ -111,7 +111,10 @@
     stack_tag = barless-info
     history_ignore = yes
 [Calibre]
-	summary = "calibre"
+    summary = "calibre"
+    history_ignore = yes
+[urxvt]
+    stack_tag = urxvtbell
     history_ignore = yes
 
 # vim: ft=cfg
