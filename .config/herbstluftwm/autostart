@@ -161,11 +161,14 @@ hc keybind $mod-a use_previous
 hc keybind XF86MonBrightnessUp spawn sh -c "light -A 5; notify-send -i brightside -h string:x-canonical-private-synchronous:brightness Brightness $(light -G)%"
 hc keybind XF86MonBrightnessDown spawn sh -c "light -U 5; notify-send -i brightside -h string:x-canonical-private-synchronous:brightness Brightness $(light)%"
 
-hc keybind XF86AudioRaiseVolume spawn sh -c "pactl set-sink-volume @DEFAULT_SINK@ +2% && ~/bin/notifs/volume.sh"
-hc keybind XF86AudioLowerVolume spawn sh -c "pactl set-sink-volume @DEFAULT_SINK@ -2% && ~/bin/notifs/volume.sh"
+hc keybind XF86AudioRaiseVolume spawn sh -c "pactl set-sink-volume @DEFAULT_SINK@ +1% && ~/bin/notifs/volume.sh"
+hc keybind XF86AudioLowerVolume spawn sh -c "pactl set-sink-volume @DEFAULT_SINK@ -1% && ~/bin/notifs/volume.sh"
+hc keybind $mod-Up spawn sh -c "pactl set-sink-volume @DEFAULT_SINK@ +1% && ~/bin/notifs/volume.sh"
+hc keybind $mod-Down spawn sh -c "pactl set-sink-volume @DEFAULT_SINK@ -1% && ~/bin/notifs/volume.sh"
 hc keybind XF86AudioMute spawn sh -c "pactl set-sink-mute @DEFAULT_SINK@ toggle && ~/bin/notifs/volume.sh"
 
-hc keybind $mod-c spawn sh -c "if pgrep -x hhpc; then pkill hhpc; else hhpc -i 5; fi"
+#hc keybind $mod-c spawn sh -c "if pgrep -x hhpc; then pkill hhpc; else hhpc -i 5; fi"
+hc keybind $mod-c spawn sh -c "if pgrep -x xbanish; then pkill xbanish; else xbanish -i 5; fi"
 
 
 # ======== Theme ======== #
@@ -257,6 +260,7 @@ hc keybind $mod-Shift-f spawn flatpak run io.gitlab.librewolf-community --Profil
 
 hc keybind $mod-Shift-g spawn gimp
 hc keybind $mod-Shift-z spawn zrythm
+hc keybind $mod-Shift-a spawn anki
 hc keybind $mod-Shift-v spawn pavucontrol
 #hc keybind $mod-f spawn urxvtc -e ranger
 
@@ -285,6 +289,7 @@ hc rule instance='feh' floating=on
 hc rule instance='lxpolkit' floating=on
 hc rule instance="pavucontrol" floating=on
 #hc rule class='Zathura' floating=on
+hc rule instance='octave-gui' floating=on
 
 hc rule instance='Zrythm' class='zrythm' title='Project Progress' focus=off switchtag=off
 hc rule class='Carla2-Plugin' floating=on
