@@ -1,15 +1,13 @@
 configuration {
-    modi: "drun,run,ssh";
-    drun-display-format: "{icon} {name}";
-    show-icons:         true;
-    icon-theme:         "Zafiro";
-	location: 0;
-	yoffset: 0;
-	xoffset: 0;
-	fullscreen: false;
-	terminal: "urxvt";
-	columns: 3;
-	sidebar-mode: false;
+  modi: "drun,run,ssh";
+  drun-display-format: "{icon} {name}";
+  show-icons:         true;
+  icon-theme:         "Zafiro";
+  location: 0;
+  yoffset: 0;
+  xoffset: 0;
+  terminal: "urxvt";
+  sidebar-mode: false;
 }
 * {
   background-color: rgba(0, 0, 0, 0);

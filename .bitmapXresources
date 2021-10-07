@@ -63,6 +63,12 @@ URxvt.boldFont: xft:scientifica:style=Bold:size=13
 URxvt.italicFont: xft:scientifica:style=Italic:size=13
 URxvt.boldItalicFont: xft:scientifica:style=Bold Italic:size=13
 
+!!URxvt.font: xft:Cartograph CF:style=Regular:size=13
+!!URxvt.boldFont: xft:Cartograph CF:style=Bold:size=13
+!!URxvt.italicFont: xft:Cartograph CF:style=Regular Italic:size=13
+!!URxvt.boldItalicFont: xft:Cartograph CF:style=Heavy Italic:size=13
+
+
 !! Emacs
 !Emacs.font: SF Mono:antialias=True:pixelsize=15
 !Emacs.menuBar: off

@@ -14,7 +14,7 @@ configuration {
 }
 
 * {
-	font: "Victor Mono Italic 11";
+	font: "Cascadia Code 11";
 	background-color: #e6dad6;
 	text-color: #685c56;
 }

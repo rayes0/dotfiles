@@ -57,7 +57,7 @@ case $chosen in
         cmus-remote -u
         amixer set Master mute
 		~/bin/lock &
-        systemctl suspend-then-hibernate
+        systemctl suspend
         ;;
     $logout)
 	pkill herbbar coffeebar lemonbar
