@@ -244,7 +244,7 @@ hc keybind $mod-Shift-f spawn flatpak run io.gitlab.librewolf-community --Profil
 #hc keybind $mod-Shift-p spawn flatpak run io.gitlab.librewolf-community --P Professional
 hc keybind $mod-Shift-p spawn flatpak run com.github.Eloston.UngoogledChromium
 
-hc keybind $mod-Shift-g spawn gimp
+hc keybind $mod-Shift-g spawn flatpak run org.gimp.GIMP
 hc keybind $mod-Shift-z spawn zrythm
 hc keybind $mod-Shift-a spawn flatpak run net.ankiweb.Anki
 hc keybind $mod-Shift-v spawn pavucontrol
@@ -259,8 +259,9 @@ hc unrule -F
 
 ### Generic rules
 hc rule focus=on # normally focus new clients
-hc rule floatplacement=center
-hc rule windowtype~'_NET_WM_WINDOW_TYPE_(DIALOG|UTILITY|SPLASH)' floating=on
+hc rule floatplacement=smart
+hc rule windowtype='_NET_WM_WINDOW_TYPE_SPLASH' manage=off
+hc rule windowtype~'_NET_WM_WINDOW_TYPE_(DIALOG|UTILITY)' floating=on
 hc rule windowtype='_NET_WM_WINDOW_TYPE_DIALOG' focus=on
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
 
