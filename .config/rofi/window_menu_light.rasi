@@ -1,27 +1,25 @@
 configuration {
 	location: 0;
 	yoffset: 0;
-    xoffset: 0;	
+  xoffset: 0;	
 	fake-transparency: false;
 	hide-scrollbar: true;
-	bw: 0;
-    fullscreen: false;
-    show-icons: true;
+  fullscreen: false;
+  show-icons: true;
 }
 
 * {
-  background-color: rgba(0, 0, 0, 0);
-  font: "SF Mono 11";
+  background-color: #e6dad6;
+  font: "Cascadia Code 11";
   text-color: #6c605a;
 }
 
 window {
-  padding : 0px;
+  padding: 0px;
   height: 60%;
   width: 35%;
   transparency: "real";
-  /*background-color: rgba(230, 218, 214, 1.0);*/
-  background-color: #e6dad6;
+  border-radius: 12px;
 }
 
 mainbox {
@@ -33,22 +31,28 @@ mainbox {
 
 listview {
   columns: 1;
-  padding: 0;
+  padding: 10px;
   spacing: 2;
 }
 
 element {
   border: 0;
-  padding: 12 12 12 12;
+  padding: 12px;
   border-radius: 0;
 }
 
 element-icon {
+  background-color: inherit;
   size: 1.1em ;
+  padding: 0 10px 0 0;
 }
 
-element selected {
-  text-color: #cc6652;
+element-text {
+  background-color: inherit;
+}
+
+element.selected {
+  background-color: #dbd0cc;
 }
 
 inputbar {

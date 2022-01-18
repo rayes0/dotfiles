@@ -1,0 +1,11 @@
+[Unit]
+Description=Anki Sync Server
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/rayes/.local/share/anki-sync-server/src
+ExecStart=/usr/bin/python3 -m ankisyncd
+
+[Install]
+WantedBy=default.target

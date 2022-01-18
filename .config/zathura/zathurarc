@@ -49,23 +49,21 @@ set selection-clipboard clipboard
 set adjust-open "best-fit"
 set pages-per-row 1
 set scroll-page-aware "true"
-set smooth-scroll "true"
 set scroll-full-overlap 0.01
 set scroll-step 100
 set zoom-min 10
 set guioptions ""
 set scroll-step 50
+set page-padding 5
 
 # Keybinds
 unmap f
-map f navigate next
-map [fullscreen] f navigate next
+map f scroll half-down
 #map f toggle_fullscreen
 #map [fullscreen] f toggle_fullscreen
 
 unmap b
 map b navigate previous
-map [fullscreen] b navigate previous
 
 unmap S
 map S toggle_statusbar

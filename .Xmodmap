@@ -1,0 +1,26 @@
+!! keysyms: [key] [shift+key] [Mode_switch+Key] [Mode_switch+Shift+key] [ISO_Level3_Shift+Key] [ISO_Level3_Shift+Key]
+!
+!keycode 66 = Mode_switch
+!
+!! Caps + hjkl as arrow keys
+!keycode 43 = h H Left
+!keycode 44 = j J Down
+!keycode 45 = k K Up
+!keycode 46 = l L Right
+!
+!! Other common movement keys
+!keycode 38 = a A Home
+!keycode 26 = e E End
+!keycode 56 = b B Prior
+!keycode 41 = f F Next
+!
+!! escpace
+!keycode 50 = 0xffe1, 0xffe1, Escape
+!keycode 23 = 0xff09, 0xff09, Escape
+!
+!! Editing keys
+!keycode 53 = x X BackSpace
+!keycode 40  = d D Delete
+!
+!! Print key to menu key
+!keycode 107 = Menu Menu
