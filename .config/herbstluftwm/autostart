@@ -1,8 +1,7 @@
 #!/usr/bin/bash
 # My herbstluftwm configuration
 
-# ======== Basic Things ======== #
-~/.fehbg &
+# ========= Basic Things ========= #
 
 # Make so that everything is only piped to one instance of herbstclient
 IFS=$'\n'
@@ -19,18 +18,19 @@ mod=Mod4   # super key
 alt=Mod1  # alt key
 hc unlock  # just in case we ran with --locked
 
-xrandr --listmonitors | grep "HDMI-0" && xrandr --output DP-2 --off
+xrandr --auto && xrandr --listmonitors | grep "HDMI-0" && xrandr --output DP-2 --off
+#xrandr --auto && xrandr --listmonitors | grep "HDMI-0" && xrandr --output DP-2 --right-of HDMI-0
 hc detect_monitors # detect monitors
 
-
-# ======== Window Keybindings ======== #
+# ========= Window Keybindings ========= #
 ### Basic binds
 hc keybind $mod-q reload
 hc keybind $mod-x close_and_remove
 hc keybind $mod-Shift-x close
 #hc keybind $mod-Return spawn "urxvtc"
-hc keybind $mod-Return spawn sh -c "emacsclient -ce '(shx)'"
-hc keybind $mod-Shift-Return spawn urxvtc -name URxvtFloat
+hc keybind $mod-Return spawn sh -c "emacsclient -cqe '(eshell t)' '(delete-other-windows)'"
+#hc keybind $mod-Shift-Return spawn urxvtc -name URxvtFloat
+hc keybind $mod-Shift-Return spawn sh -c "emacsclient -cqF '((title . \"emacs-floating\"))' -e '(eshell t)' '(delete-other-windows)'"
 
 ### Focusing
 hc set focus_crosses_monitor_boundaries 1
@@ -41,7 +41,9 @@ hc keybind $mod-k           focus up
 hc keybind $mod-l           focus right
 hc keybind $mod-BackSpace   cycle_monitor
 hc keybind $mod-Tab         cycle_all +1	
-hc keybind $mod-Shift-Tab   cycle_all -1	
+hc keybind $mod-Shift-Tab   cycle_all -1
+hc keybind $mod-Control-Tab         cycle +1	
+hc keybind $mod-Control-Shift-Tab   cycle -1	
 hc keybind $mod-r jumpto urgent
 
 hc keybind $mod-Left  focus left
@@ -63,7 +65,7 @@ hc keybind $mod-$alt-j		mirror vertical
 hc keybind $mod-$alt-k		mirror vertical
 
 ### Frames
-hc keybind $mod-u split auto
+hc keybind $mod-u chain , set frame_border_width 2 , split auto
 hc keybind $mod-Shift-u	 chain , set frame_border_width 2 , split bottom 0.5
 hc keybind $mod-Control-u chain , set frame_border_width 2 , split right 0.5
 hc keybind $mod-Control-space split explode
@@ -124,7 +126,7 @@ hc mousebind $mod-Button4 call use_previous
 hc mousebind $mod-Button5 call use_previous
 
 
-# ======== Workspaces/Tags ======== #
+# ========= Workspaces/Tags ========= #
 tag_names=( {1..14} )
 tag_keys=( {1..9} 0 F{1..4} )
 hc rename default "${tag_names[0]}" || true
@@ -153,7 +155,7 @@ hc keybind $mod-period use_index +1 --skip-visible
 hc keybind $mod-comma  use_index -1 --skip-visible
 hc keybind $mod-a use_previous
 
-# ======== Function Keys ======== #
+# ========= Function Keys ========= #
 hc keybind XF86MonBrightnessUp spawn ~/bin/notifs/brightness.sh up
 hc keybind XF86MonBrightnessDown spawn ~/bin/notifs/brightness.sh down
 
@@ -167,23 +169,23 @@ hc keybind XF86AudioMute spawn sh -c "pactl set-sink-mute @DEFAULT_SINK@ toggle 
 hc keybind $mod-c spawn sh -c "if pgrep -x xbanish; then pkill xbanish; else xbanish -i 5; fi"
 
 
-# ======== Theme ======== #
+# ========= Theme ========= #
 hc attr theme.tiling.reset 1
 hc attr theme.floating.reset 1
 
 ### Frame colors
-hc set frame_border_active_color '#fccec1'
-hc set frame_border_normal_color '#c8c2bf'
+hc set frame_border_active_color '#a09c80'
+hc set frame_border_normal_color '#dad3d0'
 hc set frame_bg_normal_color '#ede6e3'
 hc set frame_bg_active_color '#ede6e3'
 
 ### Frame settings
-hc set frame_border_width 0
+hc set frame_border_width 4
 hc set always_show_frame on
 hc set frame_bg_transparent on
 hc set frame_transparent_width 0
 hc set frame_gap 8
-hc set frame_padding -2
+hc set frame_padding 0
 hc set smart_frame_surroundings on
 
 hc set snap_gap 8
@@ -191,10 +193,10 @@ hc set snap_distance 10
 
 ### Theme Keybinds
 hc keybind $mod-g cycle_value frame_gap 0 8
-hc keybind $mod-Shift-b cycle_value frame_border_width 2 0
+hc keybind $mod-b cycle_value frame_border_width 4 0
 
 ### Window colors
-hc attr theme.floating.padding_top 20
+# hc attr theme.floating.padding_top 20
 hc attr theme.active.color '#ce9c85'
 hc attr theme.normal.color '#a09c80'
 hc attr theme.urgent.color orange
@@ -202,11 +204,13 @@ hc attr theme.inner_width 0
 hc attr theme.inner_color '#ede6e3'
 hc attr theme.border_width 0
 #hc attr theme.floating.border_width 1
-hc attr theme.floating.border_width 0
-hc attr theme.floating.outer_width 0
-hc attr theme.floating.outer_color '#ede6e3'
-hc attr theme.active.inner_color '#c8c2bf'
-hc attr theme.active.outer_color '#c8c2bf'
+hc attr theme.floating.border_width 8
+hc attr theme.floating.outer_width 8
+hc attr theme.floating.outer_color '#dad3d0'
+hc attr theme.active.outer_color '#baaca7'
+hc attr theme.floating.inner_width 0
+hc attr theme.floating.inner_color '#a09c80'
+hc attr theme.active.inner_color '#ce9c85'
 hc attr theme.background_color '#ede6e3'
 
 # Window Settings
@@ -217,13 +221,13 @@ hc set raise_on_focus 0
 hc set update_dragged_clients 1
 
 
-# ======== Application Keybindings ======== #
+# ========= Application Keybindings ========= #
 ### Menus
 #hc keybind $mod-d spawn dmenu_run -i -h 30 -nf \#6c605a -nb \#ede6e3 -sf \#6c605a -sb \#c8c2bf -shb \#c8c2bf -nhb \#ede6e3 -shf \#9c7b9c
 hc keybind $mod-d spawn rofi -show run -theme launcher_light.rasi
 hc keybind $mod-m spawn rofi -show drun -theme launcher_light.rasi
 hc keybind $mod-w spawn rofi -no-lazy-grab -show window -theme window_menu_light.rasi
-hc keybind $mod-p spawn rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' -config ~/.config/rofi/clipboard.rasi -m -4
+hc keybind $mod-p spawn rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' -theme clipboard.rasi -m -4
 #hc keybind $mod-Shift-w spawn sh -c 'eww close side-light || eww open side-light'
 #hc keybind $mod-Shift-e spawn sh -c 'eww close calendar-light || eww open calendar-light'
 hc keybind $mod-y spawn keepmenu
@@ -235,14 +239,15 @@ hc keybind $mod-z spawn ~/bin/notifs/hlwm-workspace.sh
 ### Useful Utilities
 hc keybind $mod-n spawn ~/.config/cmus/scripts/cmus-notification.sh
 hc keybind $mod-Shift-q spawn ~/bin/powermenu.sh
-hc keybind $mod-b spawn ~/bin/hlwm/hidebar.sh
+#hc keybind $mod-b spawn ~/bin/hlwm/hidebar.sh
 hc keybind $mod-Shift-Delete spawn ~/bin/lock
 
 ### Applications
-hc keybind $mod-Shift-t spawn flatpak run com.github.micahflee.torbrowser-launcher
+hc keybind $mod-Shift-t spawn mullvad-exclude flatpak run com.github.micahflee.torbrowser-launcher
 hc keybind $mod-Shift-f spawn flatpak run io.gitlab.librewolf-community --ProfileManager
+hc keybind $mod-Shift-y spawn flatpak run io.gitlab.librewolf-community -P torrent
 #hc keybind $mod-Shift-p spawn flatpak run io.gitlab.librewolf-community --P Professional
-hc keybind $mod-Shift-p spawn flatpak run com.github.Eloston.UngoogledChromium
+hc keybind $mod-Shift-p spawn mullvad-exclude flatpak run com.github.Eloston.UngoogledChromium
 
 hc keybind $mod-Shift-g spawn flatpak run org.gimp.GIMP
 hc keybind $mod-Shift-z spawn zrythm
@@ -254,7 +259,7 @@ hc keybind $mod-Shift-d spawn emacsclient -cqune '(dired "~")' -F '((title . "em
 hc keybind $mod-Shift-o spawn osu.AppImage
 
 
-# ======== Rules ======== #
+# ========= Rules ========= #
 hc unrule -F
 
 ### Generic rules
@@ -266,9 +271,6 @@ hc rule windowtype='_NET_WM_WINDOW_TYPE_DIALOG' focus=on
 hc rule windowtype~'_NET_WM_WINDOW_TYPE_(NOTIFICATION|DOCK|DESKTOP)' manage=off
 
 ### Terminal Rules
-hc rule instance='URxvtTasks' floating=on
-hc rule instance='URxvtFuzzy' floating=on
-hc rule instance='URxvtZim' floating=on
 hc rule instance='URxvtFloat' floating=on
 
 ### Application Rules
@@ -295,17 +297,20 @@ hc rule instance='Zrythm' class='zrythm' title='Project Progress' focus=off swit
 hc rule class='Carla2-Plugin' floating=on
 
 hc rule instance='anki' title='Statistics' floating=on
+hc rule instance='anki' title='Add' floating=on
+hc rule instance='anki' title='Anki: Create a hyperlink' floating=on
 
 hc rule instance='nvidia-settings' floating=on
 
+hc rule instance='mullvad vpn' floating=on
 
-# ===== Run Commands ===== #
+# ====== Run Commands ====== #
 "${cmds[@]}" &
 
-# ======== Autostarting Applications ======== #
-pkill picom
+# ========= Autostarting Applications ========= #
+# pkill picom
 #picom --config ~/.config/picom-rounded-herb.conf --shadow-opacity 0.25 &
-picom --config ~/.config/picom-herb.conf --shadow-opacity 0.25 &
+# picom --config ~/.config/picom-herb.conf --shadow-opacity 0.25 &
 pkill dunst
 dunst &
 #

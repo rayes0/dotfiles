@@ -6,8 +6,11 @@ killall -SIGUSR1 dunst
 #face="$HOME/.face.png"
 #background="$HOME/Pictures/wallpapers/neutral/foggy-mountain_trees.jpg"
 
+tempimg='/tmp/lockimg.png'
+maim "$tempimg"
+convert "$tempimg" -blur 0x10 "$tempimg"
 i3lock --ignore-empty-password --show-failed-attempts \
-	--color=ede6e3
+	--color=ede6e3 --image="$tempimg"
 
 # For i3lock color
 #i3lock -e -f \
@@ -30,5 +33,6 @@ i3lock --ignore-empty-password --show-failed-attempts \
 
 #sleep 2
 xset dpms force off
+rm -rf "$tmpimg"
 wait
 killall -SIGUSR2 dunst

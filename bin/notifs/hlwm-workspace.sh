@@ -2,8 +2,9 @@
 # Shows the workspace in a notification for when barless on hlwm
 
 check_tags() {
-	tags_list=( $(herbstclient tag_status) )
-	tags=""      
+	# tags_list=( $(herbstclient tag_status) )
+  IFS=$'\t' read -r -a tags_list <<< "$(herbstclient tag_status)"
+	tags=""
 	
 	for t in "${tags_list[@]}"; do
 		case $t in
@@ -32,5 +33,5 @@ while read -r; do
 	id2=$(dunstify -p -i xpad -h string:x-canonical-private-synchronous:barless-info "Workspaces" "$tags")
 done < <(query)
 
-[ -n "$id1" ] && dunstify -C $id1
-[ -n "$id2" ] && dunstify -C $id2
+[ -n "$id1" ] && dunstify -C "$id1"
+[ -n "$id2" ] && dunstify -C "$id2"

@@ -8,13 +8,19 @@ configuration {
   xoffset: 0;
   terminal: "urxvt";
   sidebar-mode: false;
+  matching: "fuzzy";
+  sort: true;
+  sorting-method: "fzf";
 }
+
 * {
   background-color: rgba(0, 0, 0, 0);
-  font: "SF Mono 11";
+  font: "Cascadia Code 11";
   text-color: #6c605a;
 }
+
 window {
   padding: 20px;
   background-color: #e6dad6;
+  border-radius: 12px;
 }

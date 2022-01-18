@@ -54,10 +54,11 @@ set scroll-step 100
 set zoom-min 10
 set guioptions ""
 set scroll-step 50
+set page-padding 5
 
 # Keybinds
 unmap f
-map f navigate next
+map f scroll half-down
 #map f toggle_fullscreen
 #map [fullscreen] f toggle_fullscreen
 

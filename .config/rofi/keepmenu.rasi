@@ -5,47 +5,55 @@ configuration {
 	xoffset: 0;
 	terminal: "urxvt";
 	sidebar-mode: false;
+  matching: "fuzzy";
+  sort: true;
+  sorting-method: "fzf";
 }
 
 * {
-	font: "SF Mono 11";
+	font: "Cascadia Code 11";
 	background-color: #2a2a2a;
 	text-color: #bebebe;
 }
 
-#window {
+window {
 	background-color: #2a2a2a;
 	width: 50%;
 	height: 50%;
 	padding: 30px;
+  border-radius: 12px;
 }
 
-#inputbar {
+inputbar {
 	children: [ prompt, textbox-prompt-colon, entry ];
 	padding: 10px;
 }
 
-#prompt {
-   font: "Victor Mono Italic 12";
+prompt {
+   font: "Cascadia Code Italic 12";
 }
 
-#entry {
-   font: "Victor Mono Bold Italic 12";
+entry {
+   font: "Cascadia Code Bold Italic 12";
 }
 
-#textbox-prompt-colon {
+textbox-prompt-colon {
 	expand: false;
 	str: " >  ";
 }
 
-#element {
+element {
 	padding: 10px;
 	border-radius: 5px;
 }
 
-#element.selected {
+element.selected {
 	background-color: #3a3a3a;
 	padding: 12px;
+}
+
+element-text {
+  background-color: inherit;
 }
 
 element-icon {
