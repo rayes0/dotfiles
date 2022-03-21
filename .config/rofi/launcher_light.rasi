@@ -23,7 +23,7 @@ window {
 	height: 50%;
 	padding: 30px;
   children: [ horibox ];
-  border-radius: 12px;
+/*  border-radius: 12px;*/
 }
 
 horibox {

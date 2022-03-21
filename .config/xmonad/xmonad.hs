@@ -1,56 +1,165 @@
+{-# LANGUAGE NoMonomorphismRestriction #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+{-# OPTIONS_GHC -fno-warn-name-shadowing #-}
 import XMonad
+import XMonad.Prelude
 
 import XMonad.Hooks.EwmhDesktops
+-- import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.WindowSwallowing
 
-import XMonad.Layout.NoBorders
+-- import XMonad.Layout.NoBorders
+import XMonad.Layout.VoidBorders
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.Maximize
 import XMonad.Layout.Minimize
-import XMonad.Layout.TwoPane
-import qualified XMonad.Layout.BoringWindows as BW
+import XMonad.Layout.TwoPanePersistent
+-- import XMonad.Layout.StateFull
+import XMonad.Layout.BoringWindows
+import XMonad.Layout.Renamed
+import XMonad.Layout.TrackFloating
+-- import XMonad.Layout.NoBorders
 
 import XMonad.Actions.FloatSnap
 import XMonad.Actions.CycleWS
 import XMonad.Actions.Navigation2D
 import XMonad.Actions.Minimize
-import qualified XMonad.Actions.FlexibleManipulate as Flex
-import XMonad.Actions.FloatSnap
 import XMonad.Actions.PhysicalScreens
+import XMonad.Actions.SwapWorkspaces
+import XMonad.Actions.GridSelect
+-- import XMonad.Actions.AfterDrag
+-- import XMonad.Actions.DynamicWorkspaces
+-- import XMonad.Actions.CopyWindow(copy)
 
-import Graphics.X11.ExtraTypes.XF86
+import XMonad.Util.Cursor
+
+import qualified XMonad.Actions.FlexibleManipulate as Flex
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
+-- import Text.Read
+
+import Graphics.X11.ExtraTypes.XF86
+
 main :: IO ()
-main = xmonad . ewmhFullscreen . ewmh . withNavigation2DConfig def $ myConfig
+main = xmonad $ ewmhFullscreen $ ewmh $
+       withNavigation2DConfig def $ myConfig
 
 myConfig = def
-  { modMask     = mod4Mask, -- super key
-    borderWidth = 3,
-    focusFollowsMouse = False,
-    clickJustFocuses = False,
-    workspaces = myWorkspaces,
-    normalBorderColor = "#dad3d0",
-    focusedBorderColor = "#a09c80",
-    keys = myKeys,
-    mouseBindings = myMouseBinds,
-    layoutHook = minimize . BW.boringWindows $ myLayouts,
-    manageHook = myManaged,
-    handleEventHook = myHandled
-  }
+           { modMask            = mod4Mask
+           , borderWidth        = 3
+           , focusFollowsMouse  = False
+           , clickJustFocuses   = False
+           , workspaces         = myWorkspaces
+           , normalBorderColor  = "#dad3d0"
+           , focusedBorderColor = "#ba9eba"
+           , keys               = myKeys
+           , mouseBindings      = myMouseBinds
+           , layoutHook         = myLayouts
+           , manageHook         = myManaged
+           , handleEventHook    = myHandled
+           , startupHook        = setDefaultCursor xC_left_ptr
+           -- , startupHook = setDefaultCursor xC_spider
+           }
+
+getLayout :: X String
+getLayout = gets windowset >>= return . description . W.layout . W.workspace . W.current
+
+myColor color _ isFg = do
+  return $ if isFg
+           then ("#debcde", color)
+           else ("#dad3d0", color)
+
+myColorizer = myColor "#6c605a"
+
+myGSConfig = (buildDefaultGSConfig myColorizer)
+             { gs_cellheight = 60
+             , gs_cellwidth = 270
+             , gs_cellpadding = 10
+             , gs_font = "xft:Cascadia Code:pixelsize=14"
+             , gs_navigate = myGSNavigation
+             , gs_rearranger = noRearranger
+             , gs_bordercolor = "#937f74"}
+
+myGSNavigation = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
+ where navKeyMap = M.fromList [ ((0,xK_Escape), cancel)
+                              , ((controlMask,xK_bracketleft), cancel)
+                              , ((controlMask,xK_g), cancel)
+                              , ((0,xK_Return), select)
+                              -- , ((0,xK_slash) , substringSearch myGSNavigation)
+                              -- , ((0,xK_s)     , substringSearch myGSNavigation)
+                              , ((controlMask,xK_b)  , move (-1,0)  >> myGSNavigation)
+                              -- , ((0,xK_h)     , move (-1,0)  >> myGSNavigation)
+                              , ((controlMask,xK_f) , move (1,0)   >> myGSNavigation)
+                              -- , ((0,xK_l)     , move (1,0)   >> myGSNavigation)
+                              , ((controlMask,xK_n)  , move (0,1)   >> myGSNavigation)
+                              -- , ((0,xK_j)     , move (0,1)   >> myGSNavigation)
+                              , ((controlMask,xK_p)    , move (0,-1)  >> myGSNavigation)
+                              -- , ((0,xK_k)     , move (0,-1)  >> myGSNavigation)
+                              -- , ((0,xK_y)     , move (-1,-1) >> myGSNavigation)
+                              -- , ((0,xK_i)     , move (1,-1)  >> myGSNavigation)
+                              -- , ((0,xK_n)     , move (-1,1)  >> myGSNavigation)
+                              -- , ((0,xK_m)     , move (1,1)   >> myGSNavigation)
+                              , ((0,xK_space) , setPos (0,0) >> myGSNavigation)
+                              , ((0,xK_BackSpace), transformSearchString (\s -> if s == ""
+                                                                                then ""
+                                                                                else init s)
+                                                   >> myGSNavigation)
+                              , ((controlMask,xK_u), transformSearchString (\_ -> "") >> myGSNavigation )]
+       navDefaultHandler (_,s,_) = do
+         transformSearchString (++ s)
+         myGSNavigation
+
+
+myWindowMenu = withFocused $ \w -> do
+    tags <- asks (workspaces . config)
+    Rectangle x y wh ht <- getSize w
+    Rectangle sx sy swh sht <- gets $ screenRect . W.screenDetail . W.current . windowset
+    let originFractX = (fi x - fi sx + fi wh / 2) / fi swh
+        originFractY = (fi y - fi sy + fi ht / 2) / fi sht
+        gsConfig = (buildDefaultGSConfig myColorizer) { gs_cellheight = 30
+                                                      , gs_cellwidth = 50
+                                                      , gs_cellpadding = 10
+                                                      , gs_font = "xft:Cascadia Code:pixelsize=14"
+                                                      , gs_navigate = myGSNavigation
+                                                      , gs_rearranger = noRearranger
+                                                      , gs_bordercolor = "#937f74"
+                                                      , gs_originFractX = originFractX
+                                                      , gs_originFractY = originFractY }
+        actions = [ ("^ M", sendMessage $ maximizeRestore w)
+                  , ("× Q"      , kill)
+                  , ("| m"   , minimizeWindow w)
+                  ] ++
+                  [ ("→ " ++ tag, windows $ W.shift tag)
+                  | tag <- tags ]
+    runSelectedAction gsConfig actions
+
+getSize :: Window -> X Rectangle
+getSize w = do
+  d  <- asks display
+  wa <- io $ getWindowAttributes d w
+  let x = fi $ wa_x wa
+      y = fi $ wa_y wa
+      wh = fi $ wa_width wa
+      ht = fi $ wa_height wa
+  return (Rectangle x y wh ht)
+
 
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
-  [ ((modMask,               xK_Return), spawn "sh -c \"emacsclient -cqe '(eshell t)' '(delete-other-windows)'\"")
-  , ((modMask .|. shiftMask, xK_Return), spawn "sh -c \"emacsclient -cqF '((title . \\\"emacs-floating\\\"))' -e '(eshell t)' '(delete-other-windows)'\"")
+  [ ((modMask,               xK_Return), spawn "emacsclient -cqe '(eshell t)' '(delete-other-windows)' ||  urxvt")
+  , ((modMask .|. shiftMask, xK_Return), spawn "emacsclient -cqF '((title . \\\"emacs-floating\\\"))' -e '(eshell t)' '(delete-other-windows)'")
  
   -- WM and menu bindings
-  , ((modMask, xK_q), spawn "xmonad --recompile && xmonad --restart || notify-send \"error compiling config\"")
+  , ((modMask, xK_q), spawn "xmonad --recompile && (xmonad --restart; notify-send \"successfully recompiled\") || notify-send \"error compiling config\"")
   , ((modMask, xK_x), kill)
-
   , ((modMask, xK_m), spawn "rofi -show drun -theme launcher_light.rasi")
   , ((modMask, xK_d), spawn "rofi -show run -theme launcher_light.rasi")
-  , ((modMask, xK_w), spawn "rofi -no-lazy-grab -show window -theme window_menu_light.rasi")
+  -- , ((modMask, xK_w), spawn "rofi -no-lazy-grab -show window -theme window_menu_light.rasi")
+  -- , ((modMask, xK_w), goToSelected myGSConfig)
+  , ((modMask, xK_w), goToSelected myGSConfig)
+  , ((modMask .|. shiftMask, xK_w), myWindowMenu)
   , ((modMask, xK_p), spawn "rofi -modi \"clipboard:greenclip print\" -show clipboard -run-command '{cmd}' -theme clipboard.rasi -m -4")
   , ((modMask, xK_y), spawn "keepmenu")
   , ((modMask .|. shiftMask, xK_q), spawn "\"$HOME\"/bin/powermenu.sh")
@@ -73,20 +182,29 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_a), toggleWS)
   , ((modMask, xK_period), nextWS)
   , ((modMask, xK_comma), prevWS)
-  , ((modMask,               xK_Tab), windows W.focusDown)
-  , ((modMask .|. shiftMask, xK_Tab), windows W.focusUp)
+  -- , ((modMask, xK_equal), addWorkspace getWSName)
+  , ((modMask, xK_b), markBoring)
+  , ((modMask .|. shiftMask, xK_b), clearBoring)
+  , ((modMask, xK_e), withFocused (sendMessage . maximizeRestore))
+  , ((modMask, xK_r), windows W.shiftMaster)
+  , ((modMask, xK_Tab), focusDown)
+  , ((modMask .|. shiftMask, xK_Tab), focusUp)
+  , ((modMask .|. controlMask, xK_Tab), windows W.swapDown)
+  , ((modMask .|. controlMask .|. shiftMask, xK_Tab), windows W.swapUp)
   , ((modMask .|. controlMask, xK_h), sendMessage Shrink)
   , ((modMask .|. controlMask, xK_l), sendMessage Expand)
   , ((modMask, xK_space), withFocused toggleFloat)
-  , ((modMask .|. mod1Mask, xK_space), sendMessage NextLayout)
+  , ((modMask .|. mod1Mask, xK_space), do sendMessage NextLayout
+                                          getLayout >>= \d -> spawn $"dunstify -r 1234 Layout \"" ++ d ++ "\"")
   , ((modMask, xK_i), withFocused minimizeWindow)
   , ((modMask, xK_o), withLastMinimized maximizeWindowAndFocus)
-  -- , ((modMask, xK_e) withFocused (sendMessage . maximizeRestore))
+  , ((modMask, xK_BackSpace), onNextNeighbour def W.view)
   
   -- Applications
   , ((modMask .|. shiftMask, xK_c), spawn "emacsclient -cqun")
-  , ((modMask .|. shiftMask, xK_e), spawn "emacsclient -cqun -F '((title . \"emacs-floating\"))'")
-  , ((modMask .|. shiftMask, xK_d), spawn "emacsclient -cqune '(dired \"~\")' -F '((title . \"emacs-floating\"))'")
+  -- , ((modMask .|. shiftMask, xK_e), spawn "emacsclient -cqun -F '((title . \"emacs-floating\"))'")
+  -- , ((modMask .|. shiftMask, xK_d), spawn "emacsclient -cqune '(dired \"~\")' -F '((title . \"emacs-floating\"))'")
+  , ((modMask .|. shiftMask, xK_d), spawn "emacsclient -cqune '(dired \"~\")'")
   , ((modMask .|. shiftMask, xK_t), spawn "mullvad-exclude flatpak run com.github.micahflee.torbrowser-launcher")
   , ((modMask .|. shiftMask, xK_f), spawn "flatpak run io.gitlab.librewolf-community --ProfileManager")
   , ((modMask .|. shiftMask, xK_p), spawn "mullvad-exclude flatpak run com.github.Eloston.UngoogledChromium")
@@ -103,52 +221,102 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
  , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
  ++
  -- Bind the hjkl keys to window operations in a particular direction
- [((modMask, k), windowGo d False) | (k, d) <- zip [xK_h, xK_j, xK_k, xK_l] [L, D, U, R]]
+ [((modMask, k), windowGo d False) | (k, d) <- directionKeys]
  ++
- [((modMask .|. shiftMask, k), windowSwap d False) | (k, d) <- zip [xK_h, xK_j, xK_k, xK_l] [L, D, U, R]]
+ [((modMask .|. shiftMask, k), windowSwap d False) | (k, d) <- directionKeys]
  ++
- [((modMask .|. controlMask, k), sendMessage m) | (k, m) <- zip [xK_j, xK_k]
-     [ MirrorShrink
-     , MirrorExpand]]
+ [((modMask .|. controlMask, k), sendMessage m) | (k, m) <- [(xK_j, MirrorShrink), (xK_k, MirrorExpand)]]
  ++
  -- Multi monitors
  [((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_bracketleft, xK_bracketright] [0..]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+ | (key, sc) <- zip [xK_bracketleft, xK_bracketright] [0..]
+ , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
  ++
- [((modMask, xK_BackSpace), onNextNeighbour def W.view)]
+ [((modMask .|. mod1Mask, k), windows $ swapWithCurrent i)
+ | (i, k) <- zip (XMonad.workspaces conf) ([xK_1 .. xK_9] ++ [xK_0])]
+ -- ++
+ -- [((modMask .|. controlMask, k), W.shift i (W.greedyView i))
+        -- W.greedyView i)
+ -- | (i, k) <- zip (XMonad.workspaces conf) ([xK_1 .. xK_9] ++ [xK_0])]
   where
-    toggleFloat w = windows (\s -> if M.member w (W.floating s)
-                                   then W.sink w s
-                                   else (W.float w (W.RationalRect (1/3) (1/4) (1/2) (4/5)) s))
+    directionKeys = [(xK_h, L), (xK_j, D), (xK_k, U), (xK_l, R)]
+    -- getWSName = read (maximum $ XMonad.workspaces conf) + 1
+
+toggleFloat w = do { floats <- gets (W.floating . windowset);
+                     if M.member w floats
+                     then do setBorders w 0
+                             windows (W.sink w)
+                     else do resetBorders w
+                             positionFloatCenter w }
+
+resetBorders w = asks (borderWidth . config) >>= setBorders w
+
+setBorders w bw = withDisplay $ \d -> io $ setWindowBorderWidth d w bw
+
+-- rationalrect: (posx, posy, sizex, sizey)
+
+-- positionFloat w = windows (\s -> W.float w (W.RationalRect (1/3) (1/4) (1/2) (4/5)) s)
+positionFloatCenter w = windows (\s -> W.float w (W.RationalRect (1/4) (1/6) (1/2) (2/3)) s)
+
+-- ff is float function to run
+floatAndRun ff w action = do { floats <- gets (W.floating . windowset);
+                       if M.member w floats
+                       then action
+                       else do resetBorders w
+                               _ <- ff w
+                               action }
 
 myMouseBinds (XConfig {XMonad.modMask = modm}) = M.fromList $
-  [ ((modm,               button1), (\w -> focus w >> mouseMoveWindow w >> ifClick (snapMagicMove (Just snapd) (Just snapd) w)))
-  , ((modm .|. shiftMask, button1), (\w -> focus w >> mouseMoveWindow w >> ifClick (snapMagicResize [L,R,U,D] (Just snapd) (Just snapd) w)))
-  , ((modm,               button3), (\w -> focus w >> Flex.mouseWindow Flex.discrete w >> ifClick (snapMagicResize [R,D] (Just snapd) (Just snapd) w)))
-  ] where snapd = 100
+  [ ((modm, button1), (\w -> focus w
+                             >> windows W.shiftMaster
+                             >> floatAndRun positionFloatCenter w (mouseMoveWindow w)
+                             >> myIfClick (snapMagicMove (Just snapd) (Just snapd) w)))
+  , ((modm .|. controlMask, button1), (\w -> toggleFloat w))
+  , ((modm, button3), (\w -> focus w
+                             >> floatAndRun positionFloatCenter w (Flex.mouseWindow Flex.discrete w)
+                             >> myIfClick (snapMagicResize [R,D]
+                                          (Just snapd) (Just snapd) w)))
+  ] where snapd = 400
+
+myIfClick action = ifClick' 100 action (return ())
 
 myWorkspaces = map show [1 .. 10 :: Int]
 
-myLayouts = smartBorders dual ||| noBorders Full ||| smartBorders tiled
+myLayouts = cut $ minimize . cut $ maximize . boringWindows $ trackFloating $ useTransientFor
+            $ cut (voidBorders full
+                   ||| normalBorders dual)
+                   -- ||| normalBorders tiled)
   where
-    dual = TwoPane (1/20) (1/2)
-    tiled   = ResizableTall 1 (1/20) (1/2) []
+    cut = renamed [CutWordsLeft 1]
+    full = renamed [XMonad.Layout.Renamed.Replace "Full"] $ Full
+    -- tiled = renamed [XMonad.Layout.Renamed.Replace "Tiled"] $ ResizableTall 1 (1/20) (1/2) []
+    dual = renamed [XMonad.Layout.Renamed.Replace "Dual"] $
+      TwoPanePersistent Nothing (1/20) (3/5)
 
-myHandled = swallowEventHook (className =? "URxvt") (return True)
+myHandled = swallowEventHook (className =? "URxvt"
+                             <||> title =? "*eshell*")
+            (return True)
 
 myManaged = composeAll
   [ resource =? "zoom" --> doFloat
   , className =? "mpv" --> doFloat
   , resource =? "feh" --> doFloat
   , className =? "lxpolkit" --> doFloat
-  , className =? "pavucontrol" --> doFloat
+  , className =? "Pavucontrol" --> doFloat
   , resource =? "thunar" --> doFloat
-  , (resource =? "emacs" <&&> title =? "emacs-floating") --> doFloat
-  , (resource =? "emacs" <&&> title =? "Ediff") --> doFloat
+  , (className =? "Emacs" <&&> title =? "emacs-floating") --> doFloat
+  , (className =? "Emacs" <&&> title =? "Ediff") --> doFloat
   , (className =? "Anki" <&&> title =? "Statistics") --> doFloat
   , (className =? "Anki" <&&> title =? "Add") --> doFloat
   , (className =? "Anki" <&&> title =? "Anki: Create a hyperlink") --> doFloat
+  , (className =? "Anki" <&&> title =? "Image Occlusion Enhanced - Add Mode") --> doFloat
+  , (className =? "Anki" <&&> title =? "Options for Linux") --> doFloat
+  , className =? "Gimp-2.10" --> doFloat
+  , resource =? "zrythm" --> doFloat
   , className =? "Nvidia-settings" --> doFloat
   , (className =? "LibreWolf" <&&> title =? "LibreWolf - Choose User Profile") --> doFloat
   ]
+
+-- Local Variables:
+-- flycheck-ghc-search-path: '("./")
+-- End:
