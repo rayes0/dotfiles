@@ -1,4 +1,4 @@
-! vim: ft=xdefaults 
+! -*- mode: conf-xdefaults; -*- 
 
 !! Colorscheme
 
@@ -7,7 +7,7 @@
 *.background: #ede6e3
 .cursorColor: #937f74
 
-!black
+! black
 *.color0: #ede6e3
 *.color8: #dad3d0
 
@@ -38,6 +38,9 @@
 ! white
 *.color7: #685c56
 *.color15: #938680
+
+Xcursor.theme: Fuchsia
+Xcursor.size: 32
 
 !! Fonts
 Xft.autohint: true
@@ -114,4 +117,3 @@ URxvt.url-select.launcher: /home/rayes/bin/urxvt/urxvt-url
 
 !! Rofi
 rofi.font: Noto Sans 11
-
