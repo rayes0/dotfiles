@@ -19,7 +19,6 @@ import XMonad.Layout.TwoPanePersistent
 import XMonad.Layout.BoringWindows
 import XMonad.Layout.Renamed
 import XMonad.Layout.TrackFloating
--- import XMonad.Layout.NoBorders
 
 import XMonad.Actions.FloatSnap
 import XMonad.Actions.CycleWS
@@ -39,13 +38,14 @@ import qualified XMonad.Actions.FlexibleManipulate as Flex
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
--- import Text.Read
-
 import Graphics.X11.ExtraTypes.XF86
 
 main :: IO ()
 main = xmonad $ ewmhFullscreen $ ewmh $
        withNavigation2DConfig def $ myConfig
+
+myStartup = setDefaultCursor xC_left_ptr
+            >> spawn "autorandr --change"
 
 myConfig = def
            { modMask            = mod4Mask
@@ -60,9 +60,7 @@ myConfig = def
            , layoutHook         = myLayouts
            , manageHook         = myManaged
            , handleEventHook    = myHandled
-           , startupHook        = setDefaultCursor xC_left_ptr
-           -- , startupHook = setDefaultCursor xC_spider
-           }
+           , startupHook        = myStartup }
 
 getLayout :: X String
 getLayout = gets windowset >>= return . description . W.layout . W.workspace . W.current
@@ -81,7 +79,7 @@ myGSConfig = (buildDefaultGSConfig myColorizer)
              , gs_font = "xft:Cascadia Code:pixelsize=14"
              , gs_navigate = myGSNavigation
              , gs_rearranger = noRearranger
-             , gs_bordercolor = "#937f74"}
+             , gs_bordercolor = "#937f74" }
 
 myGSNavigation = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
  where navKeyMap = M.fromList [ ((0,xK_Escape), cancel)
@@ -130,8 +128,8 @@ myWindowMenu = withFocused $ \w -> do
                                                       , gs_originFractY = originFractY }
         actions = [ ("^ M", sendMessage $ maximizeRestore w)
                   , ("× Q"      , kill)
-                  , ("| m"   , minimizeWindow w)
-                  ] ++
+                  , ("| m"   , minimizeWindow w) ]
+                  ++
                   [ ("→ " ++ tag, windows $ W.shift tag)
                   | tag <- tags ]
     runSelectedAction gsConfig actions
@@ -182,7 +180,6 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_a), toggleWS)
   , ((modMask, xK_period), nextWS)
   , ((modMask, xK_comma), prevWS)
-  -- , ((modMask, xK_equal), addWorkspace getWSName)
   , ((modMask, xK_b), markBoring)
   , ((modMask .|. shiftMask, xK_b), clearBoring)
   , ((modMask, xK_e), withFocused (sendMessage . maximizeRestore))
@@ -234,13 +231,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
  ++
  [((modMask .|. mod1Mask, k), windows $ swapWithCurrent i)
  | (i, k) <- zip (XMonad.workspaces conf) ([xK_1 .. xK_9] ++ [xK_0])]
- -- ++
- -- [((modMask .|. controlMask, k), W.shift i (W.greedyView i))
-        -- W.greedyView i)
- -- | (i, k) <- zip (XMonad.workspaces conf) ([xK_1 .. xK_9] ++ [xK_0])]
   where
     directionKeys = [(xK_h, L), (xK_j, D), (xK_k, U), (xK_l, R)]
-    -- getWSName = read (maximum $ XMonad.workspaces conf) + 1
 
 toggleFloat w = do { floats <- gets (W.floating . windowset);
                      if M.member w floats

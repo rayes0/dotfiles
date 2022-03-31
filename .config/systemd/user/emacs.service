@@ -1,0 +1,11 @@
+[Unit]
+Description=Emacs: the extensible, self-documenting text editor
+
+[Service]
+Type=forking
+ExecStart=/bin/bash --login -i -c 'exec /home/rayes/.local/bin/emacs --daemon'
+ExecStop=/home/rayes/.local/bin/emacs --eval "(progn (setq kill-emacs-hook 'nil) (kill-emacs))"
+TimeoutStartSec=0
+
+[Install]
+WantedBy=default.target
