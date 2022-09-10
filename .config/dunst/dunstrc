@@ -1,5 +1,5 @@
 [global]
-font = Cascadia Code 11
+font = Cantarell 12
 
 monitor = 0
 follow = keyboard
@@ -21,11 +21,13 @@ shrink = yes
 transparency = 0
 separator_height = 4
 
-padding = 16
+padding = 20
 horizontal_padding = 14
 frame_width = 0
-frame_color = "#ede6e3"
+frame_color = "#9c7b9c"
+highlight = "#9c7b9c"
 separator_color = auto
+
 
 # Sort messages by urgency.
 sort = true
@@ -34,10 +36,10 @@ idle_threshold = 120
 ### Text ###
 line_height = 4
 word_wrap = no
-show_age_threshold = 60
+show_age_threshold = 20
 
 markup = full
-format = "<b><i>%s</i></b>\n%b\n%n"
+format = "<b>%s</b>\n%b\n%n"
 alignment = left
 ignore_newline = no
 
@@ -71,6 +73,17 @@ class = Dunst
 
 #startup_notification = false
 
+### Actions
+mouse_left_click = close_current
+mouse_middle_click = do_action
+mouse_right_click = close_all
+
+### Shortcuts
+close = Escape
+close_all = ctrl+Escape
+history = shift+Escape
+context = mod1+Escape
+
 ### Legacy
 [urgency_low]
 background = "#e6dad6"
@@ -96,9 +109,6 @@ timeout = 0
 [Brightness]
 stack_tag = brightness
 history_ignore = yes
-[Barless]
-stack_tag = barless-info
-history_ignore = yes
 [Calibre]
 summary = "calibre"
 history_ignore = yes
@@ -106,5 +116,17 @@ history_ignore = yes
 stack_tag = urxvtbell
 history_ignore = yes
 
-# vim: ft=cfg
+[Barless]
+stack_tag = barless-info
+history_ignore = yes
 
+[Status]
+stack_tag = status
+history_ignore = yes
+format = "%b"
+icon_position = off
+
+[Volume]
+stack_tag = volume-info
+history_ignore = yes
+format = "%b"

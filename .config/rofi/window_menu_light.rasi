@@ -19,7 +19,7 @@ window {
   height: 60%;
   width: 35%;
   transparency: "real";
-  border-radius: 12px;
+//  border-radius: 12px;
 }
 
 mainbox {

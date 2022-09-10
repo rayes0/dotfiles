@@ -114,6 +114,3 @@ URxvt.resize-font.step: 0.5
 
 URxvt.keysym.M-u: perl:url-select:select_next
 URxvt.url-select.launcher: /home/rayes/bin/urxvt/urxvt-url
-
-!! Rofi
-rofi.font: Noto Sans 11
