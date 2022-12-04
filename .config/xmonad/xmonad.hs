@@ -86,7 +86,7 @@ myGSWindowConfig = (buildDefaultGSConfig colorizer)
                    { gs_cellheight = 50
                    , gs_cellwidth = 370
                    , gs_cellpadding = 10
-                   , gs_font = "xft:Cascadia Code:pixelsize=14"
+                   , gs_font = "xft:Noto Sans:pixelsize=15"
                    , gs_navigate = myGSNavigation
                    , gs_rearranger = noRearranger
                    , gs_bordercolor = "#937f74" }
@@ -114,7 +114,7 @@ myGSWsConfig = (buildDefaultGSConfig colorizer)
                { gs_cellheight = 40
                , gs_cellwidth = 100
                , gs_cellpadding = 10
-               , gs_font = "xft:Cascadia Code:pixelsize=14"
+               , gs_font = "xft:Noto Sans:pixelsize=15"
                , gs_navigate = myGSNavigation
                , gs_rearranger = noRearranger
                , gs_bordercolor = "#937f74" }
@@ -216,9 +216,15 @@ myKeys (XConfig {XMonad.modMask = mod}) = M.fromList $
   , ((0, xF86XK_AudioLowerVolume), spawn "pactl set-sink-volume @DEFAULT_SINK@ -1% && ~/bin/notifs/volume.sh")
   , ((0, xF86XK_AudioMute), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle && ~/bin/notifs/volume.sh")
   , ((0, xF86XK_AudioPlay), bindFirst [ (className =? "mpv" <||> className =? "osu!", sendKey 0 xF86XK_AudioPlay)
-                                      , (pure True, spawn "emacsclient --eval '(my/handle-play-pause)'") ])
+                                      -- , (pure True, spawn "emacsclient --eval '(my/handle-play-pause)'")
+                                      -- , (pure True, spawn "playerctl play-pause")
+                                      , (pure True, spawn "mpc toggle")
+                                      ])
   , ((mod, xF86XK_AudioMute), bindFirst [ (className =? "mpv" <||> className =? "osu!", sendKey 0 xF86XK_AudioPlay)
-                                               , (pure True, spawn "emacsclient --eval '(my/handle-play-pause)'") ])
+                                        -- , (pure True, spawn "emacsclient --eval '(my/handle-play-pause)'")
+                                        -- , (pure True, spawn "playerctl play-pause")
+                                        , (pure True, spawn "mpc toggle")
+                                        ])
   , ((0, xF86XK_AudioPrev), bindFirst [ (className =? "mpv" <||> className =? "osu!", sendKey 0 xF86XK_AudioPrev)
                                       , (pure True, spawn "emacsclient --eval '(my/handle-play-prev)'") ])
   , ((mod, xF86XK_AudioLowerVolume), bindFirst [ (className =? "mpv" <||> className =? "osu!", sendKey 0 xF86XK_AudioPrev)
@@ -227,10 +233,11 @@ myKeys (XConfig {XMonad.modMask = mod}) = M.fromList $
                                       , (pure True, spawn "emacsclient --eval '(my/handle-play-next)'") ])
   , ((mod, xF86XK_AudioRaiseVolume), bindFirst [ (className =? "mpv" <||> className =? "osu!", sendKey 0 xF86XK_AudioNext)
                                                , (pure True, spawn "emacsclient --eval '(my/handle-play-next)'") ])
-  , ((0, xF86XK_WLAN), do spawn "[ $(nmcli radio wifi) == disabled ] && nmcli radio wifi on || nmcli radio wifi off"
-                          notifyNoHist "wifi toggled")
+  , ((0, xF86XK_WLAN), toggleWifi)
+  , ((0, xF86XK_WLAN), toggleWifi)
   -- , ((0, xK_Print), sendKey 0 xF86XK_Memo)
   , ((0, xF86XK_Calculator), spawn "emacsclient -c --eval '(calc nil t)'")
+  , ((0, xF86XK_Favorites), spawn "maim -su | xclip -selection clipboard -t image/png")
 
   -- Window and WS bindings
   -- , ((mod, xK_backslash), map (\w -> removeEmptyWorkspaceByTag $ W.tag w) $ withWindowSet (pure . W.visible))
@@ -295,9 +302,11 @@ myKeys (XConfig {XMonad.modMask = mod}) = M.fromList $
   , ((mod .|. shiftMask, xK_v), spawnP "pavucontrol")
   , ((mod .|. shiftMask, xK_n), spawnP "nyxt")
   , ((mod .|. shiftMask, xK_y), spawnP "flatpak run org.ardour.Ardour")
-  , ((mod .|. shiftMask, xK_e), whenMediaMount "flatpak run com.calibre_ebook.calibre")
+  , ((mod .|. shiftMask, xK_e), spawnP "flatpak run com.calibre_ebook.calibre")
+  , ((mod .|. shiftMask, xK_r), spawnP "zathura")
   , ((mod .|. shiftMask, xK_o), whenMediaMount "env LUTRIS_SKIP_INIT=1 lutris lutris:rungameid/5")
-  , ((mod .|. shiftMask, xK_i), whenMediaMount "lutris") ]
+  , ((mod .|. shiftMask, xK_i), whenMediaMount "lutris")
+  ]
   ++
   [ ((mod, k), rws $ withPrefixArgument $ \a -> case a of
                                                   (Raw a) -> raiseNextMaybe (notifyNoHist $ "'" ++ n ++ " not open'") (M.findWithDefault w a $ M.fromList l)
@@ -328,7 +337,9 @@ myKeys (XConfig {XMonad.modMask = mod}) = M.fromList $
   where
     -- directionKeys = [(xK_h, L), (xK_j, D), (xK_k, U), (xK_l, R)]
     getLayout = gets windowset >>= return . description . W.layout . W.workspace . W.current
-    whenMediaMount c = spawn $ "mount -l | grep /home/rayes/media && "
+    toggleWifi = do spawn "[ $(nmcli radio wifi) == disabled ] && nmcli radio wifi on || nmcli radio wifi off"
+                    notifyNoHist "wifi toggled"
+    whenMediaMount c = spawn $ "mount -l | grep /home/rayes/mnt && "
                        ++ c ++ " || dunstify -i gnome-disks -h string:x-canonical-private-synchronous:barless-info 'media not mounted'"
     prefixToggle f fp = withPrefixArgument $ \p -> case p of
                                                      (Raw _) -> fp
@@ -351,10 +362,11 @@ myKeys (XConfig {XMonad.modMask = mod}) = M.fromList $
                  , (xK_5, "terminal", title =? "*eshell* - emacs [Eshell] ()", [ (1, className =? "URxvt") ])
                  , (xK_6, "editor", (className =? "Emacs"
                                       <&&> (title ~=? ".* - emacs \\[(?!Emms-Browser|EMMS|Group|Server|Summary|Article|Org|PDFView|Eshell).*\\] \\((.*|)\\)")), [])
-                 , (xK_7, "media", (className =? "Emacs"
-                                     <&&> (title ~=? ".* - emacs \\[(Emms-Browser|EMMS)\\] \\(\\)")), [ (1, className =? "mpv")
-                                                                                                      , (2, title =? "WineDesktop - Wine desktop" <||> title =? "osu!")
-                                                                                                      , (3, className =? "Lutris") ])
+                 , (xK_7, "media", ((className =? "Emacs"
+                                     <&&> (title ~=? ".* - emacs \\[(Emms-Browser|EMMS)\\] \\(\\)"))
+                                   <||> title ~=? "ncmpcpp » .*"), [ (1, className =? "mpv")
+                                                                   , (2, title =? "WineDesktop - Wine desktop" <||> title =? "osu!")
+                                                                   , (3, className =? "Lutris") ])
                  , (xK_8, "gnus", (className =? "Emacs"
                                     <&&> (title ~=? "\\*(Group|Server|Summary|Article).*\\* - emacs \\[(Group|Server|Summary|Article)\\] \\(\\)")), [])
                  , (xK_9, "browser", className =? "Nyxt", [ (1, className =? "librewolf") ])
@@ -459,6 +471,7 @@ myMouseBinds (XConfig {XMonad.modMask = mod}) = M.fromList $
                                                      windows $ W.view new)
                           , ([U,L,D], const $ raiseNextMaybe (notifyNoHist $ "Chromium not open") (className =? "Chromium-browser"))
                           , ([U,R,D], const $ raiseNextMaybe (notifyNoHist $ "Tor Browser not open") (className =? "Tor Browser"))
+                          , ([R,U,L], const $ spawn "maim -su | xclip -selection clipboard -t image/png")
                           , ([], \w -> do focus w
                                           floatAndRun positionFloatCenter w (Flex.mouseWindow Flex.discrete w)) ]
 

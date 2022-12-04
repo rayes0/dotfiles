@@ -59,7 +59,7 @@ onbg="\"#6c605a\""
 mono="face=\"SFMono\""
 
 date="<span weight=\"bold\">$(date "+%a, %b %d")</span>
-<span size=\"24pt\" weight=\"bold\" $mono>$(date "+%I:%M")</span><span weight=\"bold\"> $(date "+%p")</span>"
+<span size=\"xx-large\" weight=\"bold\" $mono>$(date "+%I:%M")</span><span weight=\"bold\"> $(date "+%p")</span>"
 
 if [[ $(cat /sys/class/power_supply/BAT0/capacity) -le 20 ]]; then
   bat_lab="<span foreground=${fg} background=\"\#8a5958\" weight=\"bold\">  bat  </span>"
@@ -72,9 +72,9 @@ else
 fi
 
 if [[ $bluetooth == "on" ]]; then
-  bth_lab="<span foreground=${fg} background=${onbg} weight=\"bold\"> ᛒ </span>"
+  bth_lab="<span foreground=${fg} background=${onbg} weight=\"bold\">   ᛒ </span>"
 else
-  bth_lab="<span foreground=${fg} background=${bg} weight=\"bold\"> ᛒ </span>"
+  bth_lab="<span foreground=${fg} background=${bg} weight=\"bold\">   ᛒ </span>"
 fi
 if [[ $wifi == "on" ]]; then
   wifi_lab="<span foreground=${fg} background=${onbg} weight=\"bold\">  wifi  </span>"
@@ -96,7 +96,7 @@ notify-send -i time -h string:x-canonical-private-synchronous:status " " \
             "$date
 $bat_lab   $battery
 <span foreground=${fg} background=${bg} weight=\"bold\">  net  </span>   $networks
-$bth_lab  ${bluetooth}\t  $wifi_lab   ${wifi}
+$wifi_lab   ${wifi}\t  $bth_lab  ${bluetooth}
 $cpu_lab   ${cpu}
 $vpn_lab   ${vpn}
 <span foreground=${fg} background=${bg} weight=\"bold\">  vol   </span>   $vollabel [$port]"

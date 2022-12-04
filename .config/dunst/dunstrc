@@ -51,7 +51,7 @@ show_indicators = yes
 
 ### Icons ###
 
-icon_path = /home/rayes/.icons/zafiro/actions/22:/home/rayes/.icons/zafiro/apps/scalable:/home/rayes/.icons/zafiro/categories/22:/home/rayes/.icons/zafiro/devices/22:/home/rayes/.icons/zafiro/emblems/22:/home/rayes/.icons/zafiro/panel/22-light:/home/rayes/.icons/zafiro/status/22
+icon_path = /home/rayes/.local/share/icons/Zafiro-Icons-Light/actions/22:/home/rayes/.local/share/icons/Zafiro-Icons-Light/apps/scalable:/home/rayes/.local/share/icons/Zafiro-Icons-Light/categories/22:/home/rayes/.local/share/icons/Zafiro-Icons-Light/devices/22:/home/rayes/.local/share/icons/Zafiro-Icons-Light/emblems/22:/home/rayes/.local/share/icons/Zafiro-Icons-Light/panel/22-light:/home/rayes/.local/share/icons/Zafiro-Icons-Light/status/22
 
 icon_position = left
 max_icon_size = 180
