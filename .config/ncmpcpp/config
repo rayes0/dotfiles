@@ -1,0 +1,49 @@
+ncmpcpp_directory = ~/.config/ncmpcpp
+#lyrics_directory = ~/.lyrics
+
+#mpd_host = localhost
+#mpd_port = 6600
+#mpd_connection_timeout = 5
+
+#mpd_music_dir = ~/music
+#mpd_crossfade_time = 5
+
+# Exclude pattern for random song action
+# http://www.boost.org/doc/libs/1_46_1/libs/regex/doc/html/boost_regex/syntax/perl_syntax.html
+#random_exclude_pattern = "^(temp|midi_songs).*"
+
+visualizer_data_source = "/tmp/mpd.fifo"
+visualizer_output_name = "my_fifo"
+visualizer_in_stereo = "yes"
+visualizer_type = "spectrum"
+# visualizer_look = "+▋"
+# visualizer_look = "●┃"
+visualizer_autoscale = "yes"
+visualizer_spectrum_smooth_look = "yes"
+
+progressbar_look = "─╼ "
+
+song_list_format = "{{%a | %t}|{%f}}{$R%l}"
+# song_status_format = "{{%a{ $2//$9 %b{, %y}} $2//$9 }{%t$/b}}|{$b%f$/b}"
+song_status_format = "$b$5%t$/b {$8by} $b$5%a$8$/b"
+song_library_format = {{%a - %t} (%b)}|{%f}
+
+now_playing_prefix = "$b$5"
+now_playing_suffix = "$/b$9"
+
+playlist_display_mode = columns
+song_columns_list_format = "(40)[yellow]{ar} (60)[cyan]{t}"
+
+song_window_title_format = "ncmpcpp » {%a - }{%t}|{%f}"
+
+browser_display_mode = classic
+playlist_editor_display_mode = classic
+
+header_visibility = no
+statusbar_visibility = yes
+titles_visibility = no
+
+display_volume_level = yes
+display_bitrate = no
+
+message_delay_time = 1
