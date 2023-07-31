@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# services to start upon login
+# services which are meaningful for graphical interface are in .xinitrc
+
+setsid --fork gentoo-pipewire-launcher
+setsid --fork mpd
+setsid --fork mpdscribble --conf ~/.config/mpdscribble.conf
+setsid --fork easyeffects --gapplication-service
+setsid --fork transmission-daemon --no-watch-dir --config-dir /home/rayes/ext/transmission-daemon
+setsid --fork emacs --daemon
+

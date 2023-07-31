@@ -1,0 +1,7 @@
+resolver:
+  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/18/23.yaml
+
+packages:
+- xmonad
+- xmonad-contrib
+- regex-pcre

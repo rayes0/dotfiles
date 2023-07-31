@@ -1,0 +1,2 @@
+#!/bin/sh
+/usr/bin/feh --no-fehbg --bg-max '/home/rayes/usr/pics/wallpapers/cofeshop-edit.jpg' 

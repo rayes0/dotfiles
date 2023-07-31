@@ -1,0 +1,50 @@
+[
+    {
+        "key": "WHEEL_UP",
+        "command": ["script-binding", "file_browser/dynamic/scroll_up"]
+    },
+    {
+        "key": "p",
+        "command": ["script-binding", "file_browser/dynamic/scroll_up"],
+        "flags": {
+            "repeatable": true
+        }
+    },
+    {
+        "key": "WHEEL_DOWN",
+        "command": ["script-binding", "file_browser/dynamic/scroll_down"]
+    },
+    {
+        "key": "n",
+        "command": ["script-binding", "file_browser/dynamic/scroll_down"],
+        "flags": {
+            "repeatable": true
+        }
+    },
+    {
+        "key": "MBTN_LEFT",
+        "command": ["script-binding", "file_browser/dynamic/down_dir"]
+    },
+    {
+        "key": "MBTN_RIGHT",
+        "command": ["script-binding", "file_browser/dynamic/up_dir"]
+    },
+    {
+        "key": "^",
+        "command": ["script-binding", "file_browser/dynamic/up_dir"]
+    },
+    {
+        "key": "b",
+        "command": ["script-binding", "file_browser/dynamic/up_dir"]
+    },
+    {
+        "key": "MBTN_MID",
+        "command": ["script-binding", "file_browser/dynamic/play"]
+    },
+
+    {
+        "key": "ENTER",
+        "command": ["script-binding", "file_browser/dynamic/down_dir"],
+        "filter": "dir",
+    },
+]
